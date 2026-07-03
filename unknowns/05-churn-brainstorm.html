@@ -1,3 +1,4 @@
+<!-- Copyright 2026 Anthropic PBC · SPDX-License-Identifier: Apache-2.0 -->
 <!doctype html>
 <html lang="en">
 <head>
@@ -457,7 +458,7 @@
 
     <div class="prompt-card">
       <div class="prompt-label">The prompt</div>
-      <blockquote>&ldquo;Here's my rough problem: Birchline users churn after onboarding. Search the codebase and brainstorm 10 places we could intervene, from cheapest to most ambitious. I'll tell you which ones resonate.&rdquo;</blockquote>
+      <blockquote>&ldquo;Here's my rough problem: Acme users churn after onboarding. Search the codebase and brainstorm 10 places we could intervene, from cheapest to most ambitious. I'll tell you which ones resonate.&rdquo;</blockquote>
       <button class="copy-prompt" id="copyPrompt" type="button">copy prompt</button>
     </div>
   </header>
@@ -465,7 +466,7 @@
   <div class="divider">What Claude produced</div>
 
   <div class="artifact">
-    <div class="art-eyebrow">Birchline &middot; post-onboarding churn</div>
+    <div class="art-eyebrow">Acme &middot; post-onboarding churn</div>
     <h2>10 places to intervene, cheapest to most ambitious</h2>
     <p class="art-sub">I searched <code>apps/web</code>, <code>services/</code>, and <code>packages/</code> for onboarding, invite, and first-session code paths. A pattern showed up: <strong>a lot of retention machinery already exists but is disconnected</strong> — the cheapest options below are mostly wiring, not building. Check the ones that resonate and copy the reply at the bottom.</p>
 
@@ -547,7 +548,7 @@
           <div class="chips"><span class="effort m">M</span></div>
         </div>
         <span class="path">apps/web/src/review/CommentComposer.tsx &middot; apps/web/src/review/Timeline.tsx</span>
-        <p class="iv-body"><span class="iv-found">Found in code —</span> Timestamped comments are Birchline's core loop, but the affordance is hidden: clicking the timeline seeds the timestamp into the composer, and nothing teaches this. <code>Timeline.tsx</code> has a <code>TODO: first-run hint?</code> from the original author. Add a ghost pin on first play — &ldquo;click anywhere to comment at this moment&rdquo;.</p>
+        <p class="iv-body"><span class="iv-found">Found in code —</span> Timestamped comments are Acme's core loop, but the affordance is hidden: clicking the timeline seeds the timestamp into the composer, and nothing teaches this. <code>Timeline.tsx</code> has a <code>TODO: first-run hint?</code> from the original author. Add a ghost pin on first play — &ldquo;click anywhere to comment at this moment&rdquo;.</p>
         <div class="iv-impact"><span class="tag">Impact</span>If first-session comment rate is the activation metric (it should be), this is the most direct lever on it.</div>
         <div class="iv-foot"><label class="resonate"><input type="checkbox" data-n="5"> This resonates</label></div>
       </div>
@@ -595,7 +596,7 @@
           <div class="chips"><span class="effort xl">XL</span></div>
         </div>
         <span class="path">new surface &middot; services/ingest already accepts chunked webm</span>
-        <p class="iv-body"><span class="iv-found">Found in code —</span> Today Birchline's onboarding has a hard external dependency: <strong>you need a finished video before the product is useful</strong>. But <code>services/ingest</code> already accepts chunked webm uploads (built for the mobile app), so a MediaRecorder-based &ldquo;record your screen, get feedback&rdquo; flow needs no pipeline work — &ldquo;just&rdquo; the capture UI. Removes the biggest reason a trial goes idle: nothing to review yet.</p>
+        <p class="iv-body"><span class="iv-found">Found in code —</span> Today Acme's onboarding has a hard external dependency: <strong>you need a finished video before the product is useful</strong>. But <code>services/ingest</code> already accepts chunked webm uploads (built for the mobile app), so a MediaRecorder-based &ldquo;record your screen, get feedback&rdquo; flow needs no pipeline work — &ldquo;just&rdquo; the capture UI. Removes the biggest reason a trial goes idle: nothing to review yet.</p>
         <div class="iv-impact"><span class="tag">Impact</span>Changes who can activate — designers and PMs without an editor can create the first reviewable artifact themselves. Big build, big surface area.</div>
         <div class="iv-foot"><label class="resonate"><input type="checkbox" data-n="9"> This resonates</label></div>
       </div>
@@ -608,7 +609,7 @@
         </div>
         <span class="path">services/auth/src/guestTokens.ts &middot; apps/web/src/share/</span>
         <p class="iv-body"><span class="iv-found">Found in code —</span> Guest share links exist but are deliberately crippled: tokens expire after 24h, guests can't comment, and there's a <code>// TODO(sasha): revisit guest perms after launch</code> from two years ago. The users who churn are often the ones whose <em>clients</em> wouldn't sign up. Make guests first-class — persistent portal, comment-with-name, no account — and every external review becomes a retention loop (and an acquisition one).</p>
-        <div class="iv-impact"><span class="tag">Impact</span>Attacks the structural cause: Birchline's value depends on people who refuse to create accounts. Quarter-long bet with auth, billing, and abuse-prevention implications.</div>
+        <div class="iv-impact"><span class="tag">Impact</span>Attacks the structural cause: Acme's value depends on people who refuse to create accounts. Quarter-long bet with auth, billing, and abuse-prevention implications.</div>
         <div class="iv-foot"><label class="resonate"><input type="checkbox" data-n="10"> This resonates</label></div>
       </div>
 
@@ -628,7 +629,7 @@
 
 <script>
 (function () {
-  var PROMPT = "Here's my rough problem: Birchline users churn after onboarding. Search the codebase and brainstorm 10 places we could intervene, from cheapest to most ambitious. I'll tell you which ones resonate.";
+  var PROMPT = "Here's my rough problem: Acme users churn after onboarding. Search the codebase and brainstorm 10 places we could intervene, from cheapest to most ambitious. I'll tell you which ones resonate.";
 
   function copyText(text, btn, label, doneLabel) {
     function done() {

@@ -1,3 +1,4 @@
+<!-- Copyright 2026 Anthropic PBC · SPDX-License-Identifier: Apache-2.0 -->
 <!doctype html>
 <html lang="en">
 <head>
@@ -343,13 +344,13 @@
   <div class="artifact">
 
     <div class="art-head">
-      <h2>Semantics map: <em style="font-style:italic;color:var(--clay-d)">rate-limiter</em> &rarr; Birchline API client</h2>
+      <h2>Semantics map: <em style="font-style:italic;color:var(--clay-d)">rate-limiter</em> &rarr; Acme API client</h2>
       <span class="badge await">awaiting confirmation</span>
     </div>
     <p class="art-sub">What the crate does, how each behavior maps to TypeScript, and every place the port cannot be a literal translation. Nothing gets implemented until you sign off on this page.</p>
     <div class="art-paths">
       <span><b>source</b> vendor/rate-limiter (Rust, 612 loc, 3 modules)</span>
-      <span><b>target</b> src/api/retry/ in birchline-web</span>
+      <span><b>target</b> src/api/retry/ in acme-web</span>
       <span><b>read</b> bucket.rs · backoff.rs · budget.rs · 14 tests</span>
     </div>
 
@@ -362,7 +363,7 @@
           <li><span><b>Refill is lazy and integer-truncated</b>: tokens are minted only when a request arrives, from elapsed nanoseconds &times; rate &divide; 10&#8313;. Fractional tokens are never stored &mdash; instead, <code>last_refill</code> only advances when at least one whole token is minted, so sub-token elapsed time carries forward.</span></li>
           <li><span><b>Decorrelated jitter backoff</b> (<code>backoff.rs</code>): on retryable failure, the next delay is drawn uniformly from <code>[base, min(prev &times; 3, cap)]</code> with <code>base = 250ms</code>, <code>cap = 30s</code>. Each draw seeds the next &mdash; delays wander rather than doubling in lockstep, which desynchronizes clients after an outage.</span></li>
           <li><span><b>Retry budget</b> (<code>budget.rs</code>): a second, separate bucket. Every <b>successful first-try</b> request deposits 1; every <b>retry attempt</b> withdraws 10. When the balance can&rsquo;t cover a withdrawal, retries are refused entirely (first-try requests still go out). This caps retry amplification at ~10% during a sustained outage.</span></li>
-          <li><span><b>Failure classification is the caller&rsquo;s job</b>: the crate never inspects errors. It exposes <code>acquire()</code>, <code>next_delay()</code>, <code>try_withdraw()</code> and the caller decides what counts as retryable. The TS port keeps that boundary &mdash; Birchline&rsquo;s <code>isRetryable()</code> in <code>src/api/errors.ts</code> stays the single source of truth.</span></li>
+          <li><span><b>Failure classification is the caller&rsquo;s job</b>: the crate never inspects errors. It exposes <code>acquire()</code>, <code>next_delay()</code>, <code>try_withdraw()</code> and the caller decides what counts as retryable. The TS port keeps that boundary &mdash; Acme&rsquo;s <code>isRetryable()</code> in <code>src/api/errors.ts</code> stays the single source of truth.</span></li>
         </ul>
       </div>
     </section>
@@ -485,7 +486,7 @@
           </div>
         </div>
         <div class="notes">
-          <div class="note" data-p="c1"><span class="nmark">7</span><span><b>Thread-safety &rarr; event loop.</b> The crate&rsquo;s <code>Mutex</code> exists because Rust callers withdraw from worker threads. Birchline&rsquo;s client runs on one event loop, so the lock disappears &mdash; <em>but the atomicity it provided must be preserved by convention</em>: <code>tryWithdraw</code> is synchronous end-to-end, and I&rsquo;ll add an eslint <code>no-await-in-budget</code> boundary comment plus a test that the method never returns a Promise.</span></div>
+          <div class="note" data-p="c1"><span class="nmark">7</span><span><b>Thread-safety &rarr; event loop.</b> The crate&rsquo;s <code>Mutex</code> exists because Rust callers withdraw from worker threads. Acme&rsquo;s client runs on one event loop, so the lock disappears &mdash; <em>but the atomicity it provided must be preserved by convention</em>: <code>tryWithdraw</code> is synchronous end-to-end, and I&rsquo;ll add an eslint <code>no-await-in-budget</code> boundary comment plus a test that the method never returns a Promise.</span></div>
           <div class="note" data-p="c2"><span class="nmark">8</span><span><b>Check-then-debit stays fused.</b> Same shape both sides. The failure mode isn&rsquo;t data races here &mdash; it&rsquo;s a future refactor inserting an <code>await</code> (e.g., to log) between the check and the debit, letting two in-flight retries both pass the check.</span></div>
           <div class="note" data-p="c3"><span class="nmark">9</span><span><b>Refuse, never queue.</b> On an empty budget the crate returns <code>false</code> immediately &mdash; the request either goes out as a first try or fails fast. The port must <em>not</em> &ldquo;helpfully&rdquo; enqueue the retry for later; that would rebuild the retry storm the budget exists to prevent.</span></div>
         </div>
@@ -521,7 +522,7 @@
             <li><b><code>saturating_mul</code> overflow guards</b> &mdash; unreachable once cap is applied in ms range</li>
             <li><b><code>Send + Sync</code> impls, <code>Arc</code> cloning</b> &mdash; no threads to share across</li>
             <li><b><code>tokio</code>/<code>async-std</code> feature flags</b> &mdash; port is runtime-agnostic by construction</li>
-            <li><b>Prometheus counters</b> &mdash; Birchline emits via <code>telemetry.track()</code> instead; hook points kept</li>
+            <li><b>Prometheus counters</b> &mdash; Acme emits via <code>telemetry.track()</code> instead; hook points kept</li>
           </ul>
         </div>
       </div>
@@ -551,7 +552,7 @@
             <tr>
               <td><b>Budget exhaustion</b><br>sustained 100% failure for 60s</td>
               <td>Balance drains to 0 in ~10 retries; further retries refused, first-tries continue. Retry rate settles at deposit&divide;cost = 10% of success rate (0 here).</td>
-              <td>Same economics, same settle point. Difference: refusal surfaces as <code>RetryBudgetExhausted</code> error so Birchline&rsquo;s upload queue can show &ldquo;reconnecting&rdquo; instead of failing silently.</td>
+              <td>Same economics, same settle point. Difference: refusal surfaces as <code>RetryBudgetExhausted</code> error so Acme&rsquo;s upload queue can show &ldquo;reconnecting&rdquo; instead of failing silently.</td>
               <td><span class="pill equiv">equivalent*</span></td>
             </tr>
             <tr>
@@ -569,7 +570,7 @@
           </tbody>
         </table>
       </div>
-      <p class="art-sub" style="margin-top:10px;font-size:13px">* &ldquo;equivalent&rdquo; = same decision, different surface. The crate returns bare <code>false</code>; the port wraps it in a typed error because Birchline&rsquo;s UI needs to distinguish &ldquo;rate limited&rdquo; from &ldquo;offline&rdquo;. Flag this row if you&rsquo;d rather keep the bare boolean.</p>
+      <p class="art-sub" style="margin-top:10px;font-size:13px">* &ldquo;equivalent&rdquo; = same decision, different surface. The crate returns bare <code>false</code>; the port wraps it in a typed error because Acme&rsquo;s UI needs to distinguish &ldquo;rate limited&rdquo; from &ldquo;offline&rdquo;. Flag this row if you&rsquo;d rather keep the bare boolean.</p>
     </section>
 
     <!-- ── 5. confirm ── -->

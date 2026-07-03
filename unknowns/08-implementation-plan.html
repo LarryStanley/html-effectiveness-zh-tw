@@ -1,3 +1,4 @@
+<!-- Copyright 2026 Anthropic PBC · SPDX-License-Identifier: Apache-2.0 -->
 <!doctype html>
 <html lang="en">
 <head>
@@ -474,7 +475,7 @@
   <div class="artifact">
 
     <h2 class="plan-title">Implementation plan: Annotation export</h2>
-    <p class="plan-sub">Birchline · export a review's annotations as a shareable PDF or CSV · branch <code>feat/annotation-export</code></p>
+    <p class="plan-sub">Acme · export a review's annotations as a shareable PDF or CSV · branch <code>feat/annotation-export</code></p>
 
     <div class="chips">
       <div class="chip"><span class="k">Effort</span><span class="v">~2.5 dev-days</span></div>
@@ -554,7 +555,7 @@
             <div class="choice-body">
               <div class="v-main">
                 <div class="pick-label">Plan's pick — render once, store in blob storage</div>
-                The worker renders the PDF/CSV once and writes <b>artifact_url</b>. Downloads are a signed-URL redirect — cheap, cacheable, and shareable with reviewers who lack Birchline accounts.
+                The worker renders the PDF/CSV once and writes <b>artifact_url</b>. Downloads are a signed-URL redirect — cheap, cacheable, and shareable with reviewers who lack Acme accounts.
                 <p class="tradeoff"><strong>Cost:</strong> blob lifecycle to manage; I'd add a 30-day TTL sweep (Section C, item 6).</p>
               </div>
               <div class="v-alt">
@@ -644,10 +645,10 @@
       <ol class="seq">
         <li><span class="s-num">1</span><span class="s-body"><strong>Migration + model.</strong> <span class="dep">Create <b>annotation_exports</b>, wire the Sequelize model, factory, fixtures.</span></span><span class="s-est">0.5d</span></li>
         <li><span class="s-num">2</span><span class="s-body"><strong>Types + request validation.</strong> <span class="dep">Everything in A2, plus zod schemas on <b>POST /api/reviews/:id/exports</b>.</span></span><span class="s-est">0.25d</span></li>
-        <li><span class="s-num">3</span><span class="s-body"><strong>Renderers.</strong> <span class="dep">CSV first (trivial), then PDF via the existing <b>@birchline/render</b> service.</span></span><span class="s-est">1d</span></li>
+        <li><span class="s-num">3</span><span class="s-body"><strong>Renderers.</strong> <span class="dep">CSV first (trivial), then PDF via the existing <b>@acme/render</b> service.</span></span><span class="s-est">1d</span></li>
         <li><span class="s-num">4</span><span class="s-body"><strong>Worker job + blob upload.</strong> <span class="dep">Queue on <b>exports.render</b>; retries ×3 then <b>status = failed</b>.</span></span><span class="s-est">0.25d</span></li>
         <li><span class="s-num">5</span><span class="s-body"><strong>UI: menu item, modal, toast, Exports tab.</strong> <span class="dep">Behind flag <b>export_annotations</b>.</span></span><span class="s-est">0.5d</span></li>
-        <li><span class="s-num">6</span><span class="s-body"><strong>Tests, docs, flag rollout to the Birchline team.</strong></span><span class="s-est">0.25d</span></li>
+        <li><span class="s-num">6</span><span class="s-body"><strong>Tests, docs, flag rollout to the Acme team.</strong></span><span class="s-est">0.25d</span></li>
       </ol>
     </section>
 

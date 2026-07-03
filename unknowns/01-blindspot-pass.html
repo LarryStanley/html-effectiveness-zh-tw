@@ -1,3 +1,4 @@
+<!-- Copyright 2026 Anthropic PBC · SPDX-License-Identifier: Apache-2.0 -->
 <!doctype html>
 <html lang="en">
 <head>
@@ -452,7 +453,7 @@
         <span>The prompt</span>
         <button class="copy-btn" data-copy-target="user-prompt">Copy prompt</button>
       </div>
-      <blockquote class="prompt" id="user-prompt">I'm adding a new SSO auth provider to Birchline but I've never touched the auth module. Do a blindspot pass: find my unknown unknowns in this part of the codebase, explain each one, and tell me how to prompt you better for the implementation.</blockquote>
+      <blockquote class="prompt" id="user-prompt">I'm adding a new SSO auth provider to Acme but I've never touched the auth module. Do a blindspot pass: find my unknown unknowns in this part of the codebase, explain each one, and tell me how to prompt you better for the implementation.</blockquote>
     </div>
   </header>
 
@@ -461,11 +462,11 @@
   <div class="artifact">
     <div class="artifact-bar">
       <span class="dot"></span><span class="dot"></span><span class="dot"></span>
-      <span class="file">blindspot-pass · birchline/services/auth · 47 files scanned</span>
+      <span class="file">blindspot-pass · acme/services/auth · 47 files scanned</span>
     </div>
     <div class="artifact-body">
 
-      <h2>Unknown unknowns: the Birchline auth module</h2>
+      <h2>Unknown unknowns: the Acme auth module</h2>
       <p class="sub">Scanned <code>services/auth/</code> (47 files), 214 commits touching it since Jan&nbsp;2025, 3 migrations in flight, 2 reverted attempts. Seven things you'd have learned the hard way.</p>
 
       <div class="vs-grid">
@@ -495,7 +496,7 @@
           <span class="bs-num">01</span>
           <h3 class="bs-title">Sessions are double-written — the Redis store you'll find first is the wrong one</h3>
         </div>
-        <p>Birchline is mid-migration from Postgres-backed sessions to Redis (<code>MIG-118</code>, stalled since March). Every session write currently goes through <code>SessionBridge.write()</code>, which fans out to <em>both</em> <code>RedisSessionStore</code> and the legacy <code>pg_sessions</code> table. The migration was never finished, so reads still come from Postgres.</p>
+        <p>Acme is mid-migration from Postgres-backed sessions to Redis (<code>MIG-118</code>, stalled since March). Every session write currently goes through <code>SessionBridge.write()</code>, which fans out to <em>both</em> <code>RedisSessionStore</code> and the legacy <code>pg_sessions</code> table. The migration was never finished, so reads still come from Postgres.</p>
         <div class="bite"><span class="bite-tag">Why it bites</span><span>Grepping for "session" surfaces <code>RedisSessionStore</code> first — it looks canonical, has the newest code, and the best docs. Write to it directly and your logins will appear to work in dev (Redis reads are enabled there) and silently fail in prod, where reads still hit Postgres.</span></div>
         <div class="chip-row">
           <div class="prompt-chip" id="chip-1">When you create sessions for the new provider, route everything through SessionBridge — never RedisSessionStore or pg_sessions directly. Explain the MIG-118 read/write split before writing any session code.</div>
@@ -525,7 +526,7 @@
           <span class="bs-num">03</span>
           <h3 class="bs-title">Someone already tried this — and it was reverted for a reason that still holds</h3>
         </div>
-        <p>PR&nbsp;#2841 ("Add Okta OIDC provider", Sept&nbsp;2025) was merged and reverted nine days later. The revert commit explains why: Birchline callback URLs must carry a tenant suffix (<code>/auth/callback/:provider/:workspaceSlug</code>) so workspace-scoped invite links survive the redirect round-trip. Okta's strict redirect-URI matching rejected the dynamic suffix, and invited users landed in the wrong workspace. The fix everyone agreed on — a state-parameter workspace claim signed with <code>AUTH_STATE_SECRET</code> — was designed in the revert thread but never built.</p>
+        <p>PR&nbsp;#2841 ("Add Okta OIDC provider", Sept&nbsp;2025) was merged and reverted nine days later. The revert commit explains why: Acme callback URLs must carry a tenant suffix (<code>/auth/callback/:provider/:workspaceSlug</code>) so workspace-scoped invite links survive the redirect round-trip. Okta's strict redirect-URI matching rejected the dynamic suffix, and invited users landed in the wrong workspace. The fix everyone agreed on — a state-parameter workspace claim signed with <code>AUTH_STATE_SECRET</code> — was designed in the revert thread but never built.</p>
         <div class="bite"><span class="bite-tag">Why it bites</span><span>Nothing in the current code hints at this. You'd re-implement #2841's approach, pass every local test (single-workspace dev env), and rediscover the bug in production the first time an invited user signs in.</span></div>
         <div class="chip-row">
           <div class="prompt-chip" id="chip-3">Read the revert of PR #2841 first. Implement the signed state-parameter workspace claim it proposed instead of tenant-suffixed callback URLs, and add a test for the workspace-scoped invite flow.</div>
@@ -540,7 +541,7 @@
           <span class="bs-num">04</span>
           <h3 class="bs-title">Identities and accounts are separate things — and the provider interface hides it</h3>
         </div>
-        <p>Birchline splits <code>users</code> from <code>identities</code>: one account can have several linked identities (email+password, Google, SAML), joined in the <code>identities</code> table. The provider interface only returns a profile; the linking decision happens in <code>identity/linker.ts</code>, keyed on verified email. Providers that can't guarantee verified emails (many SSO IdPs don't) must set <code>requiresManualLink: true</code> or the linker will happily merge two different people who share a corporate alias.</p>
+        <p>Acme splits <code>users</code> from <code>identities</code>: one account can have several linked identities (email+password, Google, SAML), joined in the <code>identities</code> table. The provider interface only returns a profile; the linking decision happens in <code>identity/linker.ts</code>, keyed on verified email. Providers that can't guarantee verified emails (many SSO IdPs don't) must set <code>requiresManualLink: true</code> or the linker will happily merge two different people who share a corporate alias.</p>
         <div class="bite"><span class="bite-tag">Why it bites</span><span>Implement the interface naively and everything works — until a customer's IdP sends an unverified or reassigned email and your provider silently attaches a stranger's identity to an existing account. This is an account-takeover bug, not a login bug.</span></div>
         <div class="chip-row">
           <div class="prompt-chip" id="chip-4">Walk me through identity/linker.ts before implementing. Decide explicitly whether this IdP guarantees verified emails; if not, set requiresManualLink and build the manual-link confirmation path.</div>
@@ -600,7 +601,7 @@
           <button class="copy-btn" data-copy-target="final-prompt">Copy prompt</button>
         </div>
         <h3>Everything above, folded into the prompt you should actually give me</h3>
-        <pre class="final-prompt" id="final-prompt">Add a new SSO auth provider to Birchline. Constraints from the blindspot pass:
+        <pre class="final-prompt" id="final-prompt">Add a new SSO auth provider to Acme. Constraints from the blindspot pass:
 
 1. Sessions: route all session writes through SessionBridge (MIG-118 is
    unfinished; prod still reads from pg_sessions). Never touch
