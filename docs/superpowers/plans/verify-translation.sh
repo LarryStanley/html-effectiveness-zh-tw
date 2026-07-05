@@ -14,18 +14,27 @@ if [[ "$f" == *.html ]]; then
   fi
 fi
 
-# 2) <style> 與 <script> 區塊必須與 git HEAD 版本位元組完全相同（CSS/JS 絕不可改）
-extract_protected () {
-  awk 'BEGIN{p=0}
-       /<style/{p=1} /<script/{p=1}
-       {if(p)print}
-       /<\/style>/{p=0} /<\/script>/{p=0}' "$1"
-}
+# 2) <style> 區塊必須與 git HEAD 版本位元組完全相同（CSS 無可譯內容，絕不可改）
+#    註：<script> 允許差異，因為 JS 內可能含使用者可見字串（note/innerHTML）需翻譯。
 if [[ "$f" == *.html ]]; then
-  before="$(git show "HEAD:$f" 2>/dev/null | awk 'BEGIN{p=0}/<style/{p=1}/<script/{p=1}{if(p)print}/<\/style>/{p=0}/<\/script>/{p=0}')" || before=""
-  after="$(extract_protected "$f")"
+  # 比較時忽略 content:"..." 字串（::before/::after 的可見文字允許翻譯）
+  norm_style () { awk 'BEGIN{p=0}/<style/{p=1}{if(p)print}/<\/style>/{p=0}' | sed -E 's/content:[[:space:]]*"[^"]*"/content:"_"/g'; }
+  before="$(git show "HEAD:$f" 2>/dev/null | norm_style)" || before=""
+  after="$(norm_style < "$f")"
   if [[ -n "$before" && "$before" != "$after" ]]; then
-    echo "  ✗ [$f] <style>/<script> 區塊被更動（CSS/JS 不可翻譯）"; fail=1
+    echo "  ✗ [$f] <style> 區塊結構被更動（CSS 不可翻譯，content 字串除外）"; fail=1
+  fi
+fi
+
+# 2b) HTML 標籤結構必須與 git HEAD 一致（抓截斷/遺漏整段，免受散文換行影響 → 一字不漏）
+if [[ "$f" == *.html ]] && headtxt="$(git show "HEAD:$f" 2>/dev/null)"; then
+  tagcount () { grep -oE '<[a-zA-Z][a-zA-Z0-9]*' | sort | uniq -c; }
+  hb="$(printf '%s' "$headtxt" | tagcount)"
+  ab="$(tagcount < "$f")"
+  if [[ -n "$hb" && "$hb" != "$ab" ]]; then
+    echo "  ✗ [$f] HTML 標籤結構與原始不符，疑似遺漏或多出整段內容："
+    diff <(printf '%s' "$hb") <(printf '%s' "$ab") | grep -E '^[<>]' | head -6 | sed 's/^/      /'
+    fail=1
   fi
 fi
 
