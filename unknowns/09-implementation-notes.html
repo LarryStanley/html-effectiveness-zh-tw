@@ -1,10 +1,10 @@
 <!-- Copyright 2026 Anthropic PBC · SPDX-License-Identifier: Apache-2.0 -->
 <!doctype html>
-<html lang="en">
+<html lang="zh-Hant-TW">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Implementation notes — Know your unknowns</title>
+<title>實作筆記 — 了解你的未知數</title>
 <style>
   :root {
     --ivory:  #FAF9F5;
@@ -343,37 +343,37 @@
 <div class="wrap">
 
   <header class="page">
-    <div class="eyebrow">Know your unknowns &middot; During implementation</div>
-    <a class="back" href="index.html">&larr; All examples</a>
-    <h1>Implementation notes</h1>
-    <p class="lede">Instead of letting mid-build surprises vanish into the scrollback, ask the agent to log every deviation from the plan as it happens — so the surprises become inputs to your next attempt.</p>
+    <div class="eyebrow">了解你的未知數 &middot; 實作期間</div>
+    <a class="back" href="index.html">&larr; 所有範例</a>
+    <h1>實作筆記</h1>
+    <p class="lede">與其讓開發中途的意外消失在捲動紀錄裡，不如要求代理程式在發生時記錄每一次與計畫的偏離，讓這些意外成為下次嘗試的輸入。</p>
 
     <div class="promptcard">
-      <div class="label">The prompt</div>
-      <button class="copybtn" id="copyPrompt">copy prompt</button>
-      <blockquote id="promptText">&ldquo;Keep an implementation-notes file as you build the export feature. If you hit an edge case that forces you to deviate from the plan, pick the conservative option, log it under &lsquo;Deviations&rsquo;, and keep going.&rdquo;</blockquote>
+      <div class="label">提示詞</div>
+      <button class="copybtn" id="copyPrompt">複製提示詞</button>
+      <blockquote id="promptText">&ldquo;在開發匯出功能時，保留一份實作筆記檔案。如果遇到邊界情境迫使你偏離計畫，請選擇保守的做法，將其記錄在『偏離』項下，然後繼續。&rdquo;</blockquote>
     </div>
   </header>
 
-  <div class="divider">What Claude produced</div>
+  <div class="divider">Claude 產出的內容</div>
 
   <div class="doc">
     <div class="doc-head">
       <span class="dot"></span>
       <span class="path">docs/notes/export-feature-implementation.md</span>
-      <span class="meta">run started 14:02 &middot; last write 16:51 &middot; branch feat/review-export</span>
+      <span class="meta">執行開始於 14:02 &middot; 最後寫入 16:51 &middot; 分支 feat/review-export</span>
     </div>
 
     <div class="doc-summary">
-      <div class="stat"><div class="n">11</div><div class="t">entries</div></div>
-      <div class="stat dev"><div class="n">4</div><div class="t">deviations</div></div>
-      <div class="stat you"><div class="n">2</div><div class="t">need your judgment</div></div>
+      <div class="stat"><div class="n">11</div><div class="t">項目</div></div>
+      <div class="stat dev"><div class="n">4</div><div class="t">項偏離</div></div>
+      <div class="stat you"><div class="n">2</div><div class="t">需要你決定</div></div>
     </div>
 
-    <div class="chips" role="tablist" aria-label="Filter entries">
-      <button class="chip on" data-f="all">All <span class="ct">11</span></button>
-      <button class="chip" data-f="dev">Deviations <span class="ct">4</span></button>
-      <button class="chip" data-f="human">For you <span class="ct">2</span></button>
+    <div class="chips" role="tablist" aria-label="篩選項目">
+      <button class="chip on" data-f="all">全部 <span class="ct">11</span></button>
+      <button class="chip" data-f="dev">偏離 <span class="ct">4</span></button>
+      <button class="chip" data-f="human">給你的 <span class="ct">2</span></button>
     </div>
 
     <div class="timeline" id="timeline">
@@ -382,9 +382,9 @@
         <div class="ts">14:02</div>
         <div class="rail"><span class="node"></span></div>
         <div class="body">
-          <span class="badge">Plan-confirmed</span><span class="ts-mobile">14:02</span>
-          <h3>Step 1 — export job model and queue wiring, as planned</h3>
-          <p>Added <code>ExportJob</code> in <code>apps/api/src/exports/exportJob.ts</code>, enqueued on the existing BullMQ <code>media-tasks</code> queue with a dedicated <code>export</code> job name. Migration <code>0121_export_jobs</code> matches the plan's schema exactly (status enum, <code>requested_by</code>, <code>review_id</code>, <code>format</code>).</p>
+          <span class="badge">計畫已確認</span><span class="ts-mobile">14:02</span>
+          <h3>步驟 1 — 匯出工作模型與佇列設定，如計畫進行</h3>
+          <p>在 <code>apps/api/src/exports/exportJob.ts</code> 中新增了 <code>ExportJob</code>，並加入現有的 BullMQ <code>media-tasks</code> 佇列，使用專屬的 <code>export</code> 工作名稱。遷移檔 <code>0121_export_jobs</code> 與計畫的資料結構完全相符（狀態列舉、<code>requested_by</code>、<code>review_id</code>、<code>format</code>）。</p>
         </div>
       </div>
 
@@ -392,9 +392,9 @@
         <div class="ts">14:18</div>
         <div class="rail"><span class="node"></span></div>
         <div class="body">
-          <span class="badge">Plan-confirmed</span><span class="ts-mobile">14:18</span>
-          <h3>Step 2 — <code>POST /api/v1/reviews/:id/export</code> endpoint</h3>
-          <p>Request validation reuses the zod schemas in <code>apps/api/src/validation/</code> as the plan specified. <code>format</code> accepts <code>mp4-burnin | csv | bundle</code>. Returns <code>202</code> with a job id; polling endpoint deferred to step 6 per plan.</p>
+          <span class="badge">計畫已確認</span><span class="ts-mobile">14:18</span>
+          <h3>步驟 2 — <code>POST /api/v1/reviews/:id/export</code> 端點</h3>
+          <p>請求驗證如計畫所述，重用了 <code>apps/api/src/validation/</code> 中的 zod 結構描述。<code>format</code> 接受 <code>mp4-burnin | csv | bundle</code>。回傳 <code>202</code> 與工作 ID；輪詢端點依計畫延後至步驟 6。</p>
         </div>
       </div>
 
@@ -402,9 +402,9 @@
         <div class="ts">14:29</div>
         <div class="rail"><span class="node"></span></div>
         <div class="body">
-          <span class="badge">Discovery</span><span class="ts-mobile">14:29</span>
-          <h3><code>Review.duration_ms</code> is denormalized and occasionally stale</h3>
-          <p>Three fixture reviews have <code>duration_ms</code> that disagrees with the source asset's probe data (looks like re-uploads never refresh it). Export reads duration from <code>MediaAsset.probe.duration</code> instead — same approach <code>playbackManifest.ts</code> already takes. No plan change, just noting the trap for anyone who touches this later.</p>
+          <span class="badge">發現</span><span class="ts-mobile">14:29</span>
+          <h3><code>Review.duration_ms</code> 是反規格化的，且偶爾會過時</h3>
+          <p>有三個測試用的評論資料，其 <code>duration_ms</code> 與來源資產的探查資料不一致（看起來是重新上傳時未更新它）。匯出功能改從 <code>MediaAsset.probe.duration</code> 讀取時間，這與 <code>playbackManifest.ts</code> 現有的做法相同。計畫無需變更，只是為了之後接手的人記下這個陷阱。</p>
         </div>
       </div>
 
@@ -412,13 +412,13 @@
         <div class="ts">14:41</div>
         <div class="rail"><span class="node"></span></div>
         <div class="body">
-          <span class="badge">Deviation 1 of 4</span><span class="ts-mobile">14:41</span>
-          <h3>Legacy annotations don't always have frame timestamps</h3>
+          <span class="badge">偏離 1 / 4</span><span class="ts-mobile">14:41</span>
+          <h3>舊版標註不見得都有影格時間戳記</h3>
           <div class="devgrid">
-            <div class="row"><div class="k">What the plan said</div><div class="v">Every annotation has a <code>frame_ts</code>; burn-in renderer can sort and place them all on the timeline.</div></div>
-            <div class="row"><div class="k">What the code revealed</div><div class="v">~12% of rows in <code>annotations</code> predate migration <code>0087</code> and have <code>frame_ts = NULL</code> — they were general review comments before per-frame annotations existed.</div></div>
-            <div class="row chosen"><div class="k">Conservative choice</div><div class="v">Exclude null-timestamp annotations from the video burn-in; include them in the CSV sidecar with <code>frame_ts</code> left blank and a <code>legacy_comment</code> flag. Nothing is silently dropped from the export bundle.</div></div>
-            <div class="row"><div class="k">Revisit</div><div class="v">Could interpolate a timestamp from <code>created_at</code> offset against the review session — decide whether that's honest enough to show in the video.</div></div>
+            <div class="row"><div class="k">計畫的內容</div><div class="v">每個標註都有 <code>frame_ts</code>；燒錄渲染器可以排序並將它們全部放置在時間軸上。</div></div>
+            <div class="row"><div class="k">程式碼顯示的狀況</div><div class="v"><code>annotations</code> 中約 12% 的資料列早於遷移 <code>0087</code>，且其 <code>frame_ts = NULL</code>。在逐影格標註功能出現之前，它們只是普通的評論。</div></div>
+            <div class="row chosen"><div class="k">保守的選擇</div><div class="v">將沒有時間戳記的標註從影片燒錄中排除；但將它們包含在 CSV 附件中，<code>frame_ts</code> 留空並加上 <code>legacy_comment</code> 旗標。匯出包不會悄悄丟棄任何資料。</div></div>
+            <div class="row"><div class="k">待後續討論</div><div class="v">可以嘗試根據 <code>created_at</code> 與評論工作階段的偏移量來插值時間戳記，但需要決定這樣做是否夠誠實，能否顯示在影片中。</div></div>
           </div>
         </div>
       </div>
@@ -427,9 +427,9 @@
         <div class="ts">15:05</div>
         <div class="rail"><span class="node"></span></div>
         <div class="body">
-          <span class="badge">Plan-confirmed</span><span class="ts-mobile">15:05</span>
-          <h3>Step 3 — annotation burn-in via ffmpeg <code>drawtext</code>/<code>drawbox</code>, as planned</h3>
-          <p>Filtergraph builder in <code>apps/worker/src/exports/burnin.ts</code>. The plan's per-annotation overlay windows (<code>enable='between(t,a,b)'</code>) work; verified against the 40-annotation stress fixture — render time 1.4x realtime on the worker instance class, inside the plan's 2x budget.</p>
+          <span class="badge">計畫已確認</span><span class="ts-mobile">15:05</span>
+          <h3>步驟 3 — 透過 ffmpeg <code>drawtext</code>/<code>drawbox</code> 進行標註燒錄，如計畫進行</h3>
+          <p>濾鏡圖建構器位於 <code>apps/worker/src/exports/burnin.ts</code>。計畫中每個標註的覆蓋時間窗（<code>enable='between(t,a,b)'</code>）運作正常；已針對 40 個標註的壓力測試資料進行驗證，在工作實例類型上的渲染時間為即時的 1.4 倍，在計畫的 2 倍預算之內。</p>
         </div>
       </div>
 
@@ -437,13 +437,13 @@
         <div class="ts">15:22</div>
         <div class="rail"><span class="node"></span></div>
         <div class="body">
-          <span class="badge">Deviation 2 of 4</span><span class="ts-mobile">15:22</span>
-          <h3>The queue round-trips <code>Date</code> objects as strings</h3>
+          <span class="badge">偏離 2 / 4</span><span class="ts-mobile">15:22</span>
+          <h3>佇列將 <code>Date</code> 物件以字串形式往返傳遞</h3>
           <div class="devgrid">
-            <div class="row"><div class="k">What the plan said</div><div class="v"><code>ExportJobPayload.requestedAt: Date</code>, passed through to the worker and compared against the review's <code>updated_at</code> to detect stale exports.</div></div>
-            <div class="row"><div class="k">What the code revealed</div><div class="v">BullMQ JSON-serializes payloads into Redis, so the worker receives an ISO string, not a <code>Date</code>. The staleness comparison silently coerced and passed in unit tests, but failed on a redelivered job in the integration run.</div></div>
-            <div class="row chosen"><div class="k">Conservative choice</div><div class="v">Typed the payload as wire format (<code>requestedAt: string</code> ISO-8601), parse once at the worker boundary in <code>exportConsumer.ts</code>. No custom serializer.</div></div>
-            <div class="row"><div class="k">Revisit</div><div class="v">Other <code>media-tasks</code> payloads likely have the same latent bug — a shared zod codec for job payloads would fix the class of problem.</div></div>
+            <div class="row"><div class="k">計畫的內容</div><div class="v"><code>ExportJobPayload.requestedAt: Date</code>，傳遞給 worker 並與評論的 <code>updated_at</code> 進行比較，以偵測過時的匯出。</div></div>
+            <div class="row"><div class="k">程式碼顯示的狀況</div><div class="v">BullMQ 將承載資料 JSON 序列化進 Redis，因此 worker 收到的是 ISO 字串，而非 <code>Date</code>。過時比較在單元測試中悄悄地發生了隱含轉換並通過，但在整合測試的重新傳遞工作中失敗了。</div></div>
+            <div class="row chosen"><div class="k">保守的選擇</div><div class="v">將承載資料型別定義為傳輸格式（<code>requestedAt: string</code> ISO-8601），並在 <code>exportConsumer.ts</code> 的 worker 邊界統一解析一次。不使用自訂序列化器。</div></div>
+            <div class="row"><div class="k">待後續討論</div><div class="v">其他 <code>media-tasks</code> 的承載資料可能也有相同的潛在錯誤。為工作承載資料加入一個共享的 zod 編解碼器，應該能解決這整類問題。</div></div>
           </div>
         </div>
       </div>
@@ -452,13 +452,13 @@
         <div class="ts">15:48</div>
         <div class="rail"><span class="node"></span></div>
         <div class="body">
-          <span class="badge">Deviation 3 of 4</span><span class="ts-mobile">15:48</span>
-          <h3>Zip streaming already exists — dropped the planned <code>archiver</code> dependency</h3>
+          <span class="badge">偏離 3 / 4</span><span class="ts-mobile">15:48</span>
+          <h3>Zip 串流功能已存在，移除了計畫中的 <code>archiver</code> 相依套件</h3>
           <div class="devgrid">
-            <div class="row"><div class="k">What the plan said</div><div class="v">Add <code>archiver</code> to build the export bundle (video + CSV + thumbnails) as a zip stream to S3.</div></div>
-            <div class="row"><div class="k">What the code revealed</div><div class="v"><code>packages/media/src/zipStream.ts</code> already does streaming zip with backpressure handling — it powers the bulk asset download feature and has been in production since March.</div></div>
-            <div class="row chosen"><div class="k">Conservative choice</div><div class="v">Reused <code>zipStream.ts</code> as-is. One fewer dependency, and bundle exports inherit the same tested backpressure behavior as bulk downloads.</div></div>
-            <div class="row"><div class="k">Revisit</div><div class="v"><code>zipStream</code> lives in <code>packages/media</code> but is now used by two features — worth promoting to <code>packages/shared</code> in a cleanup pass.</div></div>
+            <div class="row"><div class="k">計畫的內容</div><div class="v">加入 <code>archiver</code> 以將匯出包（影片 + CSV + 縮圖）建置為指向 S3 的 zip 串流。</div></div>
+            <div class="row"><div class="k">程式碼顯示的狀況</div><div class="v"><code>packages/media/src/zipStream.ts</code> 已經具備處理背壓的串流 zip 功能。它支援了批次資產下載功能，並且自三月起就已上線至正式環境。</div></div>
+            <div class="row chosen"><div class="k">保守的選擇</div><div class="v">直接重用 <code>zipStream.ts</code>。少了一個相依套件，且包匯出功能繼承了與批次下載相同、經過測試的背壓行為。</div></div>
+            <div class="row"><div class="k">待後續討論</div><div class="v"><code>zipStream</code> 位於 <code>packages/media</code>，但現在有兩個功能在使用它。值得在清理階段時將它提升到 <code>packages/shared</code>。</div></div>
           </div>
         </div>
       </div>
@@ -467,9 +467,9 @@
         <div class="ts">16:07</div>
         <div class="rail"><span class="node"></span></div>
         <div class="body">
-          <span class="badge">Discovery</span><span class="ts-mobile">16:07</span>
-          <h3>A websocket progress channel convention already exists</h3>
-          <p>The transcode pipeline emits <code>media:progress:{assetId}</code> events. Followed the same convention — exports emit <code>export:progress:{jobId}</code> — so the frontend can reuse <code>useProgressChannel()</code> from <code>apps/web/src/hooks/</code> instead of the polling UI the plan sketched. Kept the polling endpoint too, as the fallback.</p>
+          <span class="badge">發現</span><span class="ts-mobile">16:07</span>
+          <h3>已經存在 WebSocket 進度頻道的慣例</h3>
+          <p>轉碼管線會發送 <code>media:progress:{assetId}</code> 事件。我們遵循了相同的慣例，讓匯出發送 <code>export:progress:{jobId}</code> 事件。這樣一來，前端就能重用 <code>apps/web/src/hooks/</code> 裡的 <code>useProgressChannel()</code>，而不用照計畫草稿那樣做輪詢介面。不過我們也保留了輪詢端點，作為後備方案。</p>
         </div>
       </div>
 
@@ -477,13 +477,13 @@
         <div class="ts">16:20</div>
         <div class="rail"><span class="node"></span></div>
         <div class="body">
-          <span class="badge">Deviation 4 of 4</span><span class="ts-mobile">16:20</span>
-          <h3>Guest reviewers can view reviews but can't download assets</h3>
+          <span class="badge">偏離 4 / 4</span><span class="ts-mobile">16:20</span>
+          <h3>訪客審查者可以檢視評論，但無法下載資產</h3>
           <div class="devgrid">
-            <div class="row"><div class="k">What the plan said</div><div class="v">Export permission = review-level ACL: anyone who can open the review can export it.</div></div>
-            <div class="row"><div class="k">What the code revealed</div><div class="v">Workspace-level <code>guest_reviewer</code> role grants review access with <code>can_download_assets = false</code> — clients use it to let external stakeholders comment without taking the media offsite. A review-ACL-only check would let guests exfiltrate source video via export.</div></div>
-            <div class="row chosen"><div class="k">Conservative choice</div><div class="v">Export returns <code>403</code> for <code>guest_reviewer</code> across all formats, mirroring the existing asset-download check in <code>assetAccess.ts</code>. Strictest defensible reading.</div></div>
-            <div class="row"><div class="k">Revisit</div><div class="v">Arguably guests should still get the CSV (annotations only, no media). That's a product call, not mine — logged below.</div></div>
+            <div class="row"><div class="k">計畫的內容</div><div class="v">匯出權限 = 評論層級的存取控制清單（ACL）：任何能開啟評論的人都能匯出它。</div></div>
+            <div class="row"><div class="k">程式碼顯示的狀況</div><div class="v">工作區層級的 <code>guest_reviewer</code> 角色授予了評論存取權，但 <code>can_download_assets = false</code>。客戶端使用這個角色讓外部關係人發表評論，同時無法將媒體帶離站外。如果只檢查評論的 ACL，訪客就能透過匯出功能竊取來源影片。</div></div>
+            <div class="row chosen"><div class="k">保守的選擇</div><div class="v">所有格式都對 <code>guest_reviewer</code> 回傳 <code>403</code>，這對應了 <code>assetAccess.ts</code> 中現有的資產下載檢查。這是最嚴格且合理的認定。</div></div>
+            <div class="row"><div class="k">待後續討論</div><div class="v">理論上訪客還是應該能拿到 CSV（只有標註，沒有媒體）。但這是產品決策，不歸我管，已記錄在下方。</div></div>
           </div>
         </div>
       </div>
@@ -492,9 +492,9 @@
         <div class="ts">16:33</div>
         <div class="rail"><span class="node"></span></div>
         <div class="body">
-          <span class="badge">Todo for human</span><span class="ts-mobile">16:33</span>
-          <h3>Decide the guest-reviewer export policy</h3>
-          <p>Current behavior (from Deviation 4): guests get <code>403</code> on every export format. If you want guests to export the annotation CSV without media, it's a ~10-line change in <code>exportPolicy.ts</code> plus one test — but it changes what &ldquo;can't download assets&rdquo; means to customers, so it should be your call. Blocking neither merge nor QA.</p>
+          <span class="badge">待人工處理</span><span class="ts-mobile">16:33</span>
+          <h3>決定訪客審查者的匯出政策</h3>
+          <p>目前行為（來自偏離 4）：訪客在所有匯出格式上都會收到 <code>403</code> 錯誤。如果您希望訪客能夠匯出沒有媒體的標註 CSV，只需在 <code>exportPolicy.ts</code> 中修改約 10 行程式碼，並加上一個測試。但這會改變「無法下載資產」對客戶的意義，所以應該由您來決定。這不影響合併也不影響測試。</p>
         </div>
       </div>
 
@@ -502,9 +502,9 @@
         <div class="ts">16:51</div>
         <div class="rail"><span class="node"></span></div>
         <div class="body">
-          <span class="badge">Todo for human</span><span class="ts-mobile">16:51</span>
-          <h3>Confirm the retention window for export bundles</h3>
-          <p>The plan didn't specify a TTL for generated bundles. I put them under the <code>exports/</code> S3 prefix with a 7-day lifecycle rule, matching share-link expiry — conservative, and nothing customer-visible promises longer. But if contracts or the data-retention policy say otherwise, the lifecycle rule in <code>infra/s3.tf</code> is the one line to change.</p>
+          <span class="badge">待人工處理</span><span class="ts-mobile">16:51</span>
+          <h3>確認匯出包的保留期限</h3>
+          <p>計畫中並未指定生成包的存活時間（TTL）。我將它們放在 <code>exports/</code> S3 前綴下，並設定了 7 天的生命週期規則，這與分享連結的到期時間一致。這算是保守的做法，且沒有任何客戶可見的承諾保證會保留更長的時間。但如果合約或資料保留政策另有規定，<code>infra/s3.tf</code> 中的生命週期規則就是唯一需要修改的地方。</p>
         </div>
       </div>
 
@@ -512,19 +512,19 @@
   </div>
 
   <div class="next">
-    <div class="label">Fold back into the plan</div>
-    <h2>What this changes about attempt #2</h2>
-    <p class="sub">Three lines to paste into the next plan or prompt, so the next run doesn't rediscover today's surprises.</p>
-    <button class="copybtn" id="copyNext">copy bullets</button>
+    <div class="label">將其反饋至計畫中</div>
+    <h2>這對第二次嘗試有什麼改變</h2>
+    <p class="sub">將這三行重點貼到下一次的計畫或提示詞中，這樣下一次執行時就不必重新發現今天的意外。</p>
+    <button class="copybtn" id="copyNext">複製項目</button>
     <ol id="nextList">
-      <li><strong>State the legacy-data caveat up front:</strong> ~12% of annotations (pre-migration-0087) have null <code>frame_ts</code>. Decide interpolate-vs-sidecar before implementation starts, not at 14:41 mid-build.</li>
-      <li><strong>Spec queue payloads as wire types:</strong> BullMQ round-trips through JSON, so payload interfaces should use ISO strings, never <code>Date</code> — and a shared zod codec for <code>media-tasks</code> payloads would retire the whole bug class.</li>
-      <li><strong>Inventory existing utilities before adding dependencies:</strong> <code>zipStream.ts</code> and <code>useProgressChannel()</code> both existed and both beat the plan's version. Add a &ldquo;search for prior art&rdquo; step to the plan template, and settle the guest-reviewer export policy before the next feature touches ACLs.</li>
+      <li><strong>預先說明舊資料的注意事項：</strong>約 12% 的標註（早於遷移 0087）具有空值的 <code>frame_ts</code>。請在實作開始之前，而不是在建置中途的 14:41，決定要插值還是做為附件。</li>
+      <li><strong>將佇列承載資料指定為傳輸型別：</strong>BullMQ 會透過 JSON 進行往返傳遞，因此承載介面應使用 ISO 字串，絕不要用 <code>Date</code>。為 <code>media-tasks</code> 承載資料加入一個共享的 zod 編解碼器，就能徹底解決這整類錯誤。</li>
+      <li><strong>在新增相依套件之前先清點現有工具：</strong><code>zipStream.ts</code> 與 <code>useProgressChannel()</code> 兩者都已經存在，而且都比計畫中的版本更好。請在計畫範本中加入一個「搜尋前例」的步驟，並在下個功能碰到存取控制清單（ACL）之前，定好訪客審查者的匯出政策。</li>
     </ol>
   </div>
 
   <footer>
-    Part of <a href="index.html">Know your unknowns</a> — companion examples to the blog post.
+    這是<a href="index.html">了解你的未知數</a>的一部分，是部落格文章的附帶範例。
   </footer>
 
 </div>
@@ -538,7 +538,7 @@
     btn.addEventListener('click', function () {
       var text = getText();
       function done() {
-        btn.textContent = 'Copied';
+        btn.textContent = '已複製';
         btn.classList.add('done');
         setTimeout(function () {
           btn.textContent = original;

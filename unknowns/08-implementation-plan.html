@@ -1,10 +1,10 @@
 <!-- Copyright 2026 Anthropic PBC · SPDX-License-Identifier: Apache-2.0 -->
 <!doctype html>
-<html lang="en">
+<html lang="zh-Hant-TW">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The tweakable plan — Know your unknowns</title>
+<title>可微調的計畫 — 認清你的未知數</title>
 <style>
   :root {
     --ivory:  #FAF9F5;
@@ -457,128 +457,128 @@
 <div class="wrap">
 
   <header class="page-head">
-    <a class="back" href="index.html">← All examples</a>
-    <div class="eyebrow">Know your unknowns · Pre-implementation</div>
-    <h1>The tweakable plan</h1>
-    <p class="lede">Instead of a plan sorted by execution order, ask for one sorted by how likely <em>you</em> are to change each part — so the decisions worth your attention surface first and the mechanical work sinks to the bottom.</p>
+    <a class="back" href="index.html">← 所有範例</a>
+    <div class="eyebrow">認清你的未知數 · 實作前</div>
+    <h1>可微調的計畫</h1>
+    <p class="lede">不要按照執行順序排計畫，而是要求按照<em>你</em>可能修改每個部分的機率來排序。這樣一來，值得你注意的決策會先浮現，而機械性的工作會沉到底部。</p>
 
     <div class="prompt-card">
-      <div class="p-label">The prompt</div>
-      <blockquote id="the-prompt">Write an implementation plan for annotation export as HTML, but lead with the decisions I'm most likely to tweak: data model changes, new type interfaces, and anything user-facing. Bury the mechanical refactoring at the bottom — I trust you on that part.</blockquote>
-      <button class="copy-btn" onclick="copyText(this, document.getElementById('the-prompt').textContent)">Copy prompt</button>
+      <div class="p-label">提示詞</div>
+      <blockquote id="the-prompt">寫一份將標註匯出為 HTML 的實作計畫，但先呈現我最可能想微調的決策：資料模型變更、新型別介面，以及任何使用者可見的部分。把機械性的重構埋到底部，那部分我信任你。</blockquote>
+      <button class="copy-btn" onclick="copyText(this, document.getElementById('the-prompt').textContent)">複製提示詞</button>
     </div>
   </header>
 
-  <div class="produced">What Claude produced</div>
+  <div class="produced">Claude 產出的結果</div>
 
   <!-- ═══════════ THE ARTIFACT ═══════════ -->
   <div class="artifact">
 
-    <h2 class="plan-title">Implementation plan: Annotation export</h2>
-    <p class="plan-sub">Acme · export a review's annotations as a shareable PDF or CSV · branch <code>feat/annotation-export</code></p>
+    <h2 class="plan-title">實作計畫：標註匯出</h2>
+    <p class="plan-sub">Acme · 將審查的標註匯出為可分享的 PDF 或 CSV · 分支 <code>feat/annotation-export</code></p>
 
     <div class="chips">
-      <div class="chip"><span class="k">Effort</span><span class="v">~2.5 dev-days</span></div>
-      <div class="chip"><span class="k">Files touched</span><span class="v">13 (3 new)</span></div>
-      <div class="chip"><span class="k">Risk</span><span class="v risk">Low–medium</span></div>
-      <div class="chip"><span class="k">Migrations</span><span class="v">1, additive</span></div>
+      <div class="chip"><span class="k">工作量</span><span class="v">~2.5 開發人天</span></div>
+      <div class="chip"><span class="k">變更檔案</span><span class="v">13（3 個新增）</span></div>
+      <div class="chip"><span class="k">風險</span><span class="v risk">低至中</span></div>
+      <div class="chip"><span class="k">資料庫遷移</span><span class="v">1 個，純新增</span></div>
     </div>
 
     <div class="sort-banner">
-      <div class="glyph">↑ tweak
-↓ trust</div>
-      <div><strong>This plan is sorted by likelihood-of-tweaking, not execution order.</strong> Read top to bottom = most worth your attention first. Section A holds every judgment call; Section B is the build order; Section C is mechanical and safe to skip entirely.</div>
+      <div class="glyph">↑ 微調
+↓ 信任</div>
+      <div><strong>本計畫按微調可能性排序，而非執行順序。</strong>從上往下讀 = 最值得你注意的排最前面。A 部分包含所有需要判斷的決策；B 部分是建置順序；C 部分是機械性工作，可以完全略過。</div>
     </div>
 
     <!-- ── SECTION A ─────────────────────── -->
     <section class="plan-sec">
       <div class="sec-head">
         <span class="sec-letter">A</span>
-        <h3>Decisions you'll probably want to change</h3>
-        <span class="likelihood hi">High tweak likelihood</span>
+        <h3>你可能會想更改的決策</h3>
+        <span class="likelihood hi">高微調可能性</span>
       </div>
-      <p class="sec-intro">Three areas where I made a judgment call you might disagree with. Each flagged choice shows the alternative I considered — toggle to compare.</p>
+      <p class="sec-intro">三個我做出判斷但你可能會有不同意見的地方。每個標記的選擇都顯示了我考慮過的替代方案，點擊即可切換比較。</p>
 
-      <h4 class="sub">A1 · Data model — new <span style="text-transform:none">annotation_exports</span> table</h4>
+      <h4 class="sub">A1 · 資料模型 — 新增 <span style="text-transform:none">annotation_exports</span> 資料表</h4>
 
       <div class="schema-wrap">
         <div class="table-box" id="schema" data-variant="main">
-          <div class="t-name">annotation_exports <span class="new-badge">NEW</span></div>
+          <div class="t-name">annotation_exports <span class="new-badge">新增</span></div>
           <div class="col-row"><span class="cn">id</span><span class="ct">uuid pk</span></div>
           <div class="col-row"><span class="cn">review_id</span><span class="ct">uuid <span class="fk">→ reviews</span></span></div>
           <div class="col-row"><span class="cn">requested_by</span><span class="ct">uuid <span class="fk">→ users</span></span></div>
           <div class="col-row"><span class="cn">status</span><span class="ct">enum(queued, rendering, ready, failed)</span></div>
           <div class="col-row"><span class="cn">options</span><span class="ct">jsonb</span></div>
           <div class="col-row flag v-main"><span class="cn">snapshot ①</span><span class="ct">jsonb</span></div>
-          <div class="col-row alt-note v-alt">① no snapshot column — renderer JOINs <b>annotations</b> live at render time</div>
+          <div class="col-row alt-note v-alt">① 沒有 snapshot 欄位 — 轉譯器在轉譯時即時 JOIN <b>annotations</b></div>
           <div class="col-row flag v-main2"><span class="cn">artifact_url ②</span><span class="ct">text null</span></div>
           <div class="col-row flag v-main2"><span class="cn">rendered_at</span><span class="ct">timestamptz null</span></div>
-          <div class="col-row alt-note v-alt2">② no stored artifact — <b>GET /exports/:id/download</b> renders on demand</div>
+          <div class="col-row alt-note v-alt2">② 不儲存產出檔案 — <b>GET /exports/:id/download</b> 隨需轉譯</div>
           <div class="col-row"><span class="cn">created_at</span><span class="ct">timestamptz</span></div>
         </div>
 
         <div>
           <div class="choice-card" data-variant="main" id="c1">
             <div class="choice-head">
-              <span class="choice-flag">Choice ①</span>
-              <span class="ch-title">Snapshot vs. live join</span>
-              <button class="alt-toggle" onclick="toggleChoice(1)">View alternative →</button>
+              <span class="choice-flag">選擇 ①</span>
+              <span class="ch-title">快照 vs. 即時關聯</span>
+              <button class="alt-toggle" onclick="toggleChoice(1)">查看替代方案 →</button>
             </div>
             <div class="choice-body">
               <div class="v-main">
-                <div class="pick-label">Plan's pick — denormalized snapshot</div>
-                Copy the annotation payloads into <b>snapshot jsonb</b> when the export is requested. The export is a record of the review <i>at that moment</i>: later edits, resolutions, and deletions don't rewrite history.
+                <div class="pick-label">計畫的選擇 — 反正規化快照</div>
+                在請求匯出時，將標註資料複製到 <b>snapshot jsonb</b>。匯出檔是審查在<i>那個當下</i>的紀錄：之後的編輯、解決與刪除都不會改寫歷史。
                 <ul>
-                  <li>Export stays valid even if the review is archived.</li>
-                  <li>Renderer reads one row — no N+1 across <b>annotations</b> + <b>annotation_replies</b>.</li>
+                  <li>即使審查被封存，匯出檔仍然有效。</li>
+                  <li>轉譯器只讀取一列資料 — 不會在 <b>annotations</b> 與 <b>annotation_replies</b> 之間產生 N+1 查詢。</li>
                 </ul>
-                <p class="tradeoff"><strong>Cost:</strong> ~40&nbsp;KB/row for a heavy review; snapshots can go stale relative to the live thread.</p>
+                <p class="tradeoff"><strong>代價：</strong>內容繁重的審查每列約 40&nbsp;KB；快取可能會與即時討論串產生落差。</p>
               </div>
               <div class="v-alt">
-                <div class="pick-label alt-l">Alternative — live join at render time</div>
-                Skip the snapshot; the renderer joins <b>annotations</b> when the file is generated. Exports always reflect current state.
+                <div class="pick-label alt-l">替代方案 — 轉譯時即時關聯</div>
+                略過快照；轉譯器在產生檔案時即時關聯 <b>annotations</b>。匯出檔永遠反映最新狀態。
                 <ul>
-                  <li>No duplicate data, no staleness question.</li>
-                  <li>Re-downloading the same export can produce a <i>different</i> file — surprising for audit use.</li>
+                  <li>沒有重複的資料，沒有資料新舊的問題。</li>
+                  <li>重新下載同一個匯出檔可能會產生<i>不同</i>的檔案 — 這對稽核用途來說很意外。</li>
                 </ul>
-                <p class="tradeoff"><strong>Pick this if:</strong> exports are working documents, not records. One line to tell me: <i>“use live join.”</i></p>
+                <p class="tradeoff"><strong>如果符合以下情況請選此項：</strong>匯出檔是工作文件，而非正式紀錄。只要告訴我一句話：<i>「使用即時關聯。」</i></p>
               </div>
             </div>
           </div>
 
           <div class="choice-card" data-variant="main" id="c2">
             <div class="choice-head">
-              <span class="choice-flag">Choice ②</span>
-              <span class="ch-title">Stored artifact vs. render-on-demand</span>
-              <button class="alt-toggle" onclick="toggleChoice(2)">View alternative →</button>
+              <span class="choice-flag">選擇 ②</span>
+              <span class="ch-title">儲存產出檔案 vs. 隨需轉譯</span>
+              <button class="alt-toggle" onclick="toggleChoice(2)">查看替代方案 →</button>
             </div>
             <div class="choice-body">
               <div class="v-main">
-                <div class="pick-label">Plan's pick — render once, store in blob storage</div>
-                The worker renders the PDF/CSV once and writes <b>artifact_url</b>. Downloads are a signed-URL redirect — cheap, cacheable, and shareable with reviewers who lack Acme accounts.
-                <p class="tradeoff"><strong>Cost:</strong> blob lifecycle to manage; I'd add a 30-day TTL sweep (Section C, item 6).</p>
+                <div class="pick-label">計畫的選擇 — 轉譯一次，存入 blob 儲存</div>
+                工作器將 PDF/CSV 轉譯一次，並寫入 <b>artifact_url</b>。下載動作只是簽章網址的重新導向，非常輕量、可快取，還能分享給沒有 Acme 帳號的審查人員。
+                <p class="tradeoff"><strong>代價：</strong>需要管理 blob 生命週期；我會加上 30 天的 TTL 清理（C 部分，第 6 項）。</p>
               </div>
               <div class="v-alt">
-                <div class="pick-label alt-l">Alternative — render on every download</div>
-                No stored file: <b>GET /exports/:id/download</b> streams a fresh render. Zero storage, but ~2–4&nbsp;s per download on large reviews, and no shareable public link.
-                <p class="tradeoff"><strong>Pick this if:</strong> storage/compliance rules make stored copies awkward.</p>
+                <div class="pick-label alt-l">替代方案 — 每次下載都重新轉譯</div>
+                不儲存檔案：<b>GET /exports/:id/download</b> 串流新的轉譯結果。零儲存成本，但大型審查每次下載需要約 2 至 4&nbsp;秒，而且沒有可分享的公開連結。
+                <p class="tradeoff"><strong>如果符合以下情況請選此項：</strong>儲存或合規規則讓保存副本變得很麻煩。</p>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <h4 class="sub">A2 · New type interfaces</h4>
+      <h4 class="sub">A2 · 新型別介面</h4>
 
       <div class="code-grid">
         <div class="code-block"><!--
-     --><div class="cl-line"><span class="cm">// src/types/exports.ts (new)</span></div><!--
+     --><div class="cl-line"><span class="cm">// src/types/exports.ts (新增)</span></div><!--
      --><div class="cl-line"><span class="kw">export interface</span> <span class="ty">ExportRequest</span> {</div><!--
      --><div class="cl-line">  reviewId: <span class="ty">ReviewId</span>;</div><!--
      --><div class="cl-line flagged">  format: <span class="st">'pdf'</span> | <span class="st">'csv'</span>;<span class="fnum">1</span></div><!--
      --><div class="cl-line flagged">  range: <span class="st">'all'</span> | <span class="st">'unresolved'</span> | <span class="ty">TimecodeRange</span>;<span class="fnum">2</span></div><!--
-     --><div class="cl-line">  includeReplies: <span class="kw">boolean</span>;   <span class="cm">// default true</span></div><!--
-     --><div class="cl-line flagged">  includeDrawings: <span class="kw">boolean</span>;  <span class="cm">// default false</span><span class="fnum">3</span></div><!--
+     --><div class="cl-line">  includeReplies: <span class="kw">boolean</span>;   <span class="cm">// 預設 true</span></div><!--
+     --><div class="cl-line flagged">  includeDrawings: <span class="kw">boolean</span>;  <span class="cm">// 預設 false</span><span class="fnum">3</span></div><!--
      --><div class="cl-line">}</div><!--
      --><div class="cl-line">&nbsp;</div><!--
      --><div class="cl-line"><span class="kw">export interface</span> <span class="ty">AnnotationSnapshot</span> {</div><!--
@@ -591,64 +591,64 @@
      --><div class="cl-line">}</div><!--
      --></div>
         <div class="margin-notes">
-          <div class="m-note"><span class="n-num">1</span>Started with PDF + CSV. Adding <code>'xlsx'</code> or <code>'srt'</code> later is one union member + one renderer.</div>
-          <div class="m-note"><span class="n-num">2</span><code>TimecodeRange</code> lets producers export just the notes for one scene. If nobody asked for this, cutting it removes ~½ day.</div>
-          <div class="m-note"><span class="n-num">3</span>Drawings (frame markups) rasterize into the PDF. Off by default because it triples render time.</div>
-          <div class="m-note"><span class="n-num">4</span>Deliberately drops the internal 5-state machine to 2 states in the export. Tell me if reviewers need to see <code>'wont_fix'</code>.</div>
+          <div class="m-note"><span class="n-num">1</span>最初只有 PDF 與 CSV。之後加入 <code>'xlsx'</code> 或 <code>'srt'</code> 只需要新增一個聯集型別與一個轉譯器。</div>
+          <div class="m-note"><span class="n-num">2</span><code>TimecodeRange</code> 讓製作人可以只匯出某一場景的筆記。如果沒人提過這個需求，拿掉它可以省下約半天。</div>
+          <div class="m-note"><span class="n-num">3</span>繪圖（影格標記）會被點陣化嵌入 PDF。預設關閉，因為這會讓轉譯時間增加為三倍。</div>
+          <div class="m-note"><span class="n-num">4</span>刻意將內部 5 狀態的狀態機化簡為匯出時的 2 個狀態。如果審查人員需要看到 <code>'wont_fix'</code>，請告訴我。</div>
         </div>
       </div>
 
-      <h4 class="sub">A3 · UX flow</h4>
+      <h4 class="sub">A3 · 使用者體驗流程</h4>
 
       <div class="flow-strip">
         <div class="flow-step">
-          <div class="fs-num">Step 1</div>
+          <div class="fs-num">步驟 1</div>
           <div class="fs-card">
-            <div class="fs-t">Export button</div>
-            <div class="fs-d">New item in the review toolbar overflow menu, next to “Copy share link”.</div>
+            <div class="fs-t">匯出按鈕</div>
+            <div class="fs-d">審查工具列溢位選單中的新項目，就在「複製分享連結」旁邊。</div>
           </div>
         </div>
         <div class="flow-step">
-          <div class="fs-num">Step 2</div>
+          <div class="fs-num">步驟 2</div>
           <div class="fs-card">
-            <div class="fs-t">Options modal</div>
-            <div class="fs-d">Format, range, include-replies, include-drawings. Reuses <b>ModalForm</b> from settings.</div>
+            <div class="fs-t">選項設定框</div>
+            <div class="fs-d">格式、範圍、包含回覆、包含繪圖。重複使用設定頁的 <b>ModalForm</b> 元件。</div>
           </div>
         </div>
         <div class="flow-step">
-          <div class="fs-num">Step 3</div>
+          <div class="fs-num">步驟 3</div>
           <div class="fs-card weak">
-            <span class="weak-tag">Weakest part of this plan</span>
-            <div class="fs-t">Background job + toast</div>
-            <div class="fs-d">Export renders in a worker; user gets a “we'll notify you” toast and can navigate away.</div>
+            <span class="weak-tag">本計畫最薄弱的環節</span>
+            <div class="fs-t">背景工作 + 通知</div>
+            <div class="fs-d">匯出在背景工作器中轉譯；使用者會看到「我們會通知您」的訊息，且可以離開頁面。</div>
           </div>
         </div>
         <div class="flow-step">
-          <div class="fs-num">Step 4</div>
+          <div class="fs-num">步驟 4</div>
           <div class="fs-card">
-            <div class="fs-t">Ready notification</div>
-            <div class="fs-d">Bell notification + download link; also listed under review → Exports tab.</div>
+            <div class="fs-t">完成通知</div>
+            <div class="fs-d">鈴鐺通知與下載連結；也會列在審查的「匯出」分頁底下。</div>
           </div>
         </div>
       </div>
-      <p class="flow-note"><b>Why step 3 is weak:</b> most exports will finish in under 3 seconds, so a fire-and-forget toast may feel like overkill — but a 400-annotation review with drawings takes ~20&nbsp;s, which is too long to block. A hybrid (wait up to 4&nbsp;s, then fall back to notify) is nicer and adds ~half a day. Your call.</p>
+      <p class="flow-note"><b>為什麼步驟 3 比較薄弱：</b>大多數的匯出會在 3 秒內完成，所以射後不理的通知可能讓人覺得有點多餘。但包含繪圖、有 400 則標註的審查大約需要 20&nbsp;秒，這實在太久了，不能讓使用者乾等。折衷方案（先等待 4&nbsp;秒，接著退回為通知）體驗會更好，而且只需多花約半天。由你決定。</p>
     </section>
 
     <!-- ── SECTION B ─────────────────────── -->
     <section class="plan-sec">
       <div class="sec-head">
         <span class="sec-letter">B</span>
-        <h3>Sequencing</h3>
-        <span class="likelihood lo">Execution order</span>
+        <h3>實作順序</h3>
+        <span class="likelihood lo">執行順序</span>
       </div>
-      <p class="sec-intro">The order I'd actually build it in. Every step lands green on CI; nothing user-visible ships until step 5 flips the flag.</p>
+      <p class="sec-intro">我實際會採用的建置順序。每個步驟在 CI 上都會通過測試；在步驟 5 切換功能旗標（feature flag）之前，不會發布任何使用者可見的變更。</p>
       <ol class="seq">
-        <li><span class="s-num">1</span><span class="s-body"><strong>Migration + model.</strong> <span class="dep">Create <b>annotation_exports</b>, wire the Sequelize model, factory, fixtures.</span></span><span class="s-est">0.5d</span></li>
-        <li><span class="s-num">2</span><span class="s-body"><strong>Types + request validation.</strong> <span class="dep">Everything in A2, plus zod schemas on <b>POST /api/reviews/:id/exports</b>.</span></span><span class="s-est">0.25d</span></li>
-        <li><span class="s-num">3</span><span class="s-body"><strong>Renderers.</strong> <span class="dep">CSV first (trivial), then PDF via the existing <b>@acme/render</b> service.</span></span><span class="s-est">1d</span></li>
-        <li><span class="s-num">4</span><span class="s-body"><strong>Worker job + blob upload.</strong> <span class="dep">Queue on <b>exports.render</b>; retries ×3 then <b>status = failed</b>.</span></span><span class="s-est">0.25d</span></li>
-        <li><span class="s-num">5</span><span class="s-body"><strong>UI: menu item, modal, toast, Exports tab.</strong> <span class="dep">Behind flag <b>export_annotations</b>.</span></span><span class="s-est">0.5d</span></li>
-        <li><span class="s-num">6</span><span class="s-body"><strong>Tests, docs, flag rollout to the Acme team.</strong></span><span class="s-est">0.25d</span></li>
+        <li><span class="s-num">1</span><span class="s-body"><strong>資料庫遷移與模型。</strong> <span class="dep">建立 <b>annotation_exports</b>，串接 Sequelize 模型、工廠與測試資料。</span></span><span class="s-est">0.5d</span></li>
+        <li><span class="s-num">2</span><span class="s-body"><strong>型別與請求驗證。</strong> <span class="dep">A2 中的所有內容，加上 <b>POST /api/reviews/:id/exports</b> 的 zod schema。</span></span><span class="s-est">0.25d</span></li>
+        <li><span class="s-num">3</span><span class="s-body"><strong>轉譯器。</strong> <span class="dep">先做 CSV（很簡單），再透過現有的 <b>@acme/render</b> 服務處理 PDF。</span></span><span class="s-est">1d</span></li>
+        <li><span class="s-num">4</span><span class="s-body"><strong>背景工作與 blob 上傳。</strong> <span class="dep">加入 <b>exports.render</b> 佇列；重試 3 次後將 <b>status = failed</b>。</span></span><span class="s-est">0.25d</span></li>
+        <li><span class="s-num">5</span><span class="s-body"><strong>使用者介面：選單項目、設定框、通知、匯出分頁。</strong> <span class="dep">置於功能旗標 <b>export_annotations</b> 之後。</span></span><span class="s-est">0.5d</span></li>
+        <li><span class="s-num">6</span><span class="s-body"><strong>測試、文件，並向 Acme 團隊發布旗標。</strong></span><span class="s-est">0.25d</span></li>
       </ol>
     </section>
 
@@ -656,50 +656,50 @@
     <section class="plan-sec">
       <div class="sec-head">
         <span class="sec-letter soft">C</span>
-        <h3>Mechanical work (trust me)</h3>
-        <span class="likelihood lo">Low tweak likelihood</span>
+        <h3>機械性工作（交給我吧）</h3>
+        <span class="likelihood lo">低微調可能性</span>
       </div>
-      <p class="sec-intro">Refactors and plumbing the feature needs. No judgment calls here — collapsed on purpose.</p>
+      <p class="sec-intro">這個功能所需的基礎重構與管線工作。這裡沒有需要判斷的決策，所以刻意將其摺疊。</p>
       <details class="mech">
-        <summary>Boring but necessary <span class="count">8 tasks · ~0.5d total, folded into the estimates above</span></summary>
+        <summary>無聊但必要的工作 <span class="count">8 項任務 · 共約 0.5d，已包含在上方的估計中</span></summary>
         <ul class="mech-list">
-          <li>Extract <code>AnnotationSerializer</code> from <code>api/annotations.ts</code> into <code>lib/serializers/</code> so the export worker can reuse it. <span class="why">Pure move, no behavior change.</span></li>
-          <li>Finish the <code>CommentMarker</code> → <code>AnnotationMarker</code> rename — 3 files still import the deprecated alias.</li>
-          <li>Add <code>annotation_exports</code> to the fixture loader and the CI database-reset script.</li>
-          <li>Register <code>exports.render</code> in <code>workers/index.ts</code> and add it to the dead-letter alert list.</li>
-          <li>Create feature flag <code>export_annotations</code> in <code>flags.yaml</code>, default off.</li>
-          <li>Add a nightly TTL sweep for expired export blobs to <code>jobs/cleanup.ts</code> (only if Choice ② stays as-is).</li>
-          <li>Extend <code>openapi.yaml</code> with the two new endpoints and regenerate the client.</li>
-          <li>Move the timecode-formatting helper from <code>player/utils.ts</code> to <code>lib/time.ts</code> — the PDF renderer needs it and shouldn't import from the player bundle.</li>
+          <li>將 <code>AnnotationSerializer</code> 從 <code>api/annotations.ts</code> 抽離至 <code>lib/serializers/</code>，讓匯出工作器可以重複使用。 <span class="why">純粹搬移，不改變任何行為。</span></li>
+          <li>完成 <code>CommentMarker</code> → <code>AnnotationMarker</code> 的更名，還有 3 個檔案在使用過時的別名。</li>
+          <li>將 <code>annotation_exports</code> 加入測試資料載入器與 CI 資料庫重置腳本。</li>
+          <li>在 <code>workers/index.ts</code> 註冊 <code>exports.render</code>，並將其加入無效信件佇列的警報清單。</li>
+          <li>在 <code>flags.yaml</code> 建立功能旗標 <code>export_annotations</code>，預設為關閉。</li>
+          <li>在 <code>jobs/cleanup.ts</code> 中為過期的匯出 blob 加入每晚的 TTL 清理工作（僅當選擇 ② 維持原案時才需要）。</li>
+          <li>在 <code>openapi.yaml</code> 中補上這兩個新端點，並重新產生客戶端。</li>
+          <li>將時間碼格式化的輔助函式從 <code>player/utils.ts</code> 搬到 <code>lib/time.ts</code>，因為 PDF 轉譯器會用到，且不應該從播放器套件中匯入。</li>
         </ul>
       </details>
     </section>
 
     <!-- ── quick replies ─────────────────── -->
     <div class="tweak-card">
-      <h3>Tweak these three things</h3>
-      <p>The highest-leverage replies you could send. Copy one, edit, send — I'll revise the plan.</p>
+      <h3>微調這三件事</h3>
+      <p>這是你所能發送、影響力最大的回覆。複製一則、編輯後送出，我就會修改計畫。</p>
       <div class="tweak-row">
         <span class="t-num">①</span>
-        <div class="t-body"><span class="t-q">“Switch Choice ① to live join — exports here are working docs, not records.”</span></div>
-        <button class="copy-btn" onclick="copyText(this, 'Switch Choice ① to live join — exports here are working docs, not records.')">Copy</button>
+        <div class="t-body"><span class="t-q">「將選擇 ① 切換為即時關聯，這裡的匯出檔是工作文件，而非紀錄。」</span></div>
+        <button class="copy-btn" onclick="copyText(this, '將選擇 ① 切換為即時關聯，這裡的匯出檔是工作文件，而非紀錄。')">複製</button>
       </div>
       <div class="tweak-row">
         <span class="t-num">②</span>
-        <div class="t-body"><span class="t-q">“Cut TimecodeRange from ExportRequest; nobody has asked for per-scene export.”</span></div>
-        <button class="copy-btn" onclick="copyText(this, 'Cut TimecodeRange from ExportRequest; nobody has asked for per-scene export.')">Copy</button>
+        <div class="t-body"><span class="t-q">「從 ExportRequest 中移除 TimecodeRange，沒人提過需要按場景匯出的功能。」</span></div>
+        <button class="copy-btn" onclick="copyText(this, '從 ExportRequest 中移除 TimecodeRange，沒人提過需要按場景匯出的功能。')">複製</button>
       </div>
       <div class="tweak-row">
         <span class="t-num">③</span>
-        <div class="t-body"><span class="t-q">“Do the hybrid for step 3: wait up to 4s inline, then fall back to notify.”</span></div>
-        <button class="copy-btn" onclick="copyText(this, 'Do the hybrid for step 3: wait up to 4s inline, then fall back to notify.')">Copy</button>
+        <div class="t-body"><span class="t-q">「步驟 3 採用折衷方案：先內聯等待最多 4 秒，接著退回為通知。」</span></div>
+        <button class="copy-btn" onclick="copyText(this, '步驟 3 採用折衷方案：先內聯等待最多 4 秒，接著退回為通知。')">複製</button>
       </div>
     </div>
 
   </div><!-- /artifact -->
 
   <footer class="site-foot">
-    Part of <a href="index.html">Know your unknowns</a> — companion examples to the blog post.
+    屬於<a href="index.html">認清你的未知數</a>系列 — 部落格文章的附帶範例。
   </footer>
 
 </div>

@@ -1,10 +1,10 @@
 <!-- Copyright 2026 Anthropic PBC · SPDX-License-Identifier: Apache-2.0 -->
 <!doctype html>
-<html lang="en">
+<html lang="zh-Hant-TW">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Teach me my unknowns — Know your unknowns</title>
+<title>教會我所不知道的事 — 認識你的未知</title>
 <style>
   :root {
     --ivory:  #FAF9F5;
@@ -263,84 +263,84 @@
 <div class="wrap">
 
   <header>
-    <div class="eyebrow">Know your unknowns · Pre-implementation</div>
-    <a class="backlink" href="index.html">← All examples</a>
-    <h1>Teach me my unknowns</h1>
-    <p class="lede">Before doing unfamiliar work, ask Claude to teach you the domain's vocabulary — so your next prompt uses the words a professional would.</p>
+    <div class="eyebrow">認識你的未知 · 實作前</div>
+    <a class="backlink" href="index.html">← 所有範例</a>
+    <h1>教會我所不知道的事</h1>
+    <p class="lede">在進行不熟悉的工作之前，先請 Claude 教你這個領域的詞彙。這樣一來，你下一次的提示詞就能用上專業人士的用語。</p>
 
     <div class="card promptbox">
-      <div class="label">The prompt</div>
-      <blockquote id="promptText">I don't know what color grading is but I need to grade the Acme launch video. Teach me color grading well enough that I understand my unknown unknowns and can prompt you with real vocabulary.</blockquote>
-      <button class="copybtn" id="copyBtn" type="button">copy prompt</button>
+      <div class="label">提示詞</div>
+      <blockquote id="promptText">我不知道什麼是調光（color grading），但我需要為 Acme 的發表影片進行調光。請把調光教到我足以理解自己不知道哪些事，並且能用真正的專業詞彙來向你下提示詞。</blockquote>
+      <button class="copybtn" id="copyBtn" type="button">複製提示詞</button>
     </div>
   </header>
 
-  <div class="divider">What Claude produced</div>
+  <div class="divider">Claude 產出的結果</div>
 
   <main class="artifact">
-    <h2>Color grading in one sitting</h2>
-    <p class="sub">Everything you need to grade <em>acme-launch-v3.mp4</em> — or at least to give precise notes to whoever does. Correction first, then the creative look. Play with the frame below until the sliders feel obvious.</p>
+    <h2>一節課搞懂調光</h2>
+    <p class="sub">這裡包含了你為 <em>acme-launch-v3.mp4</em> 進行調光所需的一切知識，或者至少能讓你給出精確的指示給負責調光的人。先進行修正，再處理創意風格。動動下方的畫面，直到你對那些滑桿的作用感到熟悉為止。</p>
 
     <!-- mental model -->
-    <div class="sec-eyebrow">The mental model</div>
+    <div class="sec-eyebrow">心智模型</div>
     <div class="pipeline">
-      <div class="pipe-step"><b>1 · Ingest</b><span>Footage arrives "flat" (log) — grey and washed out, on purpose. It preserves detail.</span></div>
-      <div class="pipe-step hot"><b>2 · Correct</b><span>Fix exposure &amp; white balance so it looks <em>real</em>. Boring, essential, first.</span></div>
-      <div class="pipe-step hot"><b>3 · Grade</b><span>Add the <em>look</em>: contrast shape, color bias, mood. This is the creative part.</span></div>
-      <div class="pipe-step"><b>4 · Match</b><span>Make every shot in the cut agree, so the video feels like one piece.</span></div>
+      <div class="pipe-step"><b>1 · 匯入</b><span>素材進來時是「平淡的」（log 格式），看起來灰灰、霧霧的，這是故意的，為了保留最多細節。</span></div>
+      <div class="pipe-step hot"><b>2 · 修正</b><span>修正曝光與白平衡，讓畫面看起來<em>真實</em>。很無聊但不可或缺，而且必須最先做。</span></div>
+      <div class="pipe-step hot"><b>3 · 調光</b><span>加上<em>風格</em>：對比形狀、色彩偏移、氛圍。這就是創意環節。</span></div>
+      <div class="pipe-step"><b>4 · 鏡頭匹配</b><span>讓剪輯中的每個鏡頭看起來一致，使整部影片像是一個整體。</span></div>
     </div>
 
     <!-- vocab ladder -->
-    <div class="sec-eyebrow">The vocabulary ladder</div>
+    <div class="sec-eyebrow">詞彙階梯</div>
     <div class="ladder">
       <div class="card rung">
-        <div class="term">Exposure<small>overall brightness</small></div>
-        <div class="def">How light or dark the whole image is, measured in "stops" (each stop doubles/halves the light). Wrong exposure = detail lost in blown highlights or murky shadows.</div>
-        <div class="say">"the interview shots look a half-stop underexposed — bring them up"</div>
+        <div class="term">曝光<small>整體亮度</small></div>
+        <div class="def">整個影像的明暗程度，以「格」（stop）為單位測量（每一格代表加倍或減半的光量）。曝光錯誤代表細節會在過曝的亮部或混濁的暗部中流失。</div>
+        <div class="say">「訪談鏡頭看起來少了半格曝光，把它們調亮一點」</div>
       </div>
       <div class="card rung">
-        <div class="term">White balance<small>color temperature</small></div>
-        <div class="def">Whether white things actually look white. Measured in Kelvin: low = warm/orange (tungsten), high = cool/blue (daylight). Mixed lighting is the classic gotcha.</div>
-        <div class="say">"the office footage reads too warm — cool it toward neutral, protect skin tones"</div>
+        <div class="term">白平衡<small>色溫</small></div>
+        <div class="def">白色的物體在畫面中看起來是否真的是白色。以克爾文（Kelvin）為單位測量：數值低偏暖／橘色（鎢絲燈），數值高偏冷／藍色（日光）。混合光源是最常見的陷阱。</div>
+        <div class="say">「辦公室素材看起來太暖了，把它降溫到中性，但保護膚色」</div>
       </div>
       <div class="card rung">
-        <div class="term">Contrast curve<small>tone response</small></div>
-        <div class="def">The S-shaped curve mapping shadows→highlights. Steeper = punchier; flatter = softer, more "filmic". You bend the curve, you don't just crank a slider.</div>
-        <div class="say">"add a gentle S-curve — richer blacks but don't crush shadow detail"</div>
+        <div class="term">對比曲線<small>色調響應</small></div>
+        <div class="def">這條 S 型曲線對應了暗部到亮部的分佈。曲線越陡，影像越有力；曲線越平，影像越柔和，更有「電影感」。你需要彎曲曲線，而不是只把滑桿拉到底。</div>
+        <div class="say">「加一條溫和的 S 曲線，讓黑色更深沉，但不要壓碎暗部細節」</div>
       </div>
       <div class="card rung">
-        <div class="term">Lift / Gamma / Gain<small>3-way correction</small></div>
-        <div class="def">Independent color+brightness control over shadows (lift), midtones (gamma), and highlights (gain). This is how pros push "teal in the shadows, warm in the highlights".</div>
-        <div class="say">"push the lift slightly teal and the gain slightly warm — subtle, not music-video"</div>
+        <div class="term">Lift / Gamma / Gain<small>三向修正</small></div>
+        <div class="def">針對暗部（lift）、中間調（gamma）和亮部（gain）提供獨立的色彩與亮度控制。專業人士就是用這個來做出「暗部偏青藍，亮部偏暖色」的效果。</div>
+        <div class="say">「把 lift 稍微推向青藍色，gain 稍微推向暖色，要細膩，不要像音樂錄影帶那麼誇張」</div>
       </div>
       <div class="card rung">
-        <div class="term">Saturation vs vibrance<small>color intensity</small></div>
-        <div class="def">Saturation boosts <em>all</em> colors equally (skin goes orange fast). Vibrance boosts only the muted colors and protects skin. Almost always reach for vibrance first.</div>
-        <div class="say">"use vibrance not saturation — the UI screenshots can pop but faces stay natural"</div>
+        <div class="term">飽和度 vs. 自然飽和度<small>色彩濃度</small></div>
+        <div class="def">飽和度會均等地提升<em>所有</em>顏色（膚色很快就會變得橘橘的）。自然飽和度只提升較淡的顏色，並保護膚色。通常應該優先使用自然飽和度。</div>
+        <div class="say">「用自然飽和度而不是飽和度，讓 UI 截圖更亮眼，但人臉保持自然」</div>
       </div>
       <div class="card rung">
-        <div class="term">LUT<small>look-up table</small></div>
-        <div class="def">A saved color transform file (.cube) that applies a whole look in one step — either technical (log→Rec.709 conversion) or creative (a stylized grade). Apply after correction, then dial its intensity down.</div>
-        <div class="say">"apply the Rec.709 conversion LUT first, then a creative LUT at ~60% strength"</div>
+        <div class="term">LUT<small>查色表</small></div>
+        <div class="def">一種儲存的色彩轉換檔案（.cube），能一步套用整套風格，分為技術性（如 log 轉 Rec.709）或創意性（風格化的調光）。在修正之後套用，然後將其強度調降。</div>
+        <div class="say">「先套用 Rec.709 轉換 LUT，然後以約 60% 的強度套用創意 LUT」</div>
       </div>
     </div>
 
     <!-- interactive console -->
-    <div class="sec-eyebrow">Feel it — grade a frame</div>
+    <div class="sec-eyebrow">動手試試 — 為畫面調光</div>
     <div class="card console">
       <div class="console-head">
-        <span class="fname">acme-launch-v3.mp4 <i>· frame 01:47:12 · drag the split to compare</i></span>
+        <span class="fname">acme-launch-v3.mp4 <i>· 影格 01:47:12 · 拖曳中間分隔線進行前後比較</i></span>
         <div class="presets">
-          <button type="button" data-preset="flat">Flat / log</button>
-          <button type="button" data-preset="corporate" class="on">Corporate clean</button>
-          <button type="button" data-preset="teal">Cinematic teal-orange</button>
+          <button type="button" data-preset="flat">平淡 / log</button>
+          <button type="button" data-preset="corporate" class="on">企業簡潔風</button>
+          <button type="button" data-preset="teal">電影青橘風</button>
         </div>
       </div>
 
       <div class="frame-wrap">
         <div class="frame-stack">
           <!-- scene definition -->
-          <svg viewBox="0 0 640 360" preserveAspectRatio="xMidYMid slice" aria-label="Ungraded landscape frame">
+          <svg viewBox="0 0 640 360" preserveAspectRatio="xMidYMid slice" aria-label="未調光的風景畫面">
             <defs>
               <g id="scene">
                 <rect width="640" height="360" fill="#9DB3B8"/>
@@ -377,66 +377,66 @@
             <div id="splitTone"></div>
           </div>
 
-          <span class="frame-tag before">UNGRADED</span>
-          <span class="frame-tag after">GRADED</span>
+          <span class="frame-tag before">未調光</span>
+          <span class="frame-tag after">已調光</span>
           <div class="split-handle" id="splitHandle"></div>
-          <input type="range" id="splitRange" min="4" max="96" value="42" aria-label="Before/after split position">
+          <input type="range" id="splitRange" min="4" max="96" value="42" aria-label="調光前後分隔線位置">
         </div>
 
         <div class="sliders">
           <div class="sl-row">
-            <label for="sExp">Exposure <output id="oExp">+0.2 EV</output></label>
+            <label for="sExp">曝光 <output id="oExp">+0.2 EV</output></label>
             <input type="range" id="sExp" min="-50" max="50" value="10">
           </div>
           <div class="sl-row">
-            <label for="sTemp">Temperature <output id="oTemp">+8 warm</output></label>
+            <label for="sTemp">色溫 <output id="oTemp">+8 偏暖</output></label>
             <input type="range" id="sTemp" min="-50" max="50" value="8">
           </div>
           <div class="sl-row">
-            <label for="sCon">Contrast <output id="oCon">+12</output></label>
+            <label for="sCon">對比 <output id="oCon">+12</output></label>
             <input type="range" id="sCon" min="-50" max="50" value="12">
           </div>
           <div class="sl-row">
-            <label for="sSat">Saturation <output id="oSat">+8</output></label>
+            <label for="sSat">飽和度 <output id="oSat">+8</output></label>
             <input type="range" id="sSat" min="-50" max="50" value="8">
           </div>
         </div>
       </div>
 
       <div class="console-foot">
-        <span id="presetNote"><b>Corporate clean:</b> slight lift in exposure, near-neutral temperature, modest contrast — trustworthy and bright. The default for product launch videos.</span>
-        · <button class="resetbtn" type="button" id="resetBtn">reset to ungraded</button>
+        <span id="presetNote"><b>企業簡潔風：</b>略微提升曝光、接近中性的色溫、適度的對比，看起來明亮且值得信賴。這是產品發表影片的預設風格。</span>
+        · <button class="resetbtn" type="button" id="resetBtn">重置為未調光</button>
       </div>
     </div>
 
     <!-- checklist -->
-    <div class="sec-eyebrow">What good looks like</div>
+    <div class="sec-eyebrow">好結果的標準</div>
     <div class="card checklist">
       <ul>
-        <li><b>Skin tones stay believable.</b> Every creative look bends around faces, never through them. If the founder looks seasick or sunburned, the grade is wrong.</li>
-        <li><b>Blacks are rich but not crushed.</b> You can still read detail in dark areas (hair, the navy hoodie at 00:42). A histogram slammed against the left edge means lost information.</li>
-        <li><b>Whites don't clip.</b> The Acme UI screens are mostly white — if they blow out to pure 100%, button borders and text vanish. Keep highlights just under the ceiling.</li>
-        <li><b>Shot-to-shot consistency.</b> Cutting from the office interview to the screen capture shouldn't feel like changing channels. Shot matching is half the job.</li>
-        <li><b>The look serves the story.</b> A launch video wants clean and confident, not moody thriller. If viewers notice the grade before the product, dial it back.</li>
-        <li class="warn"><b>Check on more than one screen.</b> Your laptop lies. Preview on a phone and, ideally, a TV before signing off — and confirm you're exporting in Rec.709 for web delivery.</li>
+        <li><b>膚色保持自然。</b>所有的創意風格都應該圍繞著人臉調整，而不是破壞人臉。如果創辦人看起來像暈船或嚴重曬傷，那就是調光失敗了。</li>
+        <li><b>黑色深沉但不死黑。</b>你仍然可以在暗部區域看到細節（頭髮、00:42 處的深藍色連帽衫）。如果直方圖緊貼左側邊緣，就代表資訊流失了。</li>
+        <li><b>白色不要過曝。</b>Acme 的 UI 畫面大部分是白色的，如果它們變成 100% 的純白，按鈕邊框和文字就會消失。讓亮部保持在極限值以下。</li>
+        <li><b>各鏡頭之間的一致性。</b>從辦公室訪談畫面切換到螢幕錄影時，不應該有像在切換電視頻道的感覺。鏡頭匹配佔了調光一半的工作量。</li>
+        <li><b>風格必須服務於故事。</b>發表影片需要的是乾淨且充滿自信的感覺，而不是陰鬱的驚悚片風格。如果觀眾在注意到產品之前就先注意到了調光，請把效果調淡。</li>
+        <li class="warn"><b>在多個螢幕上檢查。</b>你的筆電會騙人。在簽核之前，請先在手機上預覽，如果可以，最好也在電視上看一次，並確認你輸出的是用於網頁傳遞的 Rec.709。</li>
       </ul>
     </div>
 
     <!-- prompts you couldn't have written -->
-    <div class="sec-eyebrow">The payoff</div>
+    <div class="sec-eyebrow">最終成果</div>
     <div class="card prompts-card">
-      <h3>Prompts you couldn't have written an hour ago</h3>
-      <p class="note">An hour ago the best you had was "make the video look nicer." Now you can say:</p>
+      <h3>一小前你還寫不出來的提示詞</h3>
+      <p class="note">一小時前，你最多只能說出「把影片弄好看一點」。但現在你可以這樣說：</p>
       <div class="pgrid">
-        <div class="p">"The interview footage was shot in <b>log</b> — apply the camera's <b>Rec.709 conversion LUT</b> first, then grade on top of that, not on the raw flat image."</div>
-        <div class="p">"Give the whole cut a restrained <b>teal-orange</b> look: push the <b>lift</b> slightly teal, <b>gain</b> slightly warm, keep <b>gamma</b> neutral so midtone skin stays natural."</div>
-        <div class="p">"Shot 14 is about <b>2/3 of a stop underexposed</b> and too warm versus shot 13 — match its <b>exposure</b> and <b>white balance</b> to shot 13, then A/B them at the cut point."</div>
-        <div class="p">"Add a soft <b>S-curve</b> for contrast and lift color intensity with <b>vibrance rather than saturation</b>, so the product UI pops without turning faces orange."</div>
+        <div class="p">「訪談素材是用 <b>log</b> 拍攝的，請先套用攝影機的 <b>Rec.709 轉換 LUT</b>，然後在這之上進行調光，不要直接在原始的平淡影像上調。」</div>
+        <div class="p">「為整部影片加上內斂的 <b>青橘</b> 風格：把 <b>lift</b> 稍微推向青藍色，<b>gain</b> 稍微推向暖色，保持 <b>gamma</b> 中性，讓中間調的膚色維持自然。」</div>
+        <div class="p">「第 14 個鏡頭比第 13 個鏡頭<b>少了約 2/3 格的曝光</b>且偏暖。請將它的<b>曝光</b>與<b>白平衡</b>匹配至第 13 個鏡頭，然後在剪輯點進行 A/B 比較。」</div>
+        <div class="p">「加一條柔和的 <b>S 曲線</b> 來增加對比，並用<b>自然飽和度而非飽和度</b>來提升色彩濃度，讓產品 UI 更亮眼，同時不讓人臉變得橘橘的。」</div>
       </div>
     </div>
   </main>
 
-  <footer>Part of <a href="index.html">Know your unknowns</a> — companion examples to the blog post.</footer>
+  <footer>屬於<a href="index.html">認識你的未知</a>系列 — 部落格文章的附帶範例。</footer>
 </div>
 
 <script>
@@ -490,15 +490,15 @@
   var presets = {
     flat: {
       exp: 6, temp: 0, con: -38, sat: -45, split: false,
-      note: '<b>Flat / log:</b> low contrast, low saturation — this is roughly what footage looks like straight off a camera shooting log. Ugly on purpose: it keeps maximum detail for grading.'
+      note: '<b>平淡 / log：</b>低對比、低飽和度，這大概就是攝影機直接拍攝 log 格式時的樣子。刻意看起來很醜，是為了在調光時保留最多的細節。'
     },
     corporate: {
       exp: 10, temp: 8, con: 12, sat: 8, split: false,
-      note: '<b>Corporate clean:</b> slight lift in exposure, near-neutral temperature, modest contrast — trustworthy and bright. The default for product launch videos.'
+      note: '<b>企業簡潔風：</b>略微提升曝光、接近中性的色溫、適度的對比，看起來明亮且值得信賴。這是產品發表影片的預設風格。'
     },
     teal: {
       exp: 4, temp: -22, con: 26, sat: 14, split: true,
-      note: '<b>Cinematic teal-orange:</b> shadows pushed teal, a warm glow held around the light source, stronger contrast. The blockbuster look — use at maybe 40% of this strength for a launch video.'
+      note: '<b>電影青橘風：</b>暗部推向青藍色，光源周圍保留暖色光暈，對比更強。這是好萊塢商業片的風格，如果用在發表影片中，強度大概只要這裡的 40%。'
     }
   };
 
@@ -562,7 +562,7 @@
     sExp.value = 0; sTemp.value = 0; sCon.value = 0; sSat.value = 0;
     splitToneOn = false;
     presetBtns.forEach(function (b) { b.classList.remove('on'); });
-    presetNote.innerHTML = '<b>Ungraded:</b> all corrections zeroed — the graded side now matches the source frame exactly.';
+    presetNote.innerHTML = '<b>未調光：</b>所有修正數值歸零，調光後的那一側現在與原始影格完全相同。';
     update();
   });
 
