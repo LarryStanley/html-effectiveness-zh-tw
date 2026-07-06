@@ -1,10 +1,10 @@
 <!-- Copyright 2026 Anthropic PBC · SPDX-License-Identifier: Apache-2.0 -->
 <!doctype html>
-<html lang="zh-Hant-TW">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>盲點掃描 — 認清你的未知未知</title>
+<title>Blindspot pass — Know your unknowns</title>
 <style>
   :root {
     --ivory:  #FAF9F5;
@@ -442,199 +442,199 @@
 
   <header class="page-head">
     <div class="head-row">
-      <div class="eyebrow">認清你的未知未知 · 實作前</div>
-      <a class="back" href="index.html">&larr; 所有範例</a>
+      <div class="eyebrow">Know your unknowns · Pre-implementation</div>
+      <a class="back" href="index.html">&larr; All examples</a>
     </div>
-    <h1>盲點掃描</h1>
-    <p class="lede">在修改不熟悉的程式碼之前，先請 Claude 幫你找出自已不知道自己不知道的盲點，並告訴你如何透過提示詞（prompt）來避開這些地雷。</p>
+    <h1>Blindspot pass</h1>
+    <p class="lede">Before touching unfamiliar code, ask Claude to surface what you don't know you don't know — and to tell you how to prompt around each gap.</p>
 
     <div class="prompt-card">
       <div class="prompt-label">
-        <span>提示詞</span>
-        <button class="copy-btn" data-copy-target="user-prompt">複製提示詞</button>
+        <span>The prompt</span>
+        <button class="copy-btn" data-copy-target="user-prompt">Copy prompt</button>
       </div>
-      <blockquote class="prompt" id="user-prompt">我準備為 Acme 新增一個 SSO 驗證提供者，但我從沒碰過驗證模組。請幫我做一次盲點掃描：在這個部分的程式碼庫中找出我「不知道自己不知道」的未知未知，逐一說明，並告訴我後續實作時應該怎麼向你下提示詞會更好。</blockquote>
+      <blockquote class="prompt" id="user-prompt">I'm adding a new SSO auth provider to Acme but I've never touched the auth module. Do a blindspot pass: find my unknown unknowns in this part of the codebase, explain each one, and tell me how to prompt you better for the implementation.</blockquote>
     </div>
   </header>
 
-  <div class="divider">Claude 產出的結果</div>
+  <div class="divider">What Claude produced</div>
 
   <div class="artifact">
     <div class="artifact-bar">
       <span class="dot"></span><span class="dot"></span><span class="dot"></span>
-      <span class="file">blindspot-pass · acme/services/auth · 掃描了 47 個檔案</span>
+      <span class="file">blindspot-pass · acme/services/auth · 47 files scanned</span>
     </div>
     <div class="artifact-body">
 
-      <h2>未知未知：Acme 驗證模組</h2>
-      <p class="sub">掃描了 <code>services/auth/</code>（47 個檔案），自 2025 年 1 月起有 214 次提交更動，正在進行 3 個遷移，以及 2 次被退回的嘗試。以下是你可能會付出慘痛代價才學到的七件事。</p>
+      <h2>Unknown unknowns: the Acme auth module</h2>
+      <p class="sub">Scanned <code>services/auth/</code> (47 files), 214 commits touching it since Jan&nbsp;2025, 3 migrations in flight, 2 reverted attempts. Seven things you'd have learned the hard way.</p>
 
       <div class="vs-grid">
         <div class="vs-cell">
-          <div class="vs-tag">你以為的要求</div>
-          <p>「新增一個 SSO 提供者」，聽起來就是：實作介面、註冊、寫重新導向處理器，搞定。在乾淨的程式碼庫中，這是兩天就能做完的工作。</p>
+          <div class="vs-tag">What you asked for</div>
+          <p>"Add a new SSO provider" — which sounds like: implement an interface, register it, write the redirect handlers, done. On a clean codebase, a two-day task.</p>
         </div>
         <div class="vs-cell actual">
-          <div class="vs-tag">你實際踏入的泥淖</div>
-          <p>一個<strong>正在遷移工作階段（session）儲存層</strong>的模組，其中<strong>有一個提供者悄悄繞過了大家都以為有在運作的中介層（middleware）</strong>，<strong>之前有人做過一模一樣的任務但被退回</strong>，還有一個<strong>從提供者介面上完全看不出來的身分連結模型</strong>。</p>
+          <div class="vs-tag">What you're actually walking into</div>
+          <p>A module <strong>mid-migration on session storage</strong>, with <strong>one provider that quietly bypasses the middleware</strong> everyone assumes runs, a <strong>reverted previous attempt</strong> at exactly this task, and an <strong>identity-linking model</strong> that isn't visible from the provider interface at all.</p>
         </div>
       </div>
 
       <div class="stat-strip">
-        <span class="warn"><b>4</b> 個地雷</span>
-        <span><b>2</b> 個未寫成文件的慣例</span>
-        <span><b>1</b> 個缺失的概念</span>
-        <span><b>1</b> 次針對此任務的被退回嘗試（PR&nbsp;#2841）</span>
+        <span class="warn"><b>4</b> landmines</span>
+        <span><b>2</b> unwritten conventions</span>
+        <span><b>1</b> missing concept</span>
+        <span><b>1</b> reverted attempt at this exact task (PR&nbsp;#2841)</span>
       </div>
 
-      <div class="art-eyebrow">盲點</div>
+      <div class="art-eyebrow">The blindspots</div>
 
       <!-- 1 -->
       <div class="bs-card">
         <div class="bs-head">
-          <span class="badge landmine">地雷</span>
+          <span class="badge landmine">Landmine</span>
           <span class="bs-num">01</span>
-          <h3 class="bs-title">工作階段被重複寫入，你先找到的 Redis 儲存是錯的</h3>
+          <h3 class="bs-title">Sessions are double-written — the Redis store you'll find first is the wrong one</h3>
         </div>
-        <p>Acme 正在將工作階段從 Postgres 遷移到 Redis（<code>MIG-118</code>，自三月起停滯）。目前每次寫入工作階段都會經過 <code>SessionBridge.write()</code>，它會<em>同時</em>寫入 <code>RedisSessionStore</code> 和舊的 <code>pg_sessions</code> 資料表。遷移一直沒完成，所以讀取還是從 Postgres 來。</p>
-        <div class="bite"><span class="bite-tag">為何會踩雷</span><span>搜尋 "session" 會先找到 <code>RedisSessionStore</code>，它看起來像是正規的儲存，有最新的程式碼和最完善的文件。如果你直接寫入它，在開發環境中登入看起來會正常（因為開發環境啟用了 Redis 讀取），但在正式環境中會默默失敗，因為正式環境的讀取還是從 Postgres 來。</span></div>
+        <p>Acme is mid-migration from Postgres-backed sessions to Redis (<code>MIG-118</code>, stalled since March). Every session write currently goes through <code>SessionBridge.write()</code>, which fans out to <em>both</em> <code>RedisSessionStore</code> and the legacy <code>pg_sessions</code> table. The migration was never finished, so reads still come from Postgres.</p>
+        <div class="bite"><span class="bite-tag">Why it bites</span><span>Grepping for "session" surfaces <code>RedisSessionStore</code> first — it looks canonical, has the newest code, and the best docs. Write to it directly and your logins will appear to work in dev (Redis reads are enabled there) and silently fail in prod, where reads still hit Postgres.</span></div>
         <div class="chip-row">
-          <div class="prompt-chip" id="chip-1">為新提供者建立工作階段時，請將所有操作透過 SessionBridge 處理，絕不要直接用 RedisSessionStore 或 pg_sessions。在撰寫任何工作階段程式碼前，先解釋 MIG-118 的讀寫分離機制。</div>
-          <button class="copy-btn" data-copy-target="chip-1">複製</button>
+          <div class="prompt-chip" id="chip-1">When you create sessions for the new provider, route everything through SessionBridge — never RedisSessionStore or pg_sessions directly. Explain the MIG-118 read/write split before writing any session code.</div>
+          <button class="copy-btn" data-copy-target="chip-1">Copy</button>
         </div>
       </div>
 
       <!-- 2 -->
       <div class="bs-card">
         <div class="bs-head">
-          <span class="badge landmine">地雷</span>
+          <span class="badge landmine">Landmine</span>
           <span class="bs-num">02</span>
-          <h3 class="bs-title">SAML 提供者（你最明顯的範本）繞過了驗證中介層</h3>
+          <h3 class="bs-title">The SAML provider — your obvious template — bypasses the auth middleware</h3>
         </div>
-        <p>除了 SAML 之外，每個提供者都掛載在 <code>authPipeline</code> 之下，它會執行速率限制（rate limiting）、稽核日誌和裝置信任檢查。<code>saml/handler.ts</code> 將其 ACS 端點直接掛載在路由器上，因為 SP 發起的 POST 回呼在 2024 年弄壞了 CSRF 層，之後也沒人回頭處理。14 個月前有一條 <code>// TODO(priya): fold back into pipeline</code> 的註解。</p>
-        <div class="bite"><span class="bite-tag">為何會踩雷</span><span>SAML 是最近新增的提供者，所以它自然會成為你複製的對象。一旦複製它，你的新提供者就會在沒有速率限制和稽核軌跡的情況上線，而且這不會讓任何測試失敗，因為合約測試並沒有斷言中介層的存在。</span></div>
+        <p>Every provider except SAML mounts under <code>authPipeline</code>, which runs rate limiting, audit logging, and the device-trust check. <code>saml/handler.ts</code> mounts its ACS endpoint directly on the router because SP-initiated POST callbacks broke the CSRF layer in 2024, and nobody circled back. There's a <code>// TODO(priya): fold back into pipeline</code> from 14 months ago.</p>
+        <div class="bite"><span class="bite-tag">Why it bites</span><span>SAML is the most recently added provider, so it's the natural file to copy. Copy it and your new provider ships with no rate limiting and no audit trail — which won't fail any test, because the contract tests don't assert middleware presence.</span></div>
         <div class="chip-row">
-          <div class="prompt-chip" id="chip-2">請使用 oauth/google.ts 作為結構範本，而不是 saml/handler.ts，因為 SAML 刻意繞過了 authPipeline。請確認新提供者的路由掛載在 authPipeline 之內，並向我展示掛載位置。</div>
-          <button class="copy-btn" data-copy-target="chip-2">複製</button>
+          <div class="prompt-chip" id="chip-2">Use oauth/google.ts as the structural template, not saml/handler.ts — SAML intentionally bypasses authPipeline. Confirm the new provider's routes are mounted inside authPipeline and show me the mount point.</div>
+          <button class="copy-btn" data-copy-target="chip-2">Copy</button>
         </div>
       </div>
 
       <!-- 3 -->
       <div class="bs-card">
         <div class="bs-head">
-          <span class="badge history">歷史教訓</span>
+          <span class="badge history">History</span>
           <span class="bs-num">03</span>
-          <h3 class="bs-title">已經有人嘗試過這件事，而且被退回的理由至今依然成立</h3>
+          <h3 class="bs-title">Someone already tried this — and it was reverted for a reason that still holds</h3>
         </div>
-        <p>PR&nbsp;#2841（「新增 Okta OIDC 提供者」，2025 年 9 月）合併後九天就被退回。退回的提交說明了原因：Acme 的回呼網址必須帶有租戶後綴（<code>/auth/callback/:provider/:workspaceSlug</code>），這樣工作空間範圍的邀請連結才能在重新導向往返後保留下來。Okta 嚴格的重新導向 URI 匹配拒絕了動態後綴，導致受邀使用者進入了錯誤的工作空間。大家在退回討論串中達成共識的解決方案，也就是用 <code>AUTH_STATE_SECRET</code> 簽署的 state 參數工作空間聲明，雖然設計好了，卻從未付諸實作。</p>
-        <div class="bite"><span class="bite-tag">為何會踩雷</span><span>目前的程式碼中完全看不出這件事。你可能會重新實作 #2841 的方法，通過所有本地測試（單一工作空間的開發環境），然後在第一次有受邀使用者登入時，於正式環境中重新發現這個錯誤。</span></div>
+        <p>PR&nbsp;#2841 ("Add Okta OIDC provider", Sept&nbsp;2025) was merged and reverted nine days later. The revert commit explains why: Acme callback URLs must carry a tenant suffix (<code>/auth/callback/:provider/:workspaceSlug</code>) so workspace-scoped invite links survive the redirect round-trip. Okta's strict redirect-URI matching rejected the dynamic suffix, and invited users landed in the wrong workspace. The fix everyone agreed on — a state-parameter workspace claim signed with <code>AUTH_STATE_SECRET</code> — was designed in the revert thread but never built.</p>
+        <div class="bite"><span class="bite-tag">Why it bites</span><span>Nothing in the current code hints at this. You'd re-implement #2841's approach, pass every local test (single-workspace dev env), and rediscover the bug in production the first time an invited user signs in.</span></div>
         <div class="chip-row">
-          <div class="prompt-chip" id="chip-3">請先閱讀 PR #2841 的退回紀錄。實作它所提議、以簽署的 state 參數進行工作空間聲明的做法，而不是使用帶有租戶後綴的回呼網址，並為工作空間範圍的邀請流程新增測試。</div>
-          <button class="copy-btn" data-copy-target="chip-3">複製</button>
+          <div class="prompt-chip" id="chip-3">Read the revert of PR #2841 first. Implement the signed state-parameter workspace claim it proposed instead of tenant-suffixed callback URLs, and add a test for the workspace-scoped invite flow.</div>
+          <button class="copy-btn" data-copy-target="chip-3">Copy</button>
         </div>
       </div>
 
       <!-- 4 -->
       <div class="bs-card">
         <div class="bs-head">
-          <span class="badge concept">缺失的概念</span>
+          <span class="badge concept">Missing concept</span>
           <span class="bs-num">04</span>
-          <h3 class="bs-title">身分與帳號是兩回事，而提供者介面隱瞞了這一點</h3>
+          <h3 class="bs-title">Identities and accounts are separate things — and the provider interface hides it</h3>
         </div>
-        <p>Acme 將 <code>users</code> 與 <code>identities</code> 分開：一個帳號可以有多個連結的身分（電子郵件+密碼、Google、SAML），它們在 <code>identities</code> 資料表中關聯。提供者介面只會回傳設定檔；連結的決策發生在 <code>identity/linker.ts</code> 中，以已驗證的電子郵件作為索引鍵。如果提供者無法保證電子郵件已驗證（許多 SSO IdP 並不保證），就必須設定 <code>requiresManualLink: true</code>，否則連結器會很樂意將兩個共用同一個公司別名的不同人員合併。</p>
-        <div class="bite"><span class="bite-tag">為何會踩雷</span><span>如果你毫無防備地實作了這個介面，一切看起來都會運作正常。直到某個客戶的 IdP 傳送了未驗證或被重新分配的電子郵件，你的提供者就會默默將陌生人的身分附加到現有帳號上。這是帳號遭接管的嚴重錯誤，而不只是登入錯誤。</span></div>
+        <p>Acme splits <code>users</code> from <code>identities</code>: one account can have several linked identities (email+password, Google, SAML), joined in the <code>identities</code> table. The provider interface only returns a profile; the linking decision happens in <code>identity/linker.ts</code>, keyed on verified email. Providers that can't guarantee verified emails (many SSO IdPs don't) must set <code>requiresManualLink: true</code> or the linker will happily merge two different people who share a corporate alias.</p>
+        <div class="bite"><span class="bite-tag">Why it bites</span><span>Implement the interface naively and everything works — until a customer's IdP sends an unverified or reassigned email and your provider silently attaches a stranger's identity to an existing account. This is an account-takeover bug, not a login bug.</span></div>
         <div class="chip-row">
-          <div class="prompt-chip" id="chip-4">在實作之前，請帶我過一次 identity/linker.ts。明確決定這個 IdP 是否保證電子郵件已驗證；如果不是，請設定 requiresManualLink 並建立手動連結確認路徑。</div>
-          <button class="copy-btn" data-copy-target="chip-4">複製</button>
+          <div class="prompt-chip" id="chip-4">Walk me through identity/linker.ts before implementing. Decide explicitly whether this IdP guarantees verified emails; if not, set requiresManualLink and build the manual-link confirmation path.</div>
+          <button class="copy-btn" data-copy-target="chip-4">Copy</button>
         </div>
       </div>
 
       <!-- 5 -->
       <div class="bs-card">
         <div class="bs-head">
-          <span class="badge landmine">地雷</span>
+          <span class="badge landmine">Landmine</span>
           <span class="bs-num">05</span>
-          <h3 class="bs-title">權杖刷新功能被功能旗標控制，開發環境開啟，正式環境關閉</h3>
+          <h3 class="bs-title">Token refresh is behind a flag that's on in dev and off in prod</h3>
         </div>
-        <p>刷新權杖的輪換由 <code>flags.yaml</code> 中的 <code>auth.refresh_rotation</code> 控制。它在開發與預備環境中預設為 <code>true</code>，在正式環境中為 <code>false</code>（五月發生時鐘偏差事件後暫停推出）。關閉旗標後，正式環境的工作階段壽命正好是 <code>ACCESS_TOKEN_TTL</code>（12 小時），然後就會直接失效，沒有刷新路徑。</p>
-        <div class="bite"><span class="bite-tag">為何會踩雷</span><span>你寫的任何刷新邏輯都會針對開發行為進行測試，但在正式環境中卻是死程式碼。更糟的是，如果你的提供者假設會發生刷新，正式環境的使用者每 12 小時就會在工作階段中途被登出，錯誤回報會寫著「SSO 莫名其妙把我登出了」，然後矛頭指向你的程式碼。</span></div>
+        <p>Refresh-token rotation is gated by <code>auth.refresh_rotation</code> in <code>flags.yaml</code>. It defaults to <code>true</code> in dev and staging, <code>false</code> in prod (a paused rollout after a clock-skew incident in May). With the flag off, prod sessions live exactly <code>ACCESS_TOKEN_TTL</code> (12h) and then hard-expire — there is no refresh path.</p>
+        <div class="bite"><span class="bite-tag">Why it bites</span><span>Any refresh logic you write will be tested against dev behavior and dead code in prod. Worse: if your provider assumes a refresh happens, prod users get logged out mid-session every 12 hours and the bug report will say "SSO randomly logs me out," pointing at your code.</span></div>
         <div class="chip-row">
-          <div class="prompt-chip" id="chip-5">請針對 auth.refresh_rotation=false（正式環境的現實）進行實作。讓提供者在 12 小時硬性失效的情況下運作，並另外註明如果輪換推出恢復後會有什麼變化。</div>
-          <button class="copy-btn" data-copy-target="chip-5">複製</button>
+          <div class="prompt-chip" id="chip-5">Implement against auth.refresh_rotation=false (prod reality). Make the provider work with hard 12h expiry, and note separately what changes if the rotation rollout resumes.</div>
+          <button class="copy-btn" data-copy-target="chip-5">Copy</button>
         </div>
       </div>
 
       <!-- 6 -->
       <div class="bs-card">
         <div class="bs-head">
-          <span class="badge convention">慣例</span>
+          <span class="badge convention">Convention</span>
           <span class="bs-num">06</span>
-          <h3 class="bs-title">註冊提供者需要三個步驟，但只有兩個步驟找得到</h3>
+          <h3 class="bs-title">Registering a provider takes three steps, and only two are discoverable</h3>
         </div>
-        <p>提供者編譯完成並不表示它已上線。它必須 (1) 在 <code>providers/registry.ts</code> 中註冊，(2) 透過資料庫遷移插入 <code>auth_providers</code> 資料表（管理介面讀取的是資料庫，而不是註冊表），以及 (3) 加入 <code>__tests__/provider-contract.spec.ts</code> 的測試設定清單中，該測試會針對每個註冊的提供者執行共用合約測試套件（狀態驗證、重送保護、登出擴散）。如果註冊表和測試清單不一致，CI 就會失敗。</p>
-        <div class="bite"><span class="bite-tag">為何會踩雷</span><span>如果跳過了資料庫遷移，提供者能編譯、能通過測試，但就是不會出現在任何工作空間的 SSO 設定中。已經有兩位工程師各自在這裡浪費了半天時間；這在沒有任何人的文件裡有記載。</span></div>
+        <p>A provider isn't live when it compiles. It must be (1)&nbsp;registered in <code>providers/registry.ts</code>, (2)&nbsp;inserted into the <code>auth_providers</code> table via a migration — the admin UI reads the DB, not the registry — and (3)&nbsp;added to the fixture list in <code>__tests__/provider-contract.spec.ts</code>, which runs the shared contract suite (state validation, replay protection, logout fan-out) against every registered provider. CI fails if the registry and fixture list disagree.</p>
+        <div class="bite"><span class="bite-tag">Why it bites</span><span>Skip the migration and the provider compiles, passes tests, and simply never appears in any workspace's SSO settings. Two engineers have independently lost half a day to this; it's in nobody's docs.</span></div>
         <div class="chip-row">
-          <div class="prompt-chip" id="chip-6">請完成所有三個註冊步驟：registry.ts、一個 auth_providers 遷移，以及 provider-contract 測試清單。在我們宣布完成之前，請向我展示新提供者通過了合約測試套件。</div>
-          <button class="copy-btn" data-copy-target="chip-6">複製</button>
+          <div class="prompt-chip" id="chip-6">Do all three registration steps: registry.ts, an auth_providers migration, and the provider-contract fixture list. Show me the contract suite passing for the new provider before we call it done.</div>
+          <button class="copy-btn" data-copy-target="chip-6">Copy</button>
         </div>
       </div>
 
       <!-- 7 -->
       <div class="bs-card">
         <div class="bs-head">
-          <span class="badge landmine">地雷</span>
+          <span class="badge landmine">Landmine</span>
           <span class="bs-num">07</span>
-          <h3 class="bs-title">登出不是一個函式呼叫，而是一個事件，而且審片播放器在監聽</h3>
+          <h3 class="bs-title">Logout isn't a function call — it's an event, and the review player listens</h3>
         </div>
-        <p>撤銷工作階段會在內部事件匯流排上發布 <code>auth.session.revoked</code>。即時審片播放器持有自己長效的播放授權，只有在消費該事件時才會釋放。<code>logout.ts</code> 會為現有的提供者處理這件事，但 SSO 單一登出（SLO）回呼是走另一條路徑抵達的，必須自行發布該事件。</p>
-        <div class="bite"><span class="bite-tag">為何會踩雷</span><span>如果漏掉這個事件，登出看起來「成功」了（工作階段紀錄消失了），但任何開著審片分頁的人，在授權 TTL 到期前（最長 24 小時），都會保留對私人影片的完整播放權限。對於一家向工作室銷售審片工作流程的公司來說，這是資安事件，而不只是個錯誤。</span></div>
+        <p>Session revocation publishes <code>auth.session.revoked</code> on the internal event bus. The realtime review player holds its own long-lived playback grants and only releases them when it consumes that event. <code>logout.ts</code> handles this for existing providers, but SSO single-logout (SLO) callbacks arrive on a separate path and must publish the event themselves.</p>
+        <div class="bite"><span class="bite-tag">Why it bites</span><span>Miss the event and logout "works" — the session row is gone — but anyone with an open review tab keeps full playback access to private video until the grant TTL expires (up to 24h). For a company selling review workflows to studios, that's a security incident, not a bug.</span></div>
         <div class="chip-row">
-          <div class="prompt-chip" id="chip-7">處理 SLO：新提供者中的任何撤銷路徑都必須發布 auth.session.revoked。請新增一項測試，斷言在 IdP 發起的登出時，審片播放器的授權會被釋放。</div>
-          <button class="copy-btn" data-copy-target="chip-7">複製</button>
+          <div class="prompt-chip" id="chip-7">Handle SLO: any revocation path in the new provider must publish auth.session.revoked. Add a test asserting the review player's grant is released on IdP-initiated logout.</div>
+          <button class="copy-btn" data-copy-target="chip-7">Copy</button>
         </div>
       </div>
 
       <!-- final -->
       <div class="final-card">
         <div class="final-head">
-          <div class="art-eyebrow">你改善後的提示詞</div>
-          <button class="copy-btn" data-copy-target="final-prompt">複製提示詞</button>
+          <div class="art-eyebrow">Your improved prompt</div>
+          <button class="copy-btn" data-copy-target="final-prompt">Copy prompt</button>
         </div>
-        <h3>將上述所有內容，統整成你實際該給我的提示詞</h3>
-        <pre class="final-prompt" id="final-prompt">為 Acme 新增一個新的 SSO 驗證提供者。來自盲點掃描的約束條件：
+        <h3>Everything above, folded into the prompt you should actually give me</h3>
+        <pre class="final-prompt" id="final-prompt">Add a new SSO auth provider to Acme. Constraints from the blindspot pass:
 
-1. 工作階段：將所有工作階段寫入透過 SessionBridge 處理（MIG-118
-   尚未完成；正式環境仍從 pg_sessions 讀取）。絕不要直接使用
-   RedisSessionStore。
-2. 範本：結構以 oauth/google.ts 為基礎，而不是 saml/handler.ts，
-   因為 SAML 繞過了 authPipeline。請將所有新路由掛載在
-   authPipeline 之內，並向我展示掛載位置。
-3. 歷史：請先閱讀 PR #2841 的退回紀錄。實作簽署的 state 參數
-   工作空間聲明（AUTH_STATE_SECRET），而不是帶有租戶後綴的回呼
-   網址，並測試工作空間邀請流程。
-4. 身分連結：在寫程式碼前，先帶我過一次 identity/linker.ts。
-   如果這個 IdP 不保證電子郵件已驗證，請設定 requiresManualLink
-   並建立確認路徑，不要自動連結。
-5. 旗標：請針對 auth.refresh_rotation=false（正式環境）進行實作。
-   工作階段在 12 小時硬性失效；沒有刷新路徑。請註明如果輪換功能
-   上線會有什麼變化。
-6. 註冊：所有三個步驟，providers/registry.ts、一個
-   auth_providers 遷移，以及 provider-contract 測試清單。
-   並展示合約測試套件通過。
-7. 登出：每個撤銷路徑都必須發布 auth.session.revoked，並新增
-   一項測試，確認在 IdP 發起的登出時，審片播放器的播放授權會
-   被釋放。
+1. Sessions: route all session writes through SessionBridge (MIG-118 is
+   unfinished; prod still reads from pg_sessions). Never touch
+   RedisSessionStore directly.
+2. Template: base the structure on oauth/google.ts, NOT saml/handler.ts —
+   SAML bypasses authPipeline. Mount all new routes inside authPipeline
+   and show me the mount point.
+3. History: read the revert of PR #2841 first. Implement the signed
+   state-parameter workspace claim (AUTH_STATE_SECRET) instead of
+   tenant-suffixed callback URLs, and test the workspace-invite flow.
+4. Identity linking: walk me through identity/linker.ts before coding.
+   If this IdP doesn't guarantee verified emails, set requiresManualLink
+   and build the confirmation path — do not auto-link.
+5. Flags: implement against auth.refresh_rotation=false (prod). Sessions
+   hard-expire at 12h; no refresh path. Note what changes if rotation
+   ships.
+6. Registration: all three steps — providers/registry.ts, an
+   auth_providers migration, and the provider-contract fixture list.
+   Show the contract suite green.
+7. Logout: every revocation path must publish auth.session.revoked, and
+   add a test that the review player's playback grant is released on
+   IdP-initiated logout.
 
-請依此順序進行：連結器說明 → 提供者骨架 → 回呼與 state 聲明 →
-註冊 → SLO 與事件 → 合約測試。在說明完畢後、撰寫程式碼前，
-請停下來向我展示計畫。</pre>
-        <p class="final-note">這七個句子是你今天早上還寫不出來的，每一句都是別人用半天時間換來的血淚教訓。這就是盲點掃描的價值所在。</p>
+Work in this order: linker walkthrough → provider skeleton → callback +
+state claim → registration → SLO + events → contract tests. Stop and
+show me the plan after the walkthrough before writing code.</pre>
+        <p class="final-note">Seven sentences you couldn't have written this morning — each one bought with someone else's half-day. That's the point of the pass.</p>
       </div>
 
     </div>
   </div>
 
-  <footer>屬於<a href="index.html">認清你的未知未知</a>系列，是部落格文章的配套範例。</footer>
+  <footer>Part of <a href="index.html">Know your unknowns</a> — companion examples to the blog post.</footer>
 </div>
 
 <script>

@@ -1,10 +1,10 @@
 <!-- Copyright 2026 Anthropic PBC · SPDX-License-Identifier: Apache-2.0 -->
 <!doctype html>
-<html lang="zh-Hant-TW">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>四個設計方向 — 認清你的未知數</title>
+<title>Four design directions — Know your unknowns</title>
 <style>
   :root {
     --ivory:  #FAF9F5;
@@ -201,7 +201,7 @@
     color: var(--g700);
     margin: 0 0 16px;
   }
-  .dir-says::before { content: "此方向傳達："; font-style: normal; font-family: var(--mono); font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--g500); margin-right: 6px; }
+  .dir-says::before { content: "This direction says: "; font-style: normal; font-family: var(--mono); font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--g500); margin-right: 6px; }
 
   .frame {
     background: var(--paper);
@@ -671,74 +671,78 @@
 <div class="wrap">
 
   <header class="page">
-    <a class="backlink" href="index.html">&larr; 所有範例</a>
-    <div class="eyebrow">認清你的未知數 &middot; 實作前</div>
-    <h1>四個設計方向</h1>
+    <a class="backlink" href="index.html">&larr; All examples</a>
+    <div class="eyebrow">Know your unknowns &middot; Pre-implementation</div>
+    <h1>Four design directions</h1>
     <p class="lede">
-      當你說不清楚自己要什麼樣的設計時，別硬擠一個出來。要求四個風格互斥的方向，讓它們實際呈現出來，再交給你的直覺來定案。給回饋比從零想像容易多了。
+      When you can't describe the design you want, don't describe one &mdash; ask for four incompatible ones
+      rendered live, and let your gut do the specifying. Reacting is easier than imagining.
     </p>
     <div class="prompt-card">
-      <div class="label">提示詞</div>
-      <blockquote id="prompt-text">&ldquo;我想要一個 Acme 的審查佇列儀表板，但我沒有視覺美感，也不知道有哪些可能性。給我一個 HTML 頁面，裡面放四個截然不同的設計方向，讓我來給回饋。&rdquo;</blockquote>
-      <button class="copy-btn" id="copy-prompt" type="button">複製提示詞</button>
+      <div class="label">The prompt</div>
+      <blockquote id="prompt-text">&ldquo;I want a review-queue dashboard for Acme but I have no visual taste and don't know what's possible. Make me one HTML page with 4 wildly different design directions so I can react to them.&rdquo;</blockquote>
+      <button class="copy-btn" id="copy-prompt" type="button">Copy prompt</button>
     </div>
   </header>
 
-  <div class="divider">Claude 產出的結果</div>
+  <div class="divider">What Claude produced</div>
 
   <p class="art-intro">
-    相同資料，四種理念。下方每個框架呈現的都是<strong>完全相同的審查佇列</strong>，也就是 Acme 中五支等待審查的影片，因此唯一的變數只有設計。在每個框架下方，你可以點選標籤來標記想<strong>採用</strong>或<strong>捨棄</strong>的元素；你的選擇會在頁面底部組合成一段回覆。
+    Same data, four philosophies. Every frame below renders the <strong>identical review queue</strong> &mdash;
+    five videos awaiting review in Acme &mdash; so the only variable is the design. Under each frame,
+    tap the chips for anything you'd <strong>steal</strong> or <strong>skip</strong>; your picks assemble a
+    reply at the bottom of the page.
   </p>
   <div class="same-data">
-    <b>共用資料集：</b> 5 個待審項目 &middot; 4 位審查者（MK、DR、LT、JB）&middot; 狀態：
-    審查中 / 需修改 / 等待審查者 / 已核准（附註） &middot;
-    23 個未解決留言 &middot; 本週已結案 14 項審查 &middot; 平均處理時間 6.2 小時
+    <b>The shared dataset:</b> 5 pending reviews &middot; 4 reviewers (MK, DR, LT, JB) &middot; statuses:
+    in&nbsp;review / needs&nbsp;changes / waiting&nbsp;on&nbsp;reviewer / approved&nbsp;w/&nbsp;notes &middot;
+    23 open comments &middot; 14 reviews cleared this week &middot; avg turnaround 6.2h
   </div>
 
   <!-- ═══════════════ DIRECTION 1 ═══════════════ -->
   <div class="direction">
-    <div class="dir-head"><span class="num">方向 1 / 4</span><h2>高密度營運主控台</h2></div>
-    <p class="dir-says">&ldquo;你的審查佇列是一套營運系統。鉅細靡遺地呈現，不浪費任何空間，讓異常狀況自己跳出來。&rdquo;</p>
+    <div class="dir-head"><span class="num">DIRECTION 1 / 4</span><h2>Dense ops console</h2></div>
+    <p class="dir-says">&ldquo;Your review queue is an operational system. Show everything, waste nothing, let the anomalies pop.&rdquo;</p>
     <div class="frame">
       <div class="frame-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="url">acme.app/ops/review-queue</span></div>
       <div class="frame-body">
         <div class="d1">
           <div class="topline">
             <span class="prod">ACME<span>/</span>REVIEW-OPS</span>
-            <span class="env">團隊：LAUNCH-CONTENT &middot; 更新於 14:32</span>
+            <span class="env">TEAM: LAUNCH-CONTENT &middot; UPDATED 14:32</span>
           </div>
           <div class="metrics">
-            <div class="metric"><div class="mk">待處理</div><div class="mv">5 <em class="bad">今日 +2</em></div></div>
-            <div class="metric"><div class="mk">平均處理時間</div><div class="mv">6.2h <em>&minus;0.8h</em></div></div>
-            <div class="metric"><div class="mk">已結案 / 7 天</div><div class="mv">14 <em>進度正常</em></div></div>
-            <div class="metric"><div class="mk">最久等待時間</div><div class="mv">2天 4小時 <em class="bad">SLA 48小時</em></div></div>
+            <div class="metric"><div class="mk">Pending</div><div class="mv">5 <em class="bad">+2 today</em></div></div>
+            <div class="metric"><div class="mk">Avg turnaround</div><div class="mv">6.2h <em>&minus;0.8h</em></div></div>
+            <div class="metric"><div class="mk">Cleared / 7d</div><div class="mv">14 <em>on pace</em></div></div>
+            <div class="metric"><div class="mk">Oldest waiting</div><div class="mv">2d 4h <em class="bad">SLA 48h</em></div></div>
           </div>
           <table>
             <thead>
-              <tr><th>ID</th><th>影片</th><th class="num-r">長度</th><th>審查者</th><th class="num-r">留言</th><th>狀態</th><th class="num-r">等候時間</th></tr>
+              <tr><th>ID</th><th>Video</th><th class="num-r">Len</th><th>Reviewer</th><th class="num-r">Cmts</th><th>Status</th><th class="num-r">Age</th></tr>
             </thead>
             <tbody>
-              <tr><td class="id">VR-2214</td><td class="t">Q3 發表預告 &mdash; v4</td><td class="num-r">0:47</td><td class="rv">MK &middot; Kowalski</td><td class="num-r">12</td><td class="s-chg"><span class="sdot"></span>需修改</td><td class="num-r">2h</td></tr>
-              <tr><td class="id">VR-2213</td><td class="t">新手教學導覽 &mdash; 定稿</td><td class="num-r">3:12</td><td class="rv">DR &middot; Raman</td><td class="num-r">3</td><td class="s-rev"><span class="sdot"></span>審查中</td><td class="num-r">5h</td></tr>
-              <tr><td class="id">VR-2209</td><td class="t">客戶案例：Halvorsen Co.</td><td class="num-r">2:05</td><td class="rv">LT &middot; Torres</td><td class="num-r">0</td><td class="s-wait"><span class="sdot"></span>等待中</td><td class="num-r age-hot">1天 6h</td></tr>
-              <tr><td class="id">VR-2206</td><td class="t">首頁主視覺循環 &mdash; v9</td><td class="num-r">0:15</td><td class="rv">MK &middot; Kowalski</td><td class="num-r">7</td><td class="s-ok"><span class="sdot"></span>已核准*</td><td class="num-r">1天 8h</td></tr>
-              <tr><td class="id">VR-2201</td><td class="t">Podcast 短片 &mdash; ep. 32</td><td class="num-r">1:28</td><td class="rv">JB &middot; Beck</td><td class="num-r">1</td><td class="s-rev"><span class="sdot"></span>審查中</td><td class="num-r age-hot">2天 4h</td></tr>
+              <tr><td class="id">VR-2214</td><td class="t">Q3 launch teaser &mdash; v4</td><td class="num-r">0:47</td><td class="rv">MK &middot; Kowalski</td><td class="num-r">12</td><td class="s-chg"><span class="sdot"></span>NEEDS CHANGES</td><td class="num-r">2h</td></tr>
+              <tr><td class="id">VR-2213</td><td class="t">Onboarding walkthrough &mdash; final</td><td class="num-r">3:12</td><td class="rv">DR &middot; Raman</td><td class="num-r">3</td><td class="s-rev"><span class="sdot"></span>IN REVIEW</td><td class="num-r">5h</td></tr>
+              <tr><td class="id">VR-2209</td><td class="t">Customer story: Halvorsen Co.</td><td class="num-r">2:05</td><td class="rv">LT &middot; Torres</td><td class="num-r">0</td><td class="s-wait"><span class="sdot"></span>WAITING</td><td class="num-r age-hot">1d 6h</td></tr>
+              <tr><td class="id">VR-2206</td><td class="t">Homepage hero loop &mdash; v9</td><td class="num-r">0:15</td><td class="rv">MK &middot; Kowalski</td><td class="num-r">7</td><td class="s-ok"><span class="sdot"></span>APPROVED*</td><td class="num-r">1d 8h</td></tr>
+              <tr><td class="id">VR-2201</td><td class="t">Podcast clip &mdash; ep. 32</td><td class="num-r">1:28</td><td class="rv">JB &middot; Beck</td><td class="num-r">1</td><td class="s-rev"><span class="sdot"></span>IN REVIEW</td><td class="num-r age-hot">2d 4h</td></tr>
             </tbody>
           </table>
         </div>
       </div>
     </div>
     <div class="chips" data-dir="1">
-      <button class="chip steal" type="button" data-label="the 4-stat metric strip (D1)"><span class="k">採用</span> &middot; 四項指標列</button>
-      <button class="chip steal" type="button" data-label="status dots + inline comment counts (D1)"><span class="k">採用</span> &middot; 狀態圓點與留言數</button>
-      <button class="chip skip" type="button" data-label="the full dark chrome (D1)"><span class="k">捨棄</span> &middot; 全暗色介面</button>
+      <button class="chip steal" type="button" data-label="the 4-stat metric strip (D1)"><span class="k">steal</span> &middot; the 4-stat metric strip</button>
+      <button class="chip steal" type="button" data-label="status dots + inline comment counts (D1)"><span class="k">steal</span> &middot; status dots + comment counts</button>
+      <button class="chip skip" type="button" data-label="the full dark chrome (D1)"><span class="k">skip</span> &middot; full dark chrome</button>
     </div>
   </div>
 
   <!-- ═══════════════ DIRECTION 2 ═══════════════ -->
   <div class="direction">
-    <div class="dir-head"><span class="num">方向 2 / 4</span><h2>留白編輯式卡片</h2></div>
-    <p class="dir-says">&ldquo;審查創意內容應該是從容的。放上一個關鍵數字，接著把佇列當作閱讀清單來呈現。&rdquo;</p>
+    <div class="dir-head"><span class="num">DIRECTION 2 / 4</span><h2>Airy editorial cards</h2></div>
+    <p class="dir-says">&ldquo;Reviewing creative work should feel calm. One number that matters, then the queue as a reading list.&rdquo;</p>
     <div class="frame">
       <div class="frame-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="url">acme.app/studio/queue</span></div>
       <div class="frame-body">
@@ -746,132 +750,132 @@
           <div class="masth">
             <div class="bignum-wrap">
               <div class="bignum">5</div>
-              <div class="bignum-cap">支影片等待你的決定</div>
+              <div class="bignum-cap">videos waiting on a decision</div>
             </div>
-            <div class="weekly"><b>14</b> 本週已結案 &mdash;<br>這是自五月以來最快的一週。</div>
+            <div class="weekly"><b>14</b> cleared this week &mdash;<br>your fastest week since May.</div>
           </div>
           <div class="row">
             <span class="av a1">MK</span>
             <div class="info">
-              <div class="vt">Q3 發表預告 &mdash; v4</div>
-              <div class="meta">0:47 &middot; Maya Kowalski &middot; 12 則留言 &middot; 2 小時前上傳</div>
+              <div class="vt">Q3 launch teaser &mdash; v4</div>
+              <div class="meta">0:47 &middot; Maya Kowalski &middot; 12 comments &middot; uploaded 2h ago</div>
             </div>
-            <div class="phrase hot">需修改</div>
+            <div class="phrase hot">needs changes</div>
           </div>
           <div class="row">
             <span class="av a2">DR</span>
             <div class="info">
-              <div class="vt">新手教學導覽 &mdash; 定稿</div>
-              <div class="meta">3:12 &middot; Dev Raman &middot; 3 則留言 &middot; 5 小時前上傳</div>
+              <div class="vt">Onboarding walkthrough &mdash; final</div>
+              <div class="meta">3:12 &middot; Dev Raman &middot; 3 comments &middot; uploaded 5h ago</div>
             </div>
-            <div class="phrase">正在審查中</div>
+            <div class="phrase">being reviewed now</div>
           </div>
           <div class="row">
             <span class="av a3">LT</span>
             <div class="info">
-              <div class="vt">客戶案例：Halvorsen Co.</div>
-              <div class="meta">2:05 &middot; Lena Torres &middot; 尚無留言 &middot; 昨天上傳</div>
+              <div class="vt">Customer story: Halvorsen Co.</div>
+              <div class="meta">2:05 &middot; Lena Torres &middot; no comments yet &middot; uploaded yesterday</div>
             </div>
-            <div class="phrase">等待 Lena 處理</div>
+            <div class="phrase">waiting on Lena</div>
           </div>
           <div class="row">
             <span class="av a1">MK</span>
             <div class="info">
-              <div class="vt">首頁主視覺循環 &mdash; v9</div>
-              <div class="meta">0:15 &middot; Maya Kowalski &middot; 7 則留言 &middot; 昨天上傳</div>
+              <div class="vt">Homepage hero loop &mdash; v9</div>
+              <div class="meta">0:15 &middot; Maya Kowalski &middot; 7 comments &middot; uploaded yesterday</div>
             </div>
-            <div class="phrase ok">已核准，附帶修改意見</div>
+            <div class="phrase ok">approved, with notes</div>
           </div>
           <div class="row">
             <span class="av a4">JB</span>
             <div class="info">
-              <div class="vt">Podcast 短片 &mdash; ep. 32</div>
-              <div class="meta">1:28 &middot; Jonah Beck &middot; 1 則留言 &middot; 兩天前上傳</div>
+              <div class="vt">Podcast clip &mdash; ep. 32</div>
+              <div class="meta">1:28 &middot; Jonah Beck &middot; 1 comment &middot; uploaded two days ago</div>
             </div>
-            <div class="phrase">正在審查中</div>
+            <div class="phrase">being reviewed now</div>
           </div>
         </div>
       </div>
     </div>
     <div class="chips" data-dir="2">
-      <button class="chip steal" type="button" data-label="the big serif numeral headline (D2)"><span class="k">採用</span> &middot; 大型襯線體數字</button>
-      <button class="chip steal" type="button" data-label="human status phrases like &quot;waiting on Lena&quot; (D2)"><span class="k">採用</span> &middot; 擬人化的狀態描述</button>
-      <button class="chip skip" type="button" data-label="the low density &mdash; won't survive 30 items (D2)"><span class="k">捨棄</span> &middot; 資訊密度太低（項目一多就破功）</button>
+      <button class="chip steal" type="button" data-label="the big serif numeral headline (D2)"><span class="k">steal</span> &middot; the big serif numeral</button>
+      <button class="chip steal" type="button" data-label="human status phrases like &quot;waiting on Lena&quot; (D2)"><span class="k">steal</span> &middot; human status phrases</button>
+      <button class="chip skip" type="button" data-label="the low density &mdash; won't survive 30 items (D2)"><span class="k">skip</span> &middot; low density (dies at 30 items)</button>
     </div>
   </div>
 
   <!-- ═══════════════ DIRECTION 3 ═══════════════ -->
   <div class="direction">
-    <div class="dir-head"><span class="num">方向 3 / 4</span><h2>看板與時間軸混合體</h2></div>
-    <p class="dir-says">&ldquo;審查是一個會推進的過程。呈現每支影片在流程中的位置，以及它們卡在那裡多久了。&rdquo;</p>
+    <div class="dir-head"><span class="num">DIRECTION 3 / 4</span><h2>Kanban / timeline hybrid</h2></div>
+    <p class="dir-says">&ldquo;A review is a thing that moves. Show where each video sits in the pipeline, and how long it's been sitting.&rdquo;</p>
     <div class="frame">
       <div class="frame-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="url">acme.app/board/review-queue</span></div>
       <div class="frame-body">
         <div class="d3">
           <div class="head">
-            <span class="hl">審查流程 &mdash; 發表內容</span>
-            <span class="hr"><b>14</b> 本週已結案 &middot; 平均 6.2 小時做出決定</span>
+            <span class="hl">Review pipeline &mdash; Launch content</span>
+            <span class="hr"><b>14</b> cleared this week &middot; avg 6.2h to decision</span>
           </div>
           <div class="cols">
             <div class="col wait">
-              <div class="col-h"><span>等待中 / 審查中</span><span class="cnt">3</span></div>
+              <div class="col-h"><span>Waiting / in review</span><span class="cnt">3</span></div>
               <div class="kcard">
-                <div class="kt">新手教學導覽 &mdash; 定稿</div>
-                <div class="km"><span class="mini-av a2">DR</span> 3:12 &middot; 已停留 5h <span class="cmt">3&#9998;</span></div>
+                <div class="kt">Onboarding walkthrough &mdash; final</div>
+                <div class="km"><span class="mini-av a2">DR</span> 3:12 &middot; 5h in <span class="cmt">3&#9998;</span></div>
               </div>
               <div class="kcard stale">
-                <div class="kt">客戶案例：Halvorsen Co.</div>
-                <div class="km"><span class="mini-av a3">LT</span> 2:05 &middot; 已停留 1天 6h <span class="cmt">0&#9998;</span></div>
+                <div class="kt">Customer story: Halvorsen Co.</div>
+                <div class="km"><span class="mini-av a3">LT</span> 2:05 &middot; 1d 6h in <span class="cmt">0&#9998;</span></div>
               </div>
               <div class="kcard stale">
-                <div class="kt">Podcast 短片 &mdash; ep. 32</div>
-                <div class="km"><span class="mini-av a4">JB</span> 1:28 &middot; 已停留 2天 4h <span class="cmt">1&#9998;</span></div>
+                <div class="kt">Podcast clip &mdash; ep. 32</div>
+                <div class="km"><span class="mini-av a4">JB</span> 1:28 &middot; 2d 4h in <span class="cmt">1&#9998;</span></div>
               </div>
             </div>
             <div class="col chg">
-              <div class="col-h"><span>需修改</span><span class="cnt">1</span></div>
+              <div class="col-h"><span>Needs changes</span><span class="cnt">1</span></div>
               <div class="kcard">
-                <div class="kt">Q3 發表預告 &mdash; v4</div>
-                <div class="km"><span class="mini-av a1">MK</span> 0:47 &middot; 已停留 2h <span class="cmt">12&#9998;</span></div>
+                <div class="kt">Q3 launch teaser &mdash; v4</div>
+                <div class="km"><span class="mini-av a1">MK</span> 0:47 &middot; 2h in <span class="cmt">12&#9998;</span></div>
               </div>
             </div>
             <div class="col ok">
-              <div class="col-h"><span>已核准（附註）</span><span class="cnt">1</span></div>
+              <div class="col-h"><span>Approved w/ notes</span><span class="cnt">1</span></div>
               <div class="kcard">
-                <div class="kt">首頁主視覺循環 &mdash; v9</div>
-                <div class="km"><span class="mini-av a1">MK</span> 0:15 &middot; 已停留 1天 8h <span class="cmt">7&#9998;</span></div>
+                <div class="kt">Homepage hero loop &mdash; v9</div>
+                <div class="km"><span class="mini-av a1">MK</span> 0:15 &middot; 1d 8h in <span class="cmt">7&#9998;</span></div>
               </div>
             </div>
           </div>
-          <div class="tl-label">佇列停留時間 &mdash; 超過 24 小時標示為紅色</div>
+          <div class="tl-label">Time in queue &mdash; red-flagged past 24h</div>
           <div class="tl">
-            <span class="tick" style="left:0%"></span><span class="tick-lab" style="left:0%">現在</span>
+            <span class="tick" style="left:0%"></span><span class="tick-lab" style="left:0%">now</span>
             <span class="tick" style="left:25%"></span><span class="tick-lab" style="left:25%">12h</span>
             <span class="tick" style="left:50%"></span><span class="tick-lab" style="left:50%">24h</span>
             <span class="tick" style="left:75%"></span><span class="tick-lab" style="left:75%">36h</span>
             <span class="tick" style="left:99%"></span><span class="tick-lab" style="left:98%">48h+</span>
-            <span class="tdot" style="left:4%"><span class="d chg"></span><span class="tn">預告 v4</span></span>
-            <span class="tdot" style="left:11%"><span class="d rev"></span><span class="tn">教學導覽</span></span>
+            <span class="tdot" style="left:4%"><span class="d chg"></span><span class="tn">teaser v4</span></span>
+            <span class="tdot" style="left:11%"><span class="d rev"></span><span class="tn">onboarding</span></span>
             <span class="tdot" style="left:62%"><span class="d wait"></span><span class="tn">Halvorsen</span></span>
-            <span class="tdot" style="left:67%"><span class="d ok"></span><span class="tn">主視覺 v9</span></span>
+            <span class="tdot" style="left:67%"><span class="d ok"></span><span class="tn">hero v9</span></span>
             <span class="tdot" style="left:96%"><span class="d rev"></span><span class="tn">ep. 32</span></span>
           </div>
         </div>
       </div>
     </div>
     <div class="chips" data-dir="3">
-      <button class="chip steal" type="button" data-label="the age-in-queue timeline strip (D3)"><span class="k">採用</span> &middot; 佇列停留時間軸</button>
-      <button class="chip steal" type="button" data-label="red left-edge on stale cards (D3)"><span class="k">採用</span> &middot; 停留過久卡片的紅色邊條</button>
-      <button class="chip skip" type="button" data-label="three columns &mdash; wasteful with only 5 items (D3)"><span class="k">捨棄</span> &middot; 只有 5 個項目時，欄位會顯得空洞</button>
+      <button class="chip steal" type="button" data-label="the age-in-queue timeline strip (D3)"><span class="k">steal</span> &middot; the age timeline strip</button>
+      <button class="chip steal" type="button" data-label="red left-edge on stale cards (D3)"><span class="k">steal</span> &middot; red edge on stale cards</button>
+      <button class="chip skip" type="button" data-label="three columns &mdash; wasteful with only 5 items (D3)"><span class="k">skip</span> &middot; columns feel empty at n=5</button>
     </div>
   </div>
 
   <!-- ═══════════════ DIRECTION 4 ═══════════════ -->
   <div class="direction">
-    <div class="dir-head"><span class="num">方向 4 / 4</span><h2>粗獷等寬終端機</h2></div>
-    <p class="dir-says">&ldquo;不裝飾、不加外框。佇列就是一份清單；從上到下看完就閃人。&rdquo;</p>
+    <div class="dir-head"><span class="num">DIRECTION 4 / 4</span><h2>Brutalist mono terminal</h2></div>
+    <p class="dir-says">&ldquo;No decoration, no chrome. A queue is a list; read it top to bottom and get out.&rdquo;</p>
     <div class="frame">
-      <div class="frame-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="url">acme.app/q &mdash; 鍵盤優先</span></div>
+      <div class="frame-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="url">acme.app/q &mdash; keyboard-first</span></div>
       <div class="frame-body">
         <div class="d4">
           <div class="hdr"><b>acme</b> :: review-queue :: launch-content</div>
@@ -894,41 +898,45 @@
               <tr><td class="idx">5</td><td>podcast-clip.ep32</td><td>1:28</td><td>JB</td><td>1</td><td class="st rev">[IN-REVIEW]</td><td>2d4h</td></tr>
             </tbody>
           </table>
-          <div class="cmd">&gt; <b>open 3</b> &mdash; j/k 移動 &middot; o 開啟 &middot; a 核准 &middot; c 留言 <span class="cursor"></span></div>
+          <div class="cmd">&gt; <b>open 3</b> &mdash; j/k move &middot; o open &middot; a approve &middot; c comment <span class="cursor"></span></div>
         </div>
       </div>
     </div>
     <div class="chips" data-dir="4">
-      <button class="chip steal" type="button" data-label="keyboard-first shortcuts on every row (D4)"><span class="k">採用</span> &middot; 隨處可用的鍵盤快捷鍵</button>
-      <button class="chip skip" type="button" data-label="the all-caps bracket statuses (D4)"><span class="k">捨棄</span> &middot; [全大寫括號狀態]</button>
-      <button class="chip skip" type="button" data-label="the terminal cosplay &mdash; novelty wears off (D4)"><span class="k">捨棄</span> &middot; 終端機角色扮演，新鮮感很快就退燒</button>
+      <button class="chip steal" type="button" data-label="keyboard-first shortcuts on every row (D4)"><span class="k">steal</span> &middot; keyboard shortcuts everywhere</button>
+      <button class="chip skip" type="button" data-label="the all-caps bracket statuses (D4)"><span class="k">skip</span> &middot; [ALL-CAPS-BRACKETS]</button>
+      <button class="chip skip" type="button" data-label="the terminal cosplay &mdash; novelty wears off (D4)"><span class="k">skip</span> &middot; the novelty wears off</button>
     </div>
   </div>
 
   <!-- ═══════════════ HOW TO REACT ═══════════════ -->
   <div class="react-card">
-    <div class="label">如何給回饋</div>
-    <h3>回覆你選定的方向與採用元素</h3>
+    <div class="label">How to react</div>
+    <h3>Reply with a direction and your steals</h3>
     <p>
-      你不需要寫一份設計簡報，這就是最大的用意。挑選一個<em>調性</em>最對的方向，接著點名兩三個值得從其他方向借來的細節。點選上面的方向和標籤，回覆內容就會自動產生。
+      You don't have to write a design brief &mdash; that's the whole point. Pick the direction whose
+      <em>attitude</em> is right, then name the two or three details worth carrying over from the others.
+      Tap a direction and the chips above; the reply writes itself.
     </p>
     <div class="pick-row" id="pick-row">
-      <button class="pick" type="button" data-dir="1" data-name="Direction 1 (ops console)">D1 &middot; 營運主控台</button>
-      <button class="pick on" type="button" data-dir="2" data-name="Direction 2 (editorial cards)">D2 &middot; 編輯卡片</button>
-      <button class="pick" type="button" data-dir="3" data-name="Direction 3 (kanban/timeline)">D3 &middot; 看板與時間軸</button>
-      <button class="pick" type="button" data-dir="4" data-name="Direction 4 (terminal)">D4 &middot; 終端機</button>
+      <button class="pick" type="button" data-dir="1" data-name="Direction 1 (ops console)">D1 &middot; ops console</button>
+      <button class="pick on" type="button" data-dir="2" data-name="Direction 2 (editorial cards)">D2 &middot; editorial</button>
+      <button class="pick" type="button" data-dir="3" data-name="Direction 3 (kanban/timeline)">D3 &middot; kanban/timeline</button>
+      <button class="pick" type="button" data-dir="4" data-name="Direction 4 (terminal)">D4 &middot; terminal</button>
     </div>
     <div class="reply-wrap">
       <pre class="reply" id="reply"></pre>
-      <button class="copy-reply" id="copy-reply" type="button">複製回覆</button>
+      <button class="copy-reply" id="copy-reply" type="button">Copy reply</button>
     </div>
     <p class="react-foot">
-      把這段話直接貼回對話中。Claude 會把你挑選的元素融合進獲選的方向，接著回傳一份精煉過的設計。這比起試圖去描述連你自己都不清楚的美感偏好，過程會有效率得多。
+      Paste that back into the chat as-is. Claude will fold the steals into the winning direction and
+      come back with one refined design &mdash; which is a far shorter conversation than trying to
+      describe taste you didn't know you had.
     </p>
   </div>
 
   <footer>
-    這是<a href="index.html">認清你的未知數</a>系列的一部分 &mdash; 該部落格文章的附帶範例。
+    Part of <a href="index.html">Know your unknowns</a> &mdash; companion examples to the blog post.
   </footer>
 
 </div>

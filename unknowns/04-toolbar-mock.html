@@ -1,10 +1,10 @@
 <!-- Copyright 2026 Anthropic PBC · SPDX-License-Identifier: Apache-2.0 -->
 <!doctype html>
-<html lang="zh-Hant-TW">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>先做 Mock，再動工 —— 釐清你的未知數</title>
+<title>Mock before you wire — Know your unknowns</title>
 <style>
   :root {
     --ivory:  #FAF9F5;
@@ -450,50 +450,50 @@
 <div class="wrap">
 
   <header>
-    <a class="backlink" href="index.html">← 所有範例</a>
-    <div class="eyebrow">釐清你的未知數 · 實作前</div>
-    <h1>先做 Mock，再動工</h1>
-    <p class="lede">在 Claude 碰到真實的程式碼庫之前，先要求一個用完即丟的 HTML mock。你會在能點擊的那一刻就發現自己到底想要什麼，而不是等經歷三個 PR 之後才知道。</p>
+    <a class="backlink" href="index.html">← All examples</a>
+    <div class="eyebrow">Know your unknowns · Pre-implementation</div>
+    <h1>Mock before you wire</h1>
+    <p class="lede">Before Claude touches the real codebase, ask for a throwaway HTML mock — you'll find out what you actually want the moment you can click it, not three PRs later.</p>
 
     <div class="promptbox">
-      <div class="label">提示詞</div>
-      <button class="copybtn" id="copyPrompt">複製提示詞</button>
-      <blockquote id="promptText">在動工串接之前，先用一個 HTML 檔案做出 Acme 全新影格標註工具列的 mock，並使用假資料。我想在你碰到實際應用程式之前，先針對介面布局給予回饋。</blockquote>
+      <div class="label">The prompt</div>
+      <button class="copybtn" id="copyPrompt">copy prompt</button>
+      <blockquote id="promptText">Before wiring anything up, make a single HTML file mocking Acme's new frame-annotation toolbar with fake data. I want to react to the layout before you touch the real app.</blockquote>
     </div>
   </header>
 
-  <div class="divider">Claude 產出的結果</div>
+  <div class="divider">What Claude produced</div>
 
   <!-- ═══ ARTIFACT ═══ -->
   <div class="artifact">
     <div class="art-head">
-      <div class="art-title"><b>Acme</b> · 影格標註工具列 · mock，未動用真實程式碼</div>
-      <div class="seg" id="variantSeg" role="tablist" aria-label="工具列布局變體">
-        <button class="on" data-v="v-pill"><span class="dot"></span>浮動藥丸</button>
-        <button data-v="v-rail"><span class="dot"></span>停駐左側欄</button>
-        <button data-v="v-dock"><span class="dot"></span>播放軸下方</button>
+      <div class="art-title"><b>Acme</b> · frame-annotation toolbar · mock, no real code touched</div>
+      <div class="seg" id="variantSeg" role="tablist" aria-label="Toolbar layout variant">
+        <button class="on" data-v="v-pill"><span class="dot"></span>Floating pill</button>
+        <button data-v="v-rail"><span class="dot"></span>Docked left rail</button>
+        <button data-v="v-dock"><span class="dot"></span>Under seekbar</button>
       </div>
     </div>
-    <p class="variant-note" id="variantNote"><b>浮動藥丸，底部置中。</b>懸停於播放軸上方；播放時自動隱藏。最接近 Loom/Frame.io 的上線版本。</p>
+    <p class="variant-note" id="variantNote"><b>Floating pill, bottom-center.</b> Hovers above the seekbar; hides on playback. Closest to what Loom/Frame.io ship.</p>
 
     <div class="stagewrap v-pill" id="stagewrap">
       <div class="stage">
-        <!-- 假的暫停影格 -->
-        <svg class="scene" viewBox="0 0 640 360" preserveAspectRatio="xMidYMid slice" aria-label="暫停的影片影格：日落騎行預告，00:41 — 標誌組合已標註">
-          <!-- 天空 -->
+        <!-- fake paused frame -->
+        <svg class="scene" viewBox="0 0 640 360" preserveAspectRatio="xMidYMid slice" aria-label="Paused video frame: sunset ride teaser, 00:41 — logo lockup annotated">
+          <!-- sky -->
           <rect x="0" y="0" width="640" height="360" fill="#2A2722"/>
           <rect x="0" y="0" width="640" height="230" fill="#3D3A32"/>
           <circle cx="470" cy="118" r="46" fill="#D97757"/>
           <circle cx="470" cy="118" r="46" fill="none" stroke="#E3DACC" stroke-opacity=".25" stroke-width="10"/>
-          <!-- 遠山 -->
+          <!-- far hills -->
           <path d="M0 205 Q 110 150 230 198 T 470 192 T 640 178 V 360 H 0 Z" fill="#4A4A3C"/>
-          <!-- 近山 -->
+          <!-- near hills -->
           <path d="M0 250 Q 150 205 300 246 T 640 238 V 360 H 0 Z" fill="#5B6647"/>
           <path d="M0 292 Q 200 258 400 288 T 640 280 V 360 H 0 Z" fill="#788C5D"/>
-          <!-- 道路 -->
+          <!-- road -->
           <path d="M270 360 L 315 240 L 331 240 L 410 360 Z" fill="#3D3D3A"/>
           <path d="M322 240 L 322 268 M 328 282 L 332 310 M 336 326 L 342 356" stroke="#E3DACC" stroke-opacity=".5" stroke-width="3" stroke-linecap="round" fill="none"/>
-          <!-- 騎士剪影 -->
+          <!-- rider silhouette -->
           <g fill="#141413">
             <circle cx="330" cy="252" r="9"/>
             <circle cx="352" cy="252" r="9"/>
@@ -501,24 +501,24 @@
             <path d="M341 238 L 338 222 L 346 218" stroke="#141413" stroke-width="4" stroke-linecap="round" fill="none"/>
             <circle cx="348" cy="212" r="5"/>
           </g>
-          <!-- 正在審視的標題組合 -->
+          <!-- title lockup being reviewed -->
           <g>
             <rect x="60" y="70" width="176" height="58" rx="6" fill="#141413" fill-opacity=".55"/>
             <text x="76" y="98" font-family="Georgia, serif" font-size="22" fill="#FAF9F5" font-style="italic">Ridgeline '26</text>
             <text x="76" y="117" font-family="monospace" font-size="10" letter-spacing="2" fill="#E3DACC">TEASER · CUT 04</text>
           </g>
-          <!-- 現有的標註（假資料） -->
+          <!-- existing annotations (fake data) -->
           <g>
-            <!-- 標題組合上的方框標註 -->
+            <!-- box annotation on lockup -->
             <rect x="52" y="62" width="192" height="74" rx="8" fill="none" stroke="#D97757" stroke-width="3"/>
             <circle cx="52" cy="62" r="11" fill="#D97757"/>
             <text x="52" y="66" text-anchor="middle" font-family="monospace" font-size="11" font-weight="bold" fill="#fff">1</text>
-            <!-- 太陽光暈處的箭頭標註 -->
+            <!-- arrow annotation at sun flare -->
             <path d="M560 220 Q 540 175 505 150" fill="none" stroke="#E3DACC" stroke-width="3"/>
             <path d="M505 150 L 521 152 M 505 150 L 511 165" stroke="#E3DACC" stroke-width="3" stroke-linecap="round"/>
             <circle cx="560" cy="220" r="11" fill="#788C5D"/>
             <text x="560" y="224" text-anchor="middle" font-family="monospace" font-size="11" font-weight="bold" fill="#fff">2</text>
-            <!-- 道路上的畫筆塗鴉 -->
+            <!-- pen scribble on road -->
             <path d="M380 330 q 14 -12 28 -2 q 14 10 26 -4" fill="none" stroke="#D97757" stroke-width="3" stroke-linecap="round"/>
             <circle cx="380" cy="330" r="11" fill="#D97757"/>
             <text x="380" y="334" text-anchor="middle" font-family="monospace" font-size="11" font-weight="bold" fill="#fff">3</text>
@@ -526,9 +526,9 @@
         </svg>
 
         <div class="chip-tc">00:00:41:07</div>
-        <div class="chip-paused">已暫停</div>
+        <div class="chip-paused">PAUSED</div>
 
-        <!-- 播放軸 -->
+        <!-- seekbar -->
         <div class="seekbar">
           <div class="seek-pins">
             <span class="seek-pin" style="left:34%"></span>
@@ -542,135 +542,135 @@
           </div>
         </div>
 
-        <!-- 留言面板 -->
+        <!-- comment drawer -->
         <aside class="drawer" id="drawer" aria-hidden="true">
           <div class="drawer-head">
-            <h3>留言 <span class="cnt">@ 00:41</span></h3>
-            <button class="drawer-close" id="drawerClose" aria-label="關閉留言">✕</button>
+            <h3>Comments <span class="cnt">@ 00:41</span></h3>
+            <button class="drawer-close" id="drawerClose" aria-label="Close comments">✕</button>
           </div>
           <div class="drawer-body">
             <div class="cmt">
               <div class="who"><span class="av" style="background:var(--clay)">MO</span><span class="nm">Maya Okafor</span><span class="tc">00:41:07</span></div>
-              <p>標誌組合出現得太早了，觀眾還沒對這個名字產生連結。能不能延後到 00:48 爬上山頭時再出現？</p>
-              <div class="pin">↳ 釘選於標註 #1</div>
+              <p>Lockup lands too early — we haven't earned the name yet. Can we hold it to the crest at 00:48?</p>
+              <div class="pin">↳ pinned to annotation #1</div>
             </div>
             <div class="cmt">
               <div class="who"><span class="av" style="background:var(--olive)">DP</span><span class="nm">Dev Patel</span><span class="tc">00:41:07</span></div>
-              <p>太陽光暈在 HDR 匯出時過曝了。標記給調色階段處理。</p>
-              <div class="pin">↳ 釘選於標註 #2</div>
+              <p>Flare off the sun is clipping on HDR exports. Flagging for the color pass.</p>
+              <div class="pin">↳ pinned to annotation #2</div>
             </div>
             <div class="cmt">
               <div class="who"><span class="av" style="background:var(--g500)">SR</span><span class="nm">Sam Ruiz</span><span class="tc">00:41:07</span></div>
-              <p>路面標線往前一格會抖動。可能是影像穩定化裁切造成的，請見塗鴉標記。</p>
-              <div class="pin">↳ 釘選於標註 #3</div>
+              <p>Road markings jitter one frame back. Probably the stabilization crop — see scribble.</p>
+              <div class="pin">↳ pinned to annotation #3</div>
             </div>
           </div>
-          <div class="drawer-input">在 00:41 回覆…</div>
+          <div class="drawer-input">Reply at 00:41…</div>
         </aside>
       </div>
 
-      <!-- 工具列（單一標記結構，根據變體改變定位） -->
-      <div class="toolbar" id="toolbar" role="toolbar" aria-label="影格標註工具">
+      <!-- toolbar (one markup, repositioned per variant) -->
+      <div class="toolbar" id="toolbar" role="toolbar" aria-label="Frame annotation tools">
         <div class="tb-group" id="tools">
-          <button class="tool on" data-tool="select" title="選取 (V)" aria-label="選取工具">
+          <button class="tool on" data-tool="select" title="Select (V)" aria-label="Select tool">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M5 3l14 8-6.5 1.5L9 19 5 3z"/></svg>
           </button>
-          <button class="tool" data-tool="pen" title="畫筆 (P)" aria-label="畫筆工具">
+          <button class="tool" data-tool="pen" title="Pen (P)" aria-label="Pen tool">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3l4 4L8 20l-5 1 1-5L17 3z"/></svg>
           </button>
-          <button class="tool" data-tool="arrow" title="箭頭 (A)" aria-label="箭頭工具">
+          <button class="tool" data-tool="arrow" title="Arrow (A)" aria-label="Arrow tool">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19L19 5M19 5h-8M19 5v8"/></svg>
           </button>
-          <button class="tool" data-tool="box" title="方框 (B)" aria-label="方框工具">
+          <button class="tool" data-tool="box" title="Box (B)" aria-label="Box tool">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="6" width="16" height="12" rx="2"/></svg>
           </button>
-          <button class="tool" data-tool="text" title="文字 (T)" aria-label="文字工具">
+          <button class="tool" data-tool="text" title="Text (T)" aria-label="Text tool">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 6V4h14v2M12 4v16M9 20h6"/></svg>
           </button>
-          <button class="tool" data-tool="blur" title="模糊 (U)" aria-label="模糊工具">
+          <button class="tool" data-tool="blur" title="Blur (U)" aria-label="Blur tool">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3s6 6.5 6 11a6 6 0 01-12 0c0-4.5 6-11 6-11z"/><path d="M9.5 14a2.5 2.5 0 002.5 2.5" stroke-linecap="round"/></svg>
           </button>
         </div>
         <div class="tb-sep"></div>
-        <div class="swatches" id="swatches" aria-label="標註顏色">
-          <button class="swatch on" style="background:#D97757" data-c="clay"   title="陶土色"   aria-label="陶土色"></button>
-          <button class="swatch" style="background:#788C5D" data-c="olive"  title="橄欖色"  aria-label="橄欖色"></button>
-          <button class="swatch" style="background:#E3DACC" data-c="oat"    title="燕麥色"    aria-label="燕麥色"></button>
-          <button class="swatch" style="background:#FAF9F5" data-c="white"  title="白色"  aria-label="白色"></button>
-          <button class="swatch" style="background:#141413" data-c="ink"    title="墨色"    aria-label="墨色"></button>
+        <div class="swatches" id="swatches" aria-label="Annotation color">
+          <button class="swatch on" style="background:#D97757" data-c="clay"   title="Clay"   aria-label="Clay"></button>
+          <button class="swatch" style="background:#788C5D" data-c="olive"  title="Olive"  aria-label="Olive"></button>
+          <button class="swatch" style="background:#E3DACC" data-c="oat"    title="Oat"    aria-label="Oat"></button>
+          <button class="swatch" style="background:#FAF9F5" data-c="white"  title="White"  aria-label="White"></button>
+          <button class="swatch" style="background:#141413" data-c="ink"    title="Ink"    aria-label="Ink"></button>
         </div>
         <div class="tb-sep"></div>
-        <div class="strokes" id="strokes" aria-label="線條粗細">
-          <button class="stroke s1" data-w="2" title="細"><i></i></button>
-          <button class="stroke s2 on" data-w="4" title="中"><i></i></button>
-          <button class="stroke s3" data-w="7" title="粗"><i></i></button>
+        <div class="strokes" id="strokes" aria-label="Stroke width">
+          <button class="stroke s1" data-w="2" title="Thin"><i></i></button>
+          <button class="stroke s2 on" data-w="4" title="Medium"><i></i></button>
+          <button class="stroke s3" data-w="7" title="Thick"><i></i></button>
         </div>
         <div class="tb-sep"></div>
-        <span class="ann-chip" title="此影格上的標註">3 則標註</span>
+        <span class="ann-chip" title="Annotations on this frame">3 ann.</span>
         <button class="cmt-btn" id="cmtBtn" aria-expanded="false">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M21 12a8 8 0 01-8 8H4l2-3.2A8 8 0 1121 12z"/></svg>
-          <span>留言</span>
+          <span>Comments</span>
         </button>
       </div>
     </div>
 
-    <p class="art-footnote">以上全部都是單一靜態檔案中的假資料，完全沒有讀取 <code>apps/player</code>。實際的程式碼串接會放在 <code>apps/player/src/annotate/Toolbar.tsx</code>，並由 <code>frame_annotations</code> 旗標控制。</p>
+    <p class="art-footnote">Everything above is fake data in one static file — nothing reads from <code>apps/player</code> yet. Real wiring would live in <code>apps/player/src/annotate/Toolbar.tsx</code> behind the <code>frame_annotations</code> flag.</p>
   </div>
 
   <!-- ═══ OPEN QUESTIONS ═══ -->
   <div class="questions">
-    <div class="label">留給你的開放問題</div>
-    <h2>四個我不想瞎猜的版面決定</h2>
-    <p class="sub">點選標籤來記錄你的選擇，下方的回覆範本會自動填入。</p>
+    <div class="label">Open questions for you</div>
+    <h2>Four layout calls I'd rather not guess</h2>
+    <p class="sub">Tap a chip to record your pick — the reply template below fills itself in.</p>
 
     <div class="q" data-q="placement">
-      <p class="q-text"><span class="qn">Q1</span>該讓哪種位置上線？浮動藥丸會靠近游標，但會遮住下方三分之一的畫面；停駐側欄不會擋到畫面，但離播放軸太遠；至於播放軸下方會吃掉約 56px 的播放器高度。</p>
+      <p class="q-text"><span class="qn">Q1</span>Which placement should ship? The pill stays near the pointer but covers action in the lower third; the rail never occludes footage but is far from the seekbar; under-seekbar steals ~56px of player height.</p>
       <div class="q-chips">
-        <button class="chip" data-a="Floating pill"><span class="k">A</span>浮動藥丸</button>
-        <button class="chip" data-a="Docked left rail"><span class="k">B</span>停駐左側欄</button>
-        <button class="chip" data-a="Under the seekbar"><span class="k">C</span>播放軸下方</button>
+        <button class="chip" data-a="Floating pill"><span class="k">A</span>Floating pill</button>
+        <button class="chip" data-a="Docked left rail"><span class="k">B</span>Docked left rail</button>
+        <button class="chip" data-a="Under the seekbar"><span class="k">C</span>Under the seekbar</button>
       </div>
     </div>
 
     <div class="q" data-q="colorstroke">
-      <p class="q-text"><span class="qn">Q2</span>顏色與線條粗細控制項：要永遠顯示在工具列上（目前 mock 的做法），還是收到啟用中工具的彈出選單裡？常駐顯示能少點一次滑鼠；用彈出選單則能讓藥丸縮小約 140px，這對 13 吋筆電來說很關鍵。</p>
+      <p class="q-text"><span class="qn">Q2</span>Color + stroke controls: always visible in the bar (what's mocked), or collapsed behind a popover on the active tool? Inline is one click faster; popover shrinks the pill by ~140px, which matters on 13″ laptops.</p>
       <div class="q-chips">
-        <button class="chip" data-a="Always inline"><span class="k">A</span>永遠常駐顯示</button>
-        <button class="chip" data-a="Popover on active tool"><span class="k">B</span>啟用工具的彈出選單</button>
+        <button class="chip" data-a="Always inline"><span class="k">A</span>Always inline</button>
+        <button class="chip" data-a="Popover on active tool"><span class="k">B</span>Popover on active tool</button>
       </div>
     </div>
 
     <div class="q" data-q="drawer">
-      <p class="q-text"><span class="qn">Q3</span>留言面板目前會覆蓋在影格的右側邊緣（點擊「留言」按鈕開啟）。還是說，應該讓它把影片向左推擠，確保閱讀留言時不會遮住任何標註？</p>
+      <p class="q-text"><span class="qn">Q3</span>The comment drawer currently overlays the right edge of the frame (open it via the Comments button). Should it instead push the video left so annotations are never covered while reading?</p>
       <div class="q-chips">
-        <button class="chip" data-a="Overlay the frame"><span class="k">A</span>覆蓋在影格上</button>
-        <button class="chip" data-a="Push the video left"><span class="k">B</span>將影片向左推擠</button>
+        <button class="chip" data-a="Overlay the frame"><span class="k">A</span>Overlay the frame</button>
+        <button class="chip" data-a="Push the video left"><span class="k">B</span>Push the video left</button>
       </div>
     </div>
 
     <div class="q" data-q="blur">
-      <p class="q-text"><span class="qn">Q4</span>「模糊」是唯一在匯出時需要伺服器端運算的工具。要在 v1 工具列就加入（附上「匯出時處理」的徽章），還是先留到 v1.1，讓首次發布維持全客戶端運算？</p>
+      <p class="q-text"><span class="qn">Q4</span>Blur is the only tool that needs server-side rendering on export. Keep it in the v1 toolbar (with a "processing on export" badge), or hold it for v1.1 so the first release ships all-client-side?</p>
       <div class="q-chips">
-        <button class="chip" data-a="Ship blur in v1"><span class="k">A</span>在 v1 釋出</button>
-        <button class="chip" data-a="Hold blur for v1.1"><span class="k">B</span>延後到 v1.1</button>
+        <button class="chip" data-a="Ship blur in v1"><span class="k">A</span>Ship in v1</button>
+        <button class="chip" data-a="Hold blur for v1.1"><span class="k">B</span>Hold for v1.1</button>
       </div>
     </div>
 
     <div class="reply">
-      <div class="label">我的回饋 —— 複製並貼上回去</div>
-      <button class="copybtn" id="copyReply">複製回覆</button>
+      <div class="label">My reactions — copy &amp; paste back</div>
+      <button class="copybtn" id="copyReply">copy reply</button>
       <pre id="replyText"></pre>
     </div>
   </div>
 
-  <footer>屬於<a href="index.html">釐清你的未知數</a>系列 —— 部落格文章的附帶範例。</footer>
+  <footer>Part of <a href="index.html">Know your unknowns</a> — companion examples to the blog post.</footer>
 </div>
 
 <script>
 (function () {
   "use strict";
 
-  /* 剪貼簿輔助函式，含備用方案 */
+  /* clipboard helper with fallback */
   function copyText(text, btn) {
     function flash() {
       var old = btn.textContent;
@@ -692,20 +692,20 @@
     }
   }
 
-  /* 複製提示詞 */
+  /* copy prompt */
   var promptBtn = document.getElementById("copyPrompt");
   promptBtn.addEventListener("click", function () {
     copyText(document.getElementById("promptText").textContent.trim(), promptBtn);
   });
 
-  /* 版面變體分段控制項 */
+  /* layout variant segmented control */
   var seg = document.getElementById("variantSeg");
   var stagewrap = document.getElementById("stagewrap");
   var note = document.getElementById("variantNote");
   var notes = {
-    "v-pill": "<b>浮動藥丸，底部置中。</b>懸停於播放軸上方；播放時自動隱藏。最接近 Loom/Frame.io 的上線版本。",
-    "v-rail": "<b>停駐左側欄。</b>絕不遮擋畫面；工具如剪輯軟體般垂直排列。但在小螢幕上會佔用最多的水平空間。",
-    "v-dock": "<b>附掛於播放軸下方。</b>零遮擋，永遠可見，但會吃掉約 56px 的播放器高度，且離繪圖區較遠。"
+    "v-pill": "<b>Floating pill, bottom-center.</b> Hovers above the seekbar; hides on playback. Closest to what Loom/Frame.io ship.",
+    "v-rail": "<b>Docked left rail.</b> Never occludes footage; tools stack vertically like an editor. Costs the most horizontal room on small screens.",
+    "v-dock": "<b>Attached under the seekbar.</b> Zero occlusion, always visible — but steals ~56px of player height and sits far from where you draw."
   };
   Array.prototype.forEach.call(seg.querySelectorAll("button"), function (b) {
     b.addEventListener("click", function () {
@@ -716,7 +716,7 @@
     });
   });
 
-  /* 按鈕群組的單選輔助函式 */
+  /* single-select helper for button groups */
   function group(containerId, selector) {
     var c = document.getElementById(containerId);
     Array.prototype.forEach.call(c.querySelectorAll(selector), function (b) {
@@ -730,7 +730,7 @@
   group("swatches", ".swatch");
   group("strokes", ".stroke");
 
-  /* 留言面板 */
+  /* comment drawer */
   var drawer = document.getElementById("drawer");
   var cmtBtn = document.getElementById("cmtBtn");
   function setDrawer(open) {
@@ -742,7 +742,7 @@
   cmtBtn.addEventListener("click", function () { setDrawer(!drawer.classList.contains("open")); });
   document.getElementById("drawerClose").addEventListener("click", function () { setDrawer(false); });
 
-  /* 開放問題標籤 → 回覆範本 */
+  /* open-question chips → reply template */
   var answers = { placement: null, colorstroke: null, drawer: null, blur: null };
   var labels = {
     placement: "Placement",
@@ -762,7 +762,7 @@
       var v = answers[k];
       return n + ". " + esc(labels[k]) + ": " +
         (v ? '<span class="picked">' + esc(v) + "</span>"
-           : '<span class="blank">___ (點選上方的標籤)</span>');
+           : '<span class="blank">___ (tap a chip above)</span>');
     }).join("\n");
     html += '\nOther notes: <span class="blank">___</span>';
     replyEl.innerHTML = html;

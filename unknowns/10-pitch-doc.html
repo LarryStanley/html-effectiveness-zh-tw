@@ -1,10 +1,10 @@
 <!-- Copyright 2026 Anthropic PBC · SPDX-License-Identifier: Apache-2.0 -->
 <!DOCTYPE html>
-<html lang="zh-Hant-TW">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>爭取支持文件 — 掌握你的未知數</title>
+<title>The buy-in doc — Know your unknowns</title>
 <style>
   :root {
     --ivory:#FAF9F5; --paper:#FFFFFF; --slate:#141413; --clay:#D97757; --clay-d:#B85C3E;
@@ -301,36 +301,36 @@
 <div class="wrap">
 
   <header class="page">
-    <a class="backlink" href="index.html">&larr; 所有範例</a>
-    <div class="eyebrow">掌握你的未知數 &middot; 完成實作後</div>
-    <h1>爭取支持文件</h1>
-    <p class="lede">工作完成後，最後的未知數就是其他人。請 Claude 將原型、規格書和筆記打包成一份容易快速瀏覽的文件，在別人提出異議之前就先回答完。</p>
+    <a class="backlink" href="index.html">&larr; All examples</a>
+    <div class="eyebrow">Know your unknowns &middot; Post-implementation</div>
+    <h1>The buy-in doc</h1>
+    <p class="lede">After the work is done, the last unknown is other people — ask Claude to package the prototype, spec, and notes into one skimmable doc that answers objections before they're raised.</p>
 
     <div class="promptcard">
-      <div class="label">提示詞</div>
-      <button class="copybtn" id="copyBtn">複製提示詞</button>
-      <blockquote id="promptText">&ldquo;將原型、規格書和實作筆記打包成一份單一文件，讓我可以丟到 Slack 上，爭取大家對發布註解匯出功能的支持。從展示demo開始。&rdquo;</blockquote>
+      <div class="label">The prompt</div>
+      <button class="copybtn" id="copyBtn">copy prompt</button>
+      <blockquote id="promptText">&ldquo;Package the prototype, the spec, and the implementation notes into a single doc I can drop in Slack to get buy-in on shipping annotation export. Lead with the demo.&rdquo;</blockquote>
     </div>
   </header>
 
-  <div class="divider">Claude 產出的內容</div>
+  <div class="divider">What Claude produced</div>
 
   <!-- ================= ARTIFACT ================= -->
   <article class="artifact">
     <div class="doc-top">
-      <div class="doc-eyebrow">發布提案 &middot; Acme</div>
-      <span class="timechip">90 秒可讀完</span>
+      <div class="doc-eyebrow">Ship proposal &middot; Acme</div>
+      <span class="timechip">90-second read</span>
     </div>
-    <h2 class="doc-title">註解匯出功能已準備好發布</h2>
-    <p class="doc-sub">原型、規格書和推出計畫都在這裡。<strong>訴求：</strong>週五前完成四個簽核，功能旗標（feature flag）週一開始逐步推出。</p>
+    <h2 class="doc-title">Annotation export is ready to ship</h2>
+    <p class="doc-sub">Prototype, spec, and rollout plan in one place. <strong>Ask:</strong> four sign-offs by Friday, flag ramp starts Monday.</p>
 
     <!-- 1 · DEMO -->
-    <h3 class="sec"><span class="n">01</span> 看看它的效果</h3>
+    <h3 class="sec"><span class="n">01</span> Watch it work</h3>
     <div class="demo-shell">
-      <div class="demo" id="demo" aria-label="Acme 註解匯出流程的動畫展示">
+      <div class="demo" id="demo" aria-label="Animated mock of the annotation export flow in Acme">
         <div class="bl-titlebar">
           <span class="dot"></span><span class="dot"></span><span class="dot"></span>
-          <span class="bl-name">Acme — q3_launch_teaser_v4.mp4 · 審查</span>
+          <span class="bl-name">Acme — q3_launch_teaser_v4.mp4 · Review</span>
         </div>
         <div class="bl-body">
           <div class="bl-stage">
@@ -346,139 +346,139 @@
             </div>
           </div>
           <div class="bl-panel">
-            <div class="bl-panel-head"><span>註解</span><span class="bl-count" id="selCount">已選 0 個</span></div>
+            <div class="bl-panel-head"><span>Annotations</span><span class="bl-count" id="selCount">0 selected</span></div>
             <div class="bl-ann" id="ann1">
               <span class="bl-check"></span>
               <div>
                 <div class="who">Maya R. <span class="t">00:23</span></div>
-                <div class="txt">Logo 出現得太晚，往前拉 8 格？</div>
+                <div class="txt">Logo lands too late — pull in 8 frames?</div>
               </div>
             </div>
             <div class="bl-ann" id="ann2">
               <span class="bl-check"></span>
               <div>
                 <div class="who">Devon P. <span class="t">00:51</span></div>
-                <div class="txt">這裡的調色跟母帶調光不一致</div>
+                <div class="txt">Color shift here vs. the master grade</div>
               </div>
             </div>
             <div class="bl-ann" id="ann3">
               <span class="bl-check"></span>
               <div>
                 <div class="who">Maya R. <span class="t">01:30</span></div>
-                <div class="txt">通過，最後的 CTA 看起來很棒</div>
+                <div class="txt">Approved — final CTA reads great</div>
               </div>
             </div>
-            <button class="bl-export" id="exportBtn" tabindex="-1">匯出所選</button>
+            <button class="bl-export" id="exportBtn" tabindex="-1">Export selected</button>
           </div>
         </div>
         <div class="bl-progress" id="progress">
           <div class="bl-prog-card">
-            <div class="pt">正在匯出 3 則註解</div>
-            <div class="ps" id="progStatus">正在收集註解…</div>
+            <div class="pt">Exporting 3 annotations</div>
+            <div class="ps" id="progStatus">Collecting annotations…</div>
             <div class="bl-bar"><div class="b" id="progBar"></div></div>
           </div>
         </div>
         <div class="bl-toast" id="toast">
           <span class="bl-tick"></span>
-          <span class="m">匯出完成</span>
-          <span class="bl-chip">q3_teaser_notes.srt · 3 個提示點</span>
+          <span class="m">Export ready</span>
+          <span class="bl-chip">q3_teaser_notes.srt · 3 cues</span>
         </div>
       </div>
       <div class="demo-caption">
-        <span id="demoState">選取 &rarr; 匯出 &rarr; 完成 · 自動循環播放</span>
-        <button class="replay" id="replayBtn">&#8635; 重播</button>
+        <span id="demoState">select &rarr; export &rarr; done · loops automatically</span>
+        <button class="replay" id="replayBtn">&#8635; replay</button>
       </div>
     </div>
 
     <!-- 2 · PITCH -->
-    <h3 class="sec"><span class="n">02</span> 核心訴求</h3>
-    <p class="pitch">審查人員在 Acme 留下回饋後，還要重新打字到電子郵件、Notion 和剪輯軟體裡，<strong>這是流失訪談中最常被提及的痛點（佔已流失團隊的 41%）</strong>。註解匯出功能能將任何選取的留言和繪圖，一鍵轉換成 SRT、CSV 或 PDF，而且用的是我們已經在運作的基礎設施。功能已經寫好、掛上旗標、完成每場工作階段 1.2 萬則註解的壓力測試，只要一個開關就能關閉。現在距離正式發布，只差下面四個人的簽核。</p>
+    <h3 class="sec"><span class="n">02</span> The pitch</h3>
+    <p class="pitch">Reviewers leave feedback in Acme, then retype it into email, Notion, and edit-bay software — <strong>the single most-cited gap in churn interviews (41% of departed teams)</strong>. Annotation export turns any selection of comments and drawings into SRT, CSV, or PDF in one click, using infrastructure we already run. It's built, flagged, load-tested to 12k annotations per session, and reversible in one toggle. The only thing between here and shipped is the four sign-offs below.</p>
 
     <!-- 3 · OBJECTIONS -->
-    <h3 class="sec"><span class="n">03</span> 審查人員會問的問題</h3>
+    <h3 class="sec"><span class="n">03</span> What reviewers will ask</h3>
     <details class="obj" open>
-      <summary><span class="q">Q1</span>這會不會把內部留言外洩給客戶？</summary>
-      <div class="a">不會。匯出功能採用與審查頁面相同的可見度解析器：標記為 <code>internal</code> 的註解會被排除，除非匯出者具有 <code>workspace:admin</code> 權限，並透過已標示的核取方塊明確選擇加入。這部分已由 14 項權限矩陣測試涵蓋。
-        <br><a class="ref" href="#spec">&#8599; 規格書 &sect;4.2 — 可見度與權限</a></div>
+      <summary><span class="q">Q1</span>Can this leak internal-only comments to a client?</summary>
+      <div class="a">No. Export runs through the same visibility resolver as the review page: annotations marked <code>internal</code> are excluded unless the exporter holds <code>workspace:admin</code> and explicitly opts in via a labeled checkbox. Covered by 14 permission-matrix tests.
+        <br><a class="ref" href="#spec">&#8599; spec &sect;4.2 — Visibility &amp; permissions</a></div>
     </details>
     <details class="obj">
-      <summary><span class="q">Q2</span>如果遇到超大工作階段，比方說數千則註解，會怎樣？</summary>
-      <div class="a">匯出功能會以每批 500 則註解進行分頁，並以串流方式傳送檔案。針對正式環境中最大的實際工作階段（一場有 12,400 則註解的代理商審查）進行壓力測試，在 3.1 秒內完成；一般工作階段的 p95 延遲為 340 毫秒。
-        <br><a class="ref" href="#spec">&#8599; 實作筆記，06-24 — 壓力測試結果</a></div>
+      <summary><span class="q">Q2</span>What happens on a monster session — thousands of annotations?</summary>
+      <div class="a">Export paginates at 500 annotations per batch and streams the file. Stress run against the largest real session in prod (a 12,400-annotation agency review) finished in 3.1s; p95 for typical sessions is 340ms.
+        <br><a class="ref" href="#spec">&#8599; implementation notes, 06-24 — load test results</a></div>
     </details>
     <details class="obj">
-      <summary><span class="q">Q3</span>為什麼是提供檔案格式，而不是公開 API？</summary>
-      <div class="a">SRT + CSV + PDF 涵蓋了過去兩季中，被標記為 <code>export-request</code> 的 212 張支援工單裡的 83%。API 適合做為第二階段，但它需要這個功能目前不需要的驗證範圍設定。先提供檔案能立刻解決使用者的問題，同時也不會妨礙未來的 API 設計。
-        <br><a class="ref" href="#spec">&#8599; 指標 — 支援標籤分析，Q1&ndash;Q2</a></div>
+      <summary><span class="q">Q3</span>Why file formats instead of a public API?</summary>
+      <div class="a">SRT + CSV + PDF cover 83% of the 212 support tickets tagged <code>export-request</code> over the last two quarters. An API is the right phase 2 — it needs auth scoping work this doesn't. Files unblock users now without foreclosing the API design.
+        <br><a class="ref" href="#spec">&#8599; metric — support tag analysis, Q1&ndash;Q2</a></div>
     </details>
     <details class="obj">
-      <summary><span class="q">Q4</span>這會不會增加我們需要維運的新基礎設施？</summary>
-      <div class="a">零個新服務。SRT/CSV 在現有的工作池（<code>services/render-workers</code>）中行內渲染；PDF 則重用已經在產生每週摘要的報表服務。沒有新的佇列、沒有新的資料庫，也不需要資料庫結構遷移。
-        <br><a class="ref" href="#spec">&#8599; 規格書 &sect;5.1 — 架構</a></div>
+      <summary><span class="q">Q4</span>Does this add new infrastructure we have to operate?</summary>
+      <div class="a">Zero new services. SRT/CSV render inline in the existing worker pool (<code>services/render-workers</code>); PDF reuses the report service already generating weekly digests. No new queues, no new datastore, no schema migrations.
+        <br><a class="ref" href="#spec">&#8599; spec &sect;5.1 — Architecture</a></div>
     </details>
     <details class="obj">
-      <summary><span class="q">Q5</span>針對匯出的客戶內容，合規方面的做法是什麼？</summary>
-      <div class="a">每次匯出都會在檔案中繼資料蓋上工作區 ID、請求使用者與時間戳，並寫入稽核日誌（<code>audit.annotation_export</code>）。檔案透過有期限的簽署網址（24 小時）提供，超過時間絕不會繼續儲存。
-        <br><a class="ref" href="#spec">&#8599; 規格書 &sect;6 — 稽核與資料保留</a></div>
+      <summary><span class="q">Q5</span>What's the compliance story for exported customer content?</summary>
+      <div class="a">Every export is stamped with workspace ID, requesting user, and timestamp in file metadata, and written to the audit log (<code>audit.annotation_export</code>). Files are served via expiring signed URLs (24h) and never stored beyond that window.
+        <br><a class="ref" href="#spec">&#8599; spec &sect;6 — Audit &amp; retention</a></div>
     </details>
 
     <!-- 4 · SPEC SUMMARY -->
-    <h3 class="sec" id="spec"><span class="n">04</span> 規格書速覽</h3>
+    <h3 class="sec" id="spec"><span class="n">04</span> Spec at a glance</h3>
     <div class="tblwrap">
       <table class="spec">
-        <thead><tr><th>領域</th><th>決策</th><th>參考</th></tr></thead>
+        <thead><tr><th>Area</th><th>Decision</th><th>Ref</th></tr></thead>
         <tbody>
-          <tr><td>格式</td><td>SRT（含時間碼提示點）、CSV（平面資料，包含繪圖邊界框）、PDF（影格縮圖 + 留言）</td><td class="specref">&sect;2</td></tr>
-          <tr><td>進入點</td><td>註解面板 &rarr; 多選 &rarr; <b>匯出所選</b>；工作階段選單中亦有「匯出全部」</td><td class="specref">&sect;3.1</td></tr>
-          <tr><td>權限</td><td>需要 <code>session:comment</code> 或以上權限；<code>internal</code> 註解預設不匯出</td><td class="specref">&sect;4.2</td></tr>
-          <tr><td>限制</td><td>每批 500 則註解，採串流傳輸；每次匯出硬性上限 2.5 萬則，超過會顯示明確錯誤狀態</td><td class="specref">&sect;5.3</td></tr>
-          <tr><td>遙測</td><td><code>export_started</code>、<code>export_completed</code>（格式、數量、耗時）、<code>export_failed</code></td><td class="specref">&sect;7</td></tr>
-          <tr><td>功能旗標</td><td><code>annotation_export</code> — 關閉 &rarr; 5% &rarr; 50% &rarr; 100%，為期兩週</td><td class="specref">&sect;8</td></tr>
+          <tr><td>Formats</td><td>SRT (timecoded cues), CSV (flat, incl. drawing bounding boxes), PDF (frame thumbnails + comments)</td><td class="specref">&sect;2</td></tr>
+          <tr><td>Entry point</td><td>Annotation panel &rarr; multi-select &rarr; <b>Export selected</b>; also &ldquo;Export all&rdquo; in session menu</td><td class="specref">&sect;3.1</td></tr>
+          <tr><td>Permissions</td><td>Requires <code>session:comment</code> or above; <code>internal</code> annotations excluded by default</td><td class="specref">&sect;4.2</td></tr>
+          <tr><td>Limits</td><td>500 annotations/batch, streamed; 25k hard cap per export with clear error state</td><td class="specref">&sect;5.3</td></tr>
+          <tr><td>Telemetry</td><td><code>export_started</code>, <code>export_completed</code> (format, count, duration), <code>export_failed</code></td><td class="specref">&sect;7</td></tr>
+          <tr><td>Feature flag</td><td><code>annotation_export</code> — off &rarr; 5% &rarr; 50% &rarr; 100% over two weeks</td><td class="specref">&sect;8</td></tr>
         </tbody>
       </table>
     </div>
 
     <!-- 5 · RISK + NEEDS -->
-    <h3 class="sec"><span class="n">05</span> 風險、復原機制，以及我需要你們協助的事</h3>
+    <h3 class="sec"><span class="n">05</span> Risk, rollback, and what I need from you</h3>
     <div class="cardgrid">
       <div class="risk">
-        <h4>風險與復原</h4>
+        <h4>Risk &amp; rollback</h4>
         <ul>
-          <li><strong>復復只需一個開關。</strong>將 <code>annotation_export</code> 關閉即可，沒有交付任何資料庫結構遷移，不需要收拾殘局。</li>
-          <li><strong>影響範圍有限。</strong>匯出在共享的工作池中執行，每項工作有 30 秒逾時限制；失控的工作不會拖垮審查播放功能。</li>
-          <li><strong>最可能發生的失誤：</strong>如果簽署網址的清理作業延遲，會產生孤立的匯出檔案，但無論如何它們都會在 24 小時內自動失效。</li>
-          <li><strong>已知限制：</strong>繪圖註解在 CSV 中會被扁平化為邊界框（完整的向量資料僅在 PDF 中提供）。已在產品內說明，並列為第二階段項目。</li>
+          <li><strong>Rollback is one toggle.</strong> Flip <code>annotation_export</code> off — no schema migrations shipped, nothing to unwind.</li>
+          <li><strong>Blast radius is bounded.</strong> Export runs in the shared worker pool with a 30s per-job timeout; a runaway job cannot starve review playback.</li>
+          <li><strong>Worst credible failure:</strong> orphaned export files if the signed-URL cleanup lags — they self-expire in 24h regardless.</li>
+          <li><strong>Known gap:</strong> drawing annotations flatten to bounding boxes in CSV (full vectors are PDF-only). Documented in-product; phase 2 item.</li>
         </ul>
       </div>
       <div class="need">
-        <h4>我需要你們協助的事</h4>
+        <h4>What I need from you</h4>
         <div class="approver">
           <span class="avatar">PN</span>
-          <div class="info"><b>Priya Natarajan</b><span class="role">工程負責人，播放與審查</span>
-            <div class="asks">請簽核重用算繪工作池的決定（規格書 &sect;5.1），這是唯一的共享基礎設施相依套件。</div></div>
+          <div class="info"><b>Priya Natarajan</b><span class="role">Eng lead, Playback &amp; Review</span>
+            <div class="asks">Sign off on reusing the render worker pool (spec &sect;5.1) — the only shared-infra dependency.</div></div>
         </div>
         <div class="approver">
           <span class="avatar">ES</span>
-          <div class="info"><b>Elena Sorokin</b><span class="role">安全</span>
-            <div class="asks">請核准可見度規則與稽核日誌結構（規格書 &sect;4.2、&sect;6）。</div></div>
+          <div class="info"><b>Elena Sorokin</b><span class="role">Security</span>
+            <div class="asks">Approve the visibility rules and audit-log shape (spec &sect;4.2, &sect;6).</div></div>
         </div>
         <div class="approver">
           <span class="avatar">MW</span>
-          <div class="info"><b>Marcus Webb</b><span class="role">設計</span>
-            <div class="asks">請對匯出彈窗與錯誤狀態進行最後審查，上方的原型為目前最新版本。</div></div>
+          <div class="info"><b>Marcus Webb</b><span class="role">Design</span>
+            <div class="asks">Final pass on the export modal and error states — prototype above is current.</div></div>
         </div>
         <div class="approver">
           <span class="avatar">DK</span>
-          <div class="info"><b>Dana Kim</b><span class="role">產品經理，協作</span>
-            <div class="asks">請核准旗標漸進推出時程（規格書 &sect;8），並負責更新日誌條目。</div></div>
+          <div class="info"><b>Dana Kim</b><span class="role">PM, Collaboration</span>
+            <div class="asks">Approve the flag ramp schedule (spec &sect;8) and own the changelog entry.</div></div>
         </div>
       </div>
     </div>
 
-    <div class="bottomline">以上所有內容皆已實作完成，並在旗標後方測試完畢。請針對你負責的部分回覆一個 &#10003;，或是在我的行事曆上預約 15 分鐘，<b>目標：週一開始漸進推出。</b></div>
+    <div class="bottomline">Everything above is built and tested behind the flag. Reply with a &#10003; on your piece, or grab 15 minutes on my calendar — <b>target: ramp starts Monday.</b></div>
   </article>
 
-  <footer>屬於<a href="index.html">掌握你的未知數</a> — 部落格文章的搭配範例。</footer>
+  <footer>Part of <a href="index.html">Know your unknowns</a> — companion examples to the blog post.</footer>
 </div>
 
 <script>
@@ -488,10 +488,10 @@
   var copyBtn = document.getElementById("copyBtn");
   copyBtn.addEventListener("click", function () {
     function done() {
-      copyBtn.textContent = "已複製";
+      copyBtn.textContent = "copied";
       copyBtn.classList.add("done");
       setTimeout(function () {
-        copyBtn.textContent = "複製提示詞";
+        copyBtn.textContent = "copy prompt";
         copyBtn.classList.remove("done");
       }, 1600);
     }
@@ -535,9 +535,9 @@
     // force reflow so the next width change animates
     void progBar.offsetWidth;
     progBar.style.transition = "";
-    progStatus.textContent = "正在收集註解…";
+    progStatus.textContent = "Collecting annotations…";
     toast.classList.remove("show");
-    selCount.textContent = "已選 0 個";
+    selCount.textContent = "0 selected";
   }
 
   function play() {
@@ -546,7 +546,7 @@
       at(500 + i * 450, function () {
         anns[i].classList.add("sel");
         pins[i].classList.add("on");
-        selCount.textContent = (i + 1) + " 已選";
+        selCount.textContent = (i + 1) + " selected";
         if (i === 2) exportBtn.classList.add("armed");
       });
     });
@@ -556,8 +556,8 @@
       progress.classList.add("show");
     });
     at(2450, function () { progBar.style.width = "100%"; });
-    at(3100, function () { progStatus.textContent = "正在算繪 SRT 提示點…"; });
-    at(3800, function () { progStatus.textContent = "正在簽署下載網址…"; });
+    at(3100, function () { progStatus.textContent = "Rendering SRT cues…"; });
+    at(3800, function () { progStatus.textContent = "Signing download URL…"; });
     at(4300, function () {
       progress.classList.remove("show");
       toast.classList.add("show");

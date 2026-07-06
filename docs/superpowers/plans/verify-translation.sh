@@ -28,7 +28,10 @@ fi
 
 # 2b) HTML 標籤結構必須與 git HEAD 一致（抓截斷/遺漏整段，免受散文換行影響 → 一字不漏）
 if [[ "$f" == *.html ]] && headtxt="$(git show "HEAD:$f" 2>/dev/null)"; then
-  tagcount () { grep -oE '<[a-zA-Z][a-zA-Z0-9]*' | sort | uniq -c; }
+  # 只比對「結構/區塊」標籤；忽略行內呈現標籤（em/b/strong/i/mark/sup/sub/u/code），
+  # 這些數量差一個不代表遺漏內容，只是某個字/識別字的斜體、粗體或 code 樣式不同。
+  # 整段程式碼區塊若被刪，其外層 <pre> 仍會被抓到，故不影響遺漏偵測。
+  tagcount () { grep -oE '<[a-zA-Z][a-zA-Z0-9]*' | grep -viE '^<(em|b|strong|i|mark|sup|sub|u|code)$' | sort | uniq -c; }
   hb="$(printf '%s' "$headtxt" | tagcount)"
   ab="$(tagcount < "$f")"
   if [[ -n "$hb" && "$hb" != "$ab" ]]; then
