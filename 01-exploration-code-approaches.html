@@ -1,10 +1,10 @@
 <!-- Copyright 2026 Anthropic PBC · SPDX-License-Identifier: Apache-2.0 -->
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="zh-Hant-TW">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Debounced search — three approaches</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Debounce 搜尋 — 三種做法</title>
   <style>
     :root {
       --ivory:    #FAF9F5;
@@ -258,12 +258,11 @@
   <div class="page">
 
     <header class="page-head">
-      <div class="eyebrow">Exploration · Acme web client</div>
-      <h1>Three ways to implement debounced search</h1>
+      <div class="eyebrow">技術探索 · Acme web client</div>
+      <h1>Debounce 搜尋的三種做法</h1>
       <div class="prompt-box">
         <span class="label">Prompt</span>
-        Show me three different ways to implement debounced search for the task
-        filter input in our React codebase, with tradeoffs for each.
+        在我們的 React 專案中，針對任務篩選的輸入框，列出三種實作 debounce 搜尋的做法，並比較各自的優缺點。
       </div>
     </header>
 
@@ -274,8 +273,8 @@
       <!-- ---------- Approach 1 ---------- -->
       <article class="approach">
         <header class="approach-head">
-          <h2><span class="num">01</span>Inline useEffect + setTimeout</h2>
-          <p>Debounce logic lives directly inside the component that owns the input.</p>
+          <h2><span class="num">01</span>直接寫在 useEffect + setTimeout 裡</h2>
+          <p>把 debounce 邏輯直接塞進擁有該輸入框的元件裡。</p>
         </header>
 
         <div class="code"><pre><span class="kw">export function</span> <span class="fn">TaskSearch</span>() {
@@ -300,36 +299,36 @@
 
         <div class="tradeoffs">
           <div class="row head">
-            <div class="cell">Pro</div>
-            <div class="cell">Con</div>
+            <div class="cell">優點</div>
+            <div class="cell">缺點</div>
           </div>
           <div class="row">
-            <div class="cell pro">Zero new abstractions to learn</div>
-            <div class="cell con">Logic duplicated everywhere search exists</div>
+            <div class="cell pro">不用多學任何新東西</div>
+            <div class="cell con">每個有搜尋功能的地方都要重寫一遍</div>
           </div>
           <div class="row">
-            <div class="cell pro">Easy to step through in devtools</div>
-            <div class="cell con">Two pieces of state for one conceptual value</div>
+            <div class="cell pro">在 devtools 裡一步一步 trace 很直覺</div>
+            <div class="cell con">同一個概念卻要拆成兩個 state</div>
           </div>
           <div class="row">
-            <div class="cell pro">No dependency or bundle change</div>
-            <div class="cell con">Delay constant is buried in component body</div>
+            <div class="cell pro">不用動到相依套件或 bundle 大小</div>
+            <div class="cell con">延遲時間的常數寫死在元件裡，不好找</div>
           </div>
         </div>
 
         <div class="chips">
-          <span class="chip">Bundle impact: <strong>+0 kb</strong></span>
-          <span class="chip">Testability: <strong>medium</strong></span>
-          <span class="chip">Reuse: <strong>low</strong></span>
-          <span class="chip">SSR safe: <strong>yes</strong></span>
+          <span class="chip">Bundle 大小：<strong>+0 kb</strong></span>
+          <span class="chip">可測試性：<strong>中等</strong></span>
+          <span class="chip">重複使用性：<strong>低</strong></span>
+          <span class="chip">SSR 安全：<strong>是</strong></span>
         </div>
       </article>
 
       <!-- ---------- Approach 2 ---------- -->
       <article class="approach">
         <header class="approach-head">
-          <h2><span class="num">02</span>Custom useDebounce hook</h2>
-          <p>Extract the timer into a shared hook under <code style="font-family:var(--mono)">src/hooks/</code>.</p>
+          <h2><span class="num">02</span>抽出成自訂的 useDebounce hook</h2>
+          <p>把計時器邏輯抽到 <code style="font-family:var(--mono)">src/hooks/</code> 底下變成共用的 hook。</p>
         </header>
 
         <div class="code"><pre><span class="cm">// src/hooks/useDebounce.ts</span>
@@ -349,36 +348,36 @@
 
         <div class="tradeoffs">
           <div class="row head">
-            <div class="cell">Pro</div>
-            <div class="cell">Con</div>
+            <div class="cell">優點</div>
+            <div class="cell">缺點</div>
           </div>
           <div class="row">
-            <div class="cell pro">Single import reused across filter, command bar, board search</div>
-            <div class="cell con">One more file to maintain and document</div>
+            <div class="cell pro">只要 import 一次，篩選器、命令列、看板搜尋都能用</div>
+            <div class="cell con">多一個檔案要維護和寫文件</div>
           </div>
           <div class="row">
-            <div class="cell pro">Trivial to unit test with fake timers</div>
-            <div class="cell con">Generic <code style="font-family:var(--mono)">T</code> hides intent slightly</div>
+            <div class="cell pro">用 fake timer 跑單元測試很簡單</div>
+            <div class="cell con">泛型 <code style="font-family:var(--mono)">T</code> 會讓意圖稍微沒那麼明確</div>
           </div>
           <div class="row">
-            <div class="cell pro">Delay is a visible, tunable argument</div>
-            <div class="cell con">Still re-renders on every keystroke</div>
+            <div class="cell pro">延遲時間是清楚的參數，方便調整</div>
+            <div class="cell con">每次打字還是會觸發重新渲染</div>
           </div>
         </div>
 
         <div class="chips">
-          <span class="chip">Bundle impact: <strong>+0.2 kb</strong></span>
-          <span class="chip">Testability: <strong>high</strong></span>
-          <span class="chip">Reuse: <strong>high</strong></span>
-          <span class="chip">SSR safe: <strong>yes</strong></span>
+          <span class="chip">Bundle 大小：<strong>+0.2 kb</strong></span>
+          <span class="chip">可測試性：<strong>高</strong></span>
+          <span class="chip">重複使用性：<strong>高</strong></span>
+          <span class="chip">SSR 安全：<strong>是</strong></span>
         </div>
       </article>
 
       <!-- ---------- Approach 3 ---------- -->
       <article class="approach">
         <header class="approach-head">
-          <h2><span class="num">03</span>Tiny external library</h2>
-          <p>Adopt <code style="font-family:var(--mono)">use-debounce</code> for both values and callbacks.</p>
+          <h2><span class="num">03</span>直接用輕量的外部套件</h2>
+          <p>引入 <code style="font-family:var(--mono)">use-debounce</code> 來同時處理值和 callback。</p>
         </header>
 
         <div class="code"><pre><span class="kw">import</span> { useDebouncedCallback }
@@ -405,28 +404,28 @@
 
         <div class="tradeoffs">
           <div class="row head">
-            <div class="cell">Pro</div>
-            <div class="cell">Con</div>
+            <div class="cell">優點</div>
+            <div class="cell">缺點</div>
           </div>
           <div class="row">
-            <div class="cell pro">leading / trailing / maxWait handled for us</div>
-            <div class="cell con">New runtime dependency to audit and update</div>
+            <div class="cell pro">leading、trailing、maxWait 都幫你處理好了</div>
+            <div class="cell con">多了一個執行階段的相依套件要審查和更新</div>
           </div>
           <div class="row">
-            <div class="cell pro">Callback form skips intermediate re-renders</div>
-            <div class="cell con">Uncontrolled input diverges from Acme form patterns</div>
+            <div class="cell pro">用 callback 形式可以跳過中間不必要的重新渲染</div>
+            <div class="cell con">uncontrolled input 跟 Acme 現有的表單模式不一致</div>
           </div>
           <div class="row">
-            <div class="cell pro">Well-tested edge cases (unmount, flush, cancel)</div>
-            <div class="cell con">~1.4 kb gzipped for something we could own</div>
+            <div class="cell pro">邊界情境都測過了（unmount、flush、cancel）</div>
+            <div class="cell con">gzip 後大概 1.4 kb，其實自己寫就有了</div>
           </div>
         </div>
 
         <div class="chips">
-          <span class="chip">Bundle impact: <strong>+1.4 kb</strong></span>
-          <span class="chip">Testability: <strong>high</strong></span>
-          <span class="chip">Reuse: <strong>high</strong></span>
-          <span class="chip">SSR safe: <strong>yes</strong></span>
+          <span class="chip">Bundle 大小：<strong>+1.4 kb</strong></span>
+          <span class="chip">可測試性：<strong>高</strong></span>
+          <span class="chip">重複使用性：<strong>高</strong></span>
+          <span class="chip">SSR 安全：<strong>是</strong></span>
         </div>
       </article>
 
@@ -435,17 +434,17 @@
     <!-- ============================================================= -->
 
     <aside class="reco">
-      <h2>Recommendation</h2>
+      <h2>建議做法</h2>
       <p>
-        Go with <strong>approach 02, the custom <code>useDebounce</code> hook</strong>.
-        Acme already has three places that hand-roll the inline pattern
-        (task filter, command palette, member picker), so extracting one
-        shared hook removes duplication without taking on a new dependency.
+        選 <strong>做法 02，抽出自訂的 <code>useDebounce</code> hook</strong>。
+        Acme 現在已經有三個地方各自手寫了同樣的 inline 邏輯
+        （任務篩選器、命令面板、成員選擇器），所以抽出一個共用的 hook
+        就能消除重複的程式碼，又不用多裝一個相依套件。
       </p>
       <p>
-        Revisit approach 03 only if we later need <code>maxWait</code> or
-        <code>flush()</code> semantics — the library earns its bundle cost
-        once the requirements outgrow a ten-line hook.
+        除非之後真的用到 <code>maxWait</code> 或 <code>flush()</code> 這類功能，
+        否則不用考慮做法 03。等到需求多到十行 code 的 hook 搞不定時，
+        這個套件才有它引入的價值。
       </p>
     </aside>
 

@@ -1,10 +1,10 @@
 <!-- Copyright 2026 Anthropic PBC · SPDX-License-Identifier: Apache-2.0 -->
 <!doctype html>
-<html lang="en">
+<html lang="zh-Hant-TW">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Acme — Cycle 14 triage</title>
+<title>Acme — Cycle 14 分流</title>
 <style>
   :root {
     --ivory: #FAF9F5;
@@ -296,21 +296,19 @@
 
   <header>
     <div class="eyebrow">Acme / editor / triage</div>
-    <h1>Cycle 14 triage</h1>
+    <h1>Cycle 14 分流</h1>
     <p class="sub">
-      Twenty-four open Linear tickets, pre-sorted into a best guess. Drag them
-      across Now / Next / Later / Cut until the cut feels right, then copy the
-      result back into the planning doc as markdown.
+      目前有 24 張 Linear ticket 還開著，我們先做了初步分類。你可以把卡片在「現在做 / 接著做 / 之後再說 / 砍掉」之間拖曳，等你看完覺得分配得差不多了，就把結果複製成 markdown 貼回規劃文件。
     </p>
-    <div class="hintline">drag tickets between columns &nbsp;·&nbsp; click a tag to filter</div>
+    <div class="hintline">在欄位之間拖曳 ticket &nbsp;·&nbsp; 點擊標籤來篩選</div>
   </header>
 
   <div class="toolbar">
     <div class="summary" id="summary"></div>
     <div class="spacer"></div>
     <button class="filter-active" id="filterBadge"></button>
-    <button class="ghost" id="resetBtn">Reset</button>
-    <button class="primary" id="copyBtn">Copy as markdown</button>
+    <button class="ghost" id="resetBtn">重設</button>
+    <button class="primary" id="copyBtn">複製為 markdown</button>
   </div>
 
   <div class="board" id="board"></div>
@@ -320,43 +318,43 @@
 <script>
   // ---------- data ----------
   var COLUMNS = [
-    { key: 'now',   label: 'Now',   rationale: 'Blocking the v2.4 release or actively losing user data.' },
-    { key: 'next',  label: 'Next',  rationale: 'High-leverage and well-scoped — start the moment Now clears.' },
-    { key: 'later', label: 'Later', rationale: 'Real, but can ride to a future cycle without anyone noticing.' },
-    { key: 'cut',   label: 'Cut',   rationale: 'Not this quarter — close, dedupe, or push back to the requester.' }
+    { key: 'now',   label: '現在做',   rationale: '卡到 v2.4 發布，或者正在讓使用者資料不見的。' },
+    { key: 'next',  label: '接著做',  rationale: 'CP 值高而且範圍明確，等「現在做」一清掉就馬上動手。' },
+    { key: 'later', label: '之後再說', rationale: '確實該做，但就算延到下個週期也不會有人發現。' },
+    { key: 'cut',   label: '砍掉',   rationale: '這季不做，直接關掉、合併重複的，或者退回給需求方。' }
   ];
 
   var EST_PTS = { S: 1, M: 2, L: 3 };
 
   // tag, est, owner, col
   var INITIAL = [
-    { id: 'BIR-241', title: 'Fix sync conflict toast firing twice on reconnect', tag: 'bug',   est: 'M', owner: 'AK', col: 'now' },
-    { id: 'BIR-238', title: 'Comments lost when editing offline then reloading', tag: 'bug',   est: 'L', owner: 'JM', col: 'now' },
-    { id: 'BIR-252', title: 'Billing webhook 500s on annual → monthly downgrade', tag: 'bug',   est: 'M', owner: 'RS', col: 'now' },
-    { id: 'BIR-219', title: 'Migrate workspace permissions to new ACL table',    tag: 'debt',  est: 'L', owner: 'AK', col: 'now' },
-    { id: 'BIR-260', title: 'SSO login loop on Safari 17 with strict cookies',   tag: 'bug',   est: 'S', owner: 'TN', col: 'now' },
+    { id: 'BIR-241', title: '修復同步衝突的提示在重新連線時跳兩次的問題', tag: 'bug',   est: 'M', owner: 'AK', col: 'now' },
+    { id: 'BIR-238', title: '離線編輯後重新整理會導致留言遺失', tag: 'bug',   est: 'L', owner: 'JM', col: 'now' },
+    { id: 'BIR-252', title: '帳單 webhook 在年繳降月繳時回傳 500', tag: 'bug',   est: 'M', owner: 'RS', col: 'now' },
+    { id: 'BIR-219', title: '將工作區權限遷移到新的 ACL table',    tag: 'debt',  est: 'L', owner: 'AK', col: 'now' },
+    { id: 'BIR-260', title: 'Safari 17 在嚴格 cookie 模式下導致 SSO 登入無限迴圈',   tag: 'bug',   est: 'S', owner: 'TN', col: 'now' },
 
-    { id: 'BIR-244', title: 'Inline @-mention picker in doc comments',           tag: 'feat',  est: 'M', owner: 'JM', col: 'next' },
-    { id: 'BIR-231', title: 'Bulk-archive completed projects from the sidebar',  tag: 'feat',  est: 'S', owner: 'EL', col: 'next' },
-    { id: 'BIR-247', title: 'Activity feed: collapse repeated edit events',      tag: 'feat',  est: 'M', owner: 'TN', col: 'next' },
-    { id: 'BIR-228', title: 'Notification preferences per project',              tag: 'feat',  est: 'L', owner: 'EL', col: 'next' },
-    { id: 'BIR-255', title: 'Keyboard shortcut cheat-sheet overlay (⌘/)',        tag: 'feat',  est: 'S', owner: 'RS', col: 'next' },
-    { id: 'BIR-236', title: 'Empty-state illustrations for new workspaces',      tag: 'chore', est: 'S', owner: 'EL', col: 'next' },
-    { id: 'BIR-249', title: 'Audit log export to CSV for admins',                tag: 'feat',  est: 'M', owner: 'AK', col: 'next' },
+    { id: 'BIR-244', title: '文件留言支援 @ 提及的內聯選擇器',           tag: 'feat',  est: 'M', owner: 'JM', col: 'next' },
+    { id: 'BIR-231', title: '可以從側欄大量封存已完成的專案',  tag: 'feat',  est: 'S', owner: 'EL', col: 'next' },
+    { id: 'BIR-247', title: '活動動態：摺疊重複的編輯事件',      tag: 'feat',  est: 'M', owner: 'TN', col: 'next' },
+    { id: 'BIR-228', title: '通知偏好設定能針對各個專案調整',              tag: 'feat',  est: 'L', owner: 'EL', col: 'next' },
+    { id: 'BIR-255', title: '鍵盤快捷鍵的提示覆蓋層 (⌘/)',        tag: 'feat',  est: 'S', owner: 'RS', col: 'next' },
+    { id: 'BIR-236', title: '新工作區的空狀態插圖',      tag: 'chore', est: 'S', owner: 'EL', col: 'next' },
+    { id: 'BIR-249', title: '管理員可以將稽核 log 匯出成 CSV',                tag: 'feat',  est: 'M', owner: 'AK', col: 'next' },
 
-    { id: 'BIR-213', title: 'Dark mode pass on settings + billing pages',        tag: 'chore', est: 'M', owner: 'EL', col: 'later' },
-    { id: 'BIR-258', title: 'Slack integration: post on milestone close',        tag: 'feat',  est: 'M', owner: 'RS', col: 'later' },
-    { id: 'BIR-221', title: 'Replace moment.js with date-fns across web',        tag: 'debt',  est: 'L', owner: 'TN', col: 'later' },
-    { id: 'BIR-263', title: 'Drag-to-reorder columns on the board view',         tag: 'feat',  est: 'M', owner: 'JM', col: 'later' },
-    { id: 'BIR-209', title: 'Upgrade Postgres minor + reindex search vectors',   tag: 'chore', est: 'M', owner: 'AK', col: 'later' },
-    { id: 'BIR-251', title: 'Per-doc read receipts in the share dialog',         tag: 'feat',  est: 'L', owner: 'JM', col: 'later' },
-    { id: 'BIR-240', title: 'Onboarding checklist resurfaces after dismissal',   tag: 'bug',   est: 'S', owner: 'TN', col: 'later' },
-    { id: 'BIR-265', title: 'Add request-id to client error reports',            tag: 'debt',  est: 'S', owner: 'RS', col: 'later' },
+    { id: 'BIR-213', title: '設定與帳單頁面的深色模式調整',        tag: 'chore', est: 'M', owner: 'EL', col: 'later' },
+    { id: 'BIR-258', title: 'Slack 整合：里程碑結束時發送通知',        tag: 'feat',  est: 'M', owner: 'RS', col: 'later' },
+    { id: 'BIR-221', title: '把 moment.js 換成 date-fns (web 端)',        tag: 'debt',  est: 'L', owner: 'TN', col: 'later' },
+    { id: 'BIR-263', title: '看板檢視支援拖曳欄位排序',         tag: 'feat',  est: 'M', owner: 'JM', col: 'later' },
+    { id: 'BIR-209', title: '升級 Postgres minor 版本並重建搜尋向量',   tag: 'chore', est: 'M', owner: 'AK', col: 'later' },
+    { id: 'BIR-251', title: '在分享對話框顯示各文件的讀取回條',         tag: 'feat',  est: 'L', owner: 'JM', col: 'later' },
+    { id: 'BIR-240', title: '新手引導清單在被關掉後又會重新出現',   tag: 'bug',   est: 'S', owner: 'TN', col: 'later' },
+    { id: 'BIR-265', title: '在客戶端錯誤回報加上 request-id',            tag: 'debt',  est: 'S', owner: 'RS', col: 'later' },
 
-    { id: 'BIR-198', title: 'Custom emoji reactions on comments',                tag: 'feat',  est: 'M', owner: 'EL', col: 'cut' },
-    { id: 'BIR-204', title: 'Native Windows desktop wrapper',                    tag: 'feat',  est: 'L', owner: 'TN', col: 'cut' },
-    { id: 'BIR-217', title: 'AI summary of long comment threads',                tag: 'feat',  est: 'L', owner: 'JM', col: 'cut' },
-    { id: 'BIR-233', title: 'Public roadmap page with voting',                   tag: 'feat',  est: 'L', owner: 'RS', col: 'cut' }
+    { id: 'BIR-198', title: '留言支援自訂表情符號回應',                tag: 'feat',  est: 'M', owner: 'EL', col: 'cut' },
+    { id: 'BIR-204', title: '原生 Windows 桌面版 wrapper',                    tag: 'feat',  est: 'L', owner: 'TN', col: 'cut' },
+    { id: 'BIR-217', title: '用 AI 摘要落落長的留言討論串',                tag: 'feat',  est: 'L', owner: 'JM', col: 'cut' },
+    { id: 'BIR-233', title: '公開的產品藍圖頁面並支援投票',                   tag: 'feat',  est: 'L', owner: 'RS', col: 'cut' }
   ];
 
   var OWNER_CLASS = { AK: 'o1', JM: 'o2', RS: 'o3', TN: 'o4', EL: 'o1' };
@@ -492,7 +490,7 @@
 
     COLUMNS.forEach(function (c) {
       colCounts[c.key].textContent = counts[c.key];
-      colFoots[c.key].innerHTML = 'estimate <b>' + pts[c.key] + ' pt' + (pts[c.key] === 1 ? '' : 's') + '</b>';
+      colFoots[c.key].innerHTML = '預估 <b>' + pts[c.key] + ' pt' + (pts[c.key] === 1 ? '' : 's') + '</b>';
     });
 
     var summary = document.getElementById('summary');
@@ -502,7 +500,7 @@
 
     var badge = document.getElementById('filterBadge');
     if (activeFilter) {
-      badge.textContent = 'filter: ' + activeFilter + ' ×';
+      badge.textContent = '篩選：' + activeFilter + ' ×';
       badge.classList.add('on');
     } else {
       badge.classList.remove('on');
@@ -517,7 +515,7 @@
   // ---------- export ----------
   function buildMarkdown() {
     var lines = [];
-    lines.push('# Acme — Cycle 14 triage');
+    lines.push('# Acme — Cycle 14 分流');
     lines.push('');
     COLUMNS.forEach(function (c) {
       var rows = tickets.filter(function (t) { return t.col === c.key; });
@@ -539,11 +537,11 @@
   copyBtn.addEventListener('click', function () {
     var md = buildMarkdown();
     function flash() {
-      copyBtn.textContent = 'Copied ✓';
+      copyBtn.textContent = '已複製 ✓';
       copyBtn.classList.add('copied');
       clearTimeout(copyTimer);
       copyTimer = setTimeout(function () {
-        copyBtn.textContent = 'Copy as markdown';
+        copyBtn.textContent = '複製為 markdown';
         copyBtn.classList.remove('copied');
       }, 1200);
     }

@@ -1,10 +1,10 @@
 <!-- Copyright 2026 Anthropic PBC · SPDX-License-Identifier: Apache-2.0 -->
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="zh-Hant-TW">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Empty state — four visual directions</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>空狀態 — 四個視覺方向</title>
   <style>
     :root {
       --ivory:    #FAF9F5;
@@ -383,12 +383,12 @@
 <body>
 
   <div class="toolbar">
-    <div class="title">Acme · design exploration</div>
+    <div class="title">Acme · 設計探索</div>
     <div class="field">
-      <span>Background:</span>
+      <span>背景：</span>
       <div class="seg" id="bg-seg">
-        <label><input type="radio" name="bg" value="light" checked><span>Light</span></label>
-        <label><input type="radio" name="bg" value="dark"><span>Dark</span></label>
+        <label><input type="radio" name="bg" value="light" checked><span>淺色</span></label>
+        <label><input type="radio" name="bg" value="dark"><span>深色</span></label>
       </div>
     </div>
   </div>
@@ -396,13 +396,11 @@
   <div class="page">
 
     <header class="page-head">
-      <div class="eyebrow">Exploration · Empty states</div>
-      <h1>Four visual directions for the “no tasks yet” state</h1>
+      <div class="eyebrow">探索 · 空狀態</div>
+      <h1>「目前沒有任何任務」狀態的四個視覺方向</h1>
       <div class="prompt-box">
         <span class="label">Prompt</span>
-        Explore four visual directions for our empty-state component. Render each
-        live so we can compare tone, density, and how well they hold up on light
-        and dark surfaces.
+        針對我們的空狀態元件，發想四個視覺方向。把每個都實際畫出來，讓我們可以比較它們的調性、資訊密度，以及在淺色和深色背景上的呈現效果。
       </div>
     </header>
 
@@ -410,23 +408,22 @@
 
       <!-- ================= A — Minimal ================= -->
       <article class="artboard">
-        <span class="tag">A — Minimal</span>
+        <span class="tag">A — 極簡</span>
         <div class="stage">
           <div class="es-a">
-            <h3>No tasks yet</h3>
-            <p>When you create a task it will show up here.</p>
-            <span class="btn">New task</span>
+            <h3>目前沒有任務</h3>
+            <p>你建立的任務會出現在這裡。</p>
+            <span class="btn">新增任務</span>
           </div>
         </div>
         <p class="rationale">
-          Pure typography, single quiet action. Reads as calm and confident;
-          assumes the surrounding UI already carries enough personality.
+          純文字排版，只放一個低調的動作。整體看起來沉穩且有自信；前提是周圍的介面已經有足夠的個性了。
         </p>
       </article>
 
       <!-- ================= B — Illustrated ================= -->
       <article class="artboard">
-        <span class="tag">B — Illustrated</span>
+        <span class="tag">B — 插圖</span>
         <div class="stage">
           <div class="es-b">
             <svg width="120" height="90" viewBox="0 0 120 90" aria-hidden="true">
@@ -442,20 +439,19 @@
               <path d="M98 55 v10 M93 60 h10"
                     stroke="white" stroke-width="2" stroke-linecap="round"/>
             </svg>
-            <h3>Start your first list</h3>
-            <p>Group related work and watch progress roll up automatically.</p>
-            <span class="btn">Create a task</span>
+            <h3>建立你的第一個清單</h3>
+            <p>把相關的工作集結起來，進度會自動彙整上去。</p>
+            <span class="btn">建立任務</span>
           </div>
         </div>
         <p class="rationale">
-          A small geometric spot illustration anchors the eye and explains the
-          object model (lists contain tasks) without a wall of copy.
+          用一個簡單的幾何小插圖來抓住視線，順便說明資料模型（清單裡包含任務），不用寫一大堆文字。
         </p>
       </article>
 
       <!-- ================= C — Playful ================= -->
       <article class="artboard">
-        <span class="tag">C — Playful</span>
+        <span class="tag">C — 活潑</span>
         <div class="stage">
           <div class="es-c">
             <div class="float">
@@ -464,41 +460,39 @@
               <div class="card"></div>
             </div>
             <div class="shadow"></div>
-            <h3>Nothing on your plate</h3>
-            <p>Enjoy the quiet, or add something to get moving.</p>
+            <h3>目前沒事可忙</h3>
+            <p>趁現在享受一下清閒，或者加點東西來開始動工吧。</p>
           </div>
         </div>
         <p class="rationale">
-          A gently bobbing stack adds life to an otherwise static screen. Motion
-          is subtle enough to loop indefinitely without drawing complaints.
+          緩緩上下浮動的卡片堆疊，替原本死板的畫面帶來一點生氣。動態效果很輕微，就算一直循環播放也不會惹人嫌。
         </p>
       </article>
 
       <!-- ================= D — Instructional ================= -->
       <article class="artboard">
-        <span class="tag">D — Instructional</span>
+        <span class="tag">D — 引導</span>
         <div class="stage">
           <div class="es-d">
-            <h3>Set up this project</h3>
+            <h3>設定這個專案</h3>
             <ol>
               <li>
-                Create your first task
-                <span>Give it a name and an owner.</span>
+                建立你的第一個任務
+                <span>給它一個名稱，並指派負責人。</span>
               </li>
               <li>
-                Add a due date
-                <span>Acme will surface it on the timeline.</span>
+                加上截止日期
+                <span>Acme 會自動把它顯示在時間軸上。</span>
               </li>
               <li>
-                Invite a teammate
-                <span>Shared projects stay in sync automatically.</span>
+                邀請隊友
+                <span>共用專案會自動保持同步。</span>
               </li>
             </ol>
           </div>
         </div>
         <p class="rationale">
-          Treats the empty state as onboarding. Higher density, but every line is
-          actionable — best when the user is new to the product, not just the view.
+          把空狀態當作新手引導來用。資訊密度比較高，但每一行都可以直接動手做；最適合剛接觸產品的新使用者，而不只是剛切換到這個頁面的人。
         </p>
       </article>
 

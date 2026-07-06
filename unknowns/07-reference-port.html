@@ -1,10 +1,10 @@
 <!-- Copyright 2026 Anthropic PBC · SPDX-License-Identifier: Apache-2.0 -->
 <!doctype html>
-<html lang="en">
+<html lang="zh-Hant-TW">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Point at a reference — Know your unknowns</title>
+<title>指出參考實作 — 搞清楚你的未知</title>
 <style>
   :root {
     --ivory:  #FAF9F5;
@@ -327,55 +327,55 @@
 <div class="wrap">
 
   <header>
-    <div class="eyebrow">Know your unknowns · Pre-implementation</div>
-    <a class="backlink" href="index.html">&larr; All examples</a>
-    <h1>Point at a reference</h1>
-    <p class="lede">When an existing implementation already encodes the behavior you want, make Claude prove it understood the reference — as a reviewable artifact — before a single line gets ported.</p>
+    <div class="eyebrow">搞清楚你的未知 · 動手寫程式前</div>
+    <a class="backlink" href="index.html">&larr; 所有範例</a>
+    <h1>指出參考實作</h1>
+    <p class="lede">如果本來就有一份現成實作，裡頭已經包含你想要的行為，那就先別急著動手移植。讓 Claude 先證明它看懂了這份參考程式碼，並產出一份可以審查的對照文件。</p>
 
     <div class="card promptbox">
-      <div class="label">The prompt</div>
-      <button class="copybtn" id="copyPrompt">copy prompt</button>
-      <blockquote id="promptText">This Rust crate in vendor/rate-limiter implements the exact backoff behavior I want. Read it and reimplement the same semantics in our TypeScript API client &mdash; but first show me a semantics map so I can confirm you understood it.</blockquote>
+      <div class="label">提示詞</div>
+      <button class="copybtn" id="copyPrompt">複製提示詞</button>
+      <blockquote id="promptText">放在 vendor/rate-limiter 的這個 Rust crate，裡面的退避（backoff）行為剛好就是我要的。請先讀過原始碼，然後把同樣的語意改寫進我們的 TypeScript API client。不過在動手改寫之前，請先給我一份語意對照表，讓我確認你真的搞懂了。</blockquote>
     </div>
   </header>
 
-  <div class="divider">What Claude produced</div>
+  <div class="divider">Claude 生出的結果</div>
 
   <div class="artifact">
 
     <div class="art-head">
-      <h2>Semantics map: <em style="font-style:italic;color:var(--clay-d)">rate-limiter</em> &rarr; Acme API client</h2>
-      <span class="badge await">awaiting confirmation</span>
+      <h2>語意對照表：<em style="font-style:italic;color:var(--clay-d)">rate-limiter</em> &rarr; Acme API client</h2>
+      <span class="badge await">等待確認中</span>
     </div>
-    <p class="art-sub">What the crate does, how each behavior maps to TypeScript, and every place the port cannot be a literal translation. Nothing gets implemented until you sign off on this page.</p>
+    <p class="art-sub">這份文件會說明這個 crate 到底做了什麼、每個行為對應到 TypeScript 的哪個地方，以及所有不能直接照字面硬翻的段落。在你核可這份對照表之前，我不會動任何一行程式碼。</p>
     <div class="art-paths">
-      <span><b>source</b> vendor/rate-limiter (Rust, 612 loc, 3 modules)</span>
-      <span><b>target</b> src/api/retry/ in acme-web</span>
-      <span><b>read</b> bucket.rs · backoff.rs · budget.rs · 14 tests</span>
+      <span><b>來源</b> vendor/rate-limiter (Rust, 612 loc, 3 個模組)</span>
+      <span><b>目標</b> acme-web 專案裡的 src/api/retry/</span>
+      <span><b>讀取</b> bucket.rs · backoff.rs · budget.rs · 14 個測試</span>
     </div>
 
     <!-- ── 1. what it does ── -->
     <section class="sec">
-      <div class="sec-eyebrow"><span class="num">1</span> What the crate actually does</div>
+      <div class="sec-eyebrow"><span class="num">1</span> 這個 crate 到底做了什麼</div>
       <div class="card bullets">
         <ul>
-          <li><span><b>Token bucket admission</b> (<code>bucket.rs</code>): every outgoing request withdraws 1 token from a bucket that refills at <code>rate_per_sec = 8</code> up to <code>burst_capacity = 40</code>. The bucket starts <b>full</b>, so a cold client can burst 40 requests instantly.</span></li>
-          <li><span><b>Refill is lazy and integer-truncated</b>: tokens are minted only when a request arrives, from elapsed nanoseconds &times; rate &divide; 10&#8313;. Fractional tokens are never stored &mdash; instead, <code>last_refill</code> only advances when at least one whole token is minted, so sub-token elapsed time carries forward.</span></li>
-          <li><span><b>Decorrelated jitter backoff</b> (<code>backoff.rs</code>): on retryable failure, the next delay is drawn uniformly from <code>[base, min(prev &times; 3, cap)]</code> with <code>base = 250ms</code>, <code>cap = 30s</code>. Each draw seeds the next &mdash; delays wander rather than doubling in lockstep, which desynchronizes clients after an outage.</span></li>
-          <li><span><b>Retry budget</b> (<code>budget.rs</code>): a second, separate bucket. Every <b>successful first-try</b> request deposits 1; every <b>retry attempt</b> withdraws 10. When the balance can&rsquo;t cover a withdrawal, retries are refused entirely (first-try requests still go out). This caps retry amplification at ~10% during a sustained outage.</span></li>
-          <li><span><b>Failure classification is the caller&rsquo;s job</b>: the crate never inspects errors. It exposes <code>acquire()</code>, <code>next_delay()</code>, <code>try_withdraw()</code> and the caller decides what counts as retryable. The TS port keeps that boundary &mdash; Acme&rsquo;s <code>isRetryable()</code> in <code>src/api/errors.ts</code> stays the single source of truth.</span></li>
+          <li><span><b>權杖桶（token bucket）許可機制</b>（<code>bucket.rs</code>）：每送出一個請求，就會從桶子裡扣掉 1 個 token。桶子會以 <code>rate_per_sec = 8</code> 的速率回補，上限是 <code>burst_capacity = 40</code>。桶子一開始是<b>全滿</b>的，所以全新的 client 可以瞬間打出 40 個請求。</span></li>
+          <li><span><b>延遲回補且無條件捨去</b>：token 是等請求進來時才根據經過的奈秒數（經過時間 &times; 速率 &divide; 10&#8313;）現算的。小數點後的 token 一律不存起來，而是靠 <code>last_refill</code> 記錄時間：只有真的湊到一個完整的 token 時，時間才會往前推進。這樣一來，還沒湊滿一個 token 的剩餘時間就不會白白損失掉。</span></li>
+          <li><span><b>去關聯抖動（decorrelated jitter）退避</b>（<code>backoff.rs</code>）：遇到可以重試的錯誤時，下一次的延遲時間會從 <code>[base, min(prev &times; 3, cap)]</code> 這個區間隨機抽取，其中 <code>base = 250ms</code>，<code>cap = 30s</code>。每次抽出的值都會變成下一次的種子。這會讓延遲時間隨機亂飄，而不是死板板地每次都乘兩倍，好處是發生大當機時，所有 client 的重試時間才不會全部擠在一起。</span></li>
+          <li><span><b>重試預算</b>（<code>budget.rs</code>）：這是另一個獨立的桶子。<b>第一次就成功</b>的請求會存入 1 個單位；每發生一次<b>重試</b>，就會扣掉 10 個單位。如果餘額不夠扣，系統就會直接拒絕重試（但第一次發出的請求不受影響）。這樣一來，就算伺服器持續大當機，重試造成的流量也會被壓在 10% 左右。</span></li>
+          <li><span><b>錯誤分類是呼叫端的事</b>：這個 crate 完全不碰錯誤內容。它只提供 <code>acquire()</code>、<code>next_delay()</code>、<code>try_withdraw()</code>，至於什麼錯誤可以重試，交給呼叫端自己決定。TypeScript 版本也會守住這條界線：Acme 在 <code>src/api/errors.ts</code> 裡的 <code>isRetryable()</code> 依然是判斷的唯一標準。</span></li>
         </ul>
       </div>
     </section>
 
     <!-- ── 2. side-by-side ── -->
     <section class="sec">
-      <div class="sec-eyebrow"><span class="num">2</span> Side-by-side: Rust source &rarr; proposed TypeScript</div>
-      <p class="art-sub" style="margin-bottom:20px">Highlighted regions correspond across columns &mdash; hover one to light up its counterpart and the gotcha note it maps to.</p>
+      <div class="sec-eyebrow"><span class="num">2</span> 左右對照：Rust 原始碼 &rarr; TypeScript 提案</div>
+      <p class="art-sub" style="margin-bottom:20px">兩邊標起來的區塊是互相對應的。把滑鼠移到其中一邊，另一邊對應的程式碼和注意事項就會跟著亮起來。</p>
 
       <!-- pair A -->
       <div class="pair">
-        <div class="pair-title"><span class="pt-n">PAIR A / 3</span><h3>Lazy refill &mdash; integer truncation must survive the float world</h3></div>
+        <div class="pair-title"><span class="pt-n">配對 A / 3</span><h3>延遲回補 — 整數無條件捨去在浮點數世界裡也得活下來</h3></div>
         <div class="pair-grid">
           <div class="card codecard">
             <div class="chead"><span class="fp">vendor/rate-limiter/src/bucket.rs:41</span><span class="lang rust">Rust</span></div>
@@ -395,7 +395,7 @@
           <div class="card codecard">
             <div class="chead"><span class="fp">src/api/retry/tokenBucket.ts (proposed)</span><span class="lang ts">TS</span></div>
             <pre><code><span class="kw">private</span> <span class="fn2">refill</span>(now: <span class="ty">number</span>): <span class="ty">void</span> {
-  <span class="cm">// now comes from performance.now(), not Date.now()</span>
+  <span class="cm">// now 是從 performance.now() 拿來的，不是 Date.now()</span>
   <span class="kw">const</span> elapsedMs = <mark class="hl" data-p="a1"><span class="ty">Math</span>.max(<span class="nu">0</span>, now - <span class="kw">this</span>.lastRefill)<sup>1</sup></mark>;
   <span class="kw">const</span> newTokens = <mark class="hl" data-p="a2"><span class="ty">Math</span>.floor(
     (elapsedMs * <span class="kw">this</span>.ratePerSec) / <span class="nu">1000</span>
@@ -411,15 +411,15 @@
           </div>
         </div>
         <div class="notes">
-          <div class="note" data-p="a1"><span class="nmark">1</span><span><b>Clock going backwards.</b> <code>saturating_duration_since</code> clamps negative elapsed time to zero. <code>Date.now()</code> can jump backwards under NTP correction; the port uses monotonic <code>performance.now()</code> <em>and</em> keeps <code>Math.max(0, &hellip;)</code> as a belt-and-suspenders match.</span></div>
-          <div class="note" data-p="a2"><span class="nmark">2</span><span><b>Integer vs float math.</b> Rust&rsquo;s <code>u64</code> division truncates; JS division doesn&rsquo;t. <code>Math.floor</code> restores truncation. Millis instead of nanos is safe: at <code>rate = 8</code>, <code>elapsedMs * 8</code> stays far below <code>2&#8309;&sup3;</code>, so no precision loss.</span></div>
-          <div class="note" data-p="a3"><span class="nmark">3</span><span><b>The load-bearing guard.</b> <code>last_refill</code> only advances when a whole token is minted. Dropping this guard (an easy &ldquo;simplification&rdquo;) silently discards sub-token progress on every call &mdash; at low rates the bucket would <em>never</em> refill under frequent polling. Preserved exactly, plus a regression test.</span></div>
+          <div class="note" data-p="a1"><span class="nmark">1</span><span><b>系統時鐘倒退。</b> <code>saturating_duration_since</code> 會把負數的經過時間硬壓成 0。在 NTP 校時下，<code>Date.now()</code> 有可能往回跳；移植版改用單調遞增的 <code>performance.now()</code>，而且還是保留了 <code>Math.max(0, &hellip;)</code> 做為雙重保險。</span></div>
+          <div class="note" data-p="a2"><span class="nmark">2</span><span><b>整數與浮點數的差異。</b> Rust 的 <code>u64</code> 除法會自動截斷；JS 的除法不會。所以這裡用 <code>Math.floor</code> 來還原截斷行為。把奈秒換成毫秒是安全的：在 <code>rate = 8</code> 的情況下，<code>elapsedMs * 8</code> 遠低於 <code>2&#8309;&sup3;</code>，不用擔心精密度流失。</span></div>
+          <div class="note" data-p="a3"><span class="nmark">3</span><span><b>這個判斷是核心。</b> <code>last_refill</code> 只有在真的湊到一個完整 token 時才會更新。如果自作主張把這個判斷拿掉（很多人會覺得這樣「比較簡潔」），每次呼叫時還沒湊滿一個 token 的進度就會被默默丟掉。在低速率的情況下，如果頻繁輪詢，桶子就會<em>永遠</em>補不滿。這個邏輯被原封不動保留了下來，而且還補了一支回歸測試。</span></div>
         </div>
       </div>
 
       <!-- pair B -->
       <div class="pair">
-        <div class="pair-title"><span class="pt-n">PAIR B / 3</span><h3>Decorrelated jitter &mdash; inclusive range, wandering seed</h3></div>
+        <div class="pair-title"><span class="pt-n">配對 B / 3</span><h3>去關聯抖動 — 閉區間與隨機亂飄的種子</h3></div>
         <div class="pair-grid">
           <div class="card codecard">
             <div class="chead"><span class="fp">vendor/rate-limiter/src/backoff.rs:27</span><span class="lang rust">Rust</span></div>
@@ -448,15 +448,15 @@
           </div>
         </div>
         <div class="notes">
-          <div class="note" data-p="b1"><span class="nmark">4</span><span><b>Saturating multiply.</b> <code>saturating_mul(3)</code> guards <code>u64</code> overflow. In JS this can&rsquo;t overflow &mdash; <code>capMs = 30_000</code> bounds the product long before <code>2&#8309;&sup3;</code> &mdash; so the guard is deliberately dropped (see &sect;3, &ldquo;dropped&rdquo; column).</span></div>
-          <div class="note" data-p="b2"><span class="nmark">5</span><span><b>Inclusive vs exclusive range.</b> Rust&rsquo;s <code>lo..=hi</code> includes both endpoints. Naive <code>lo + random() * (hi - lo)</code> never yields <code>hi</code>. The <code>+ 1</code> inside <code>Math.floor</code> restores inclusivity &mdash; a one-character bug magnet, called out so you can veto or bless it.</span></div>
-          <div class="note" data-p="b3"><span class="nmark">6</span><span><b>Stateful seed.</b> Each draw becomes the next iteration&rsquo;s <code>prev</code> &mdash; this is what makes it <em>decorrelated</em> rather than plain expo-backoff-with-jitter. <code>reset()</code> restores <code>prevDelayMs = baseMs</code> on success, matching the crate&rsquo;s <code>Backoff::reset</code>. <code>this.random</code> is injectable for deterministic tests (crate uses a seeded <code>SmallRng</code> in its tests).</span></div>
+          <div class="note" data-p="b1"><span class="nmark">4</span><span><b>飽和乘法。</b> <code>saturating_mul(3)</code> 是為了防止 <code>u64</code> 溢位。在 JS 裡根本不會溢位，因為 <code>capMs = 30_000</code> 早就把乘積限制在 <code>2&#8309;&sup3;</code> 以下，所以這個保護機制被刻意拿掉了（詳見 &sect;3 的「捨棄」欄位）。</span></div>
+          <div class="note" data-p="b2"><span class="nmark">5</span><span><b>閉區間與開區間。</b> Rust 的 <code>lo..=hi</code> 包含頭尾兩個邊界值。如果直接寫成 <code>lo + random() * (hi - lo)</code>，永遠抽不到 <code>hi</code>。在 <code>Math.floor</code> 裡面加 <code>+ 1</code> 就能還原閉區間。這一個字元的差異超容易出錯，所以我特地標出來，讓你決定要不要買單。</span></div>
+          <div class="note" data-p="b3"><span class="nmark">6</span><span><b>保存狀態的種子。</b> 每次抽出的延遲時間，都會變成下一次計算的 <code>prev</code>。這正是它被稱為<em>去關聯</em>抖動的原因，而不是單純加上抖動的指數退避。成功時呼叫 <code>reset()</code> 會把 <code>prevDelayMs</code> 還原成 <code>baseMs</code>，這跟 crate 裡 <code>Backoff::reset</code> 的行為一模一樣。<code>this.random</code> 被設計成可以注入的，方便做確定性的測試（crate 在測試時用的是帶種子的 <code>SmallRng</code>）。</span></div>
         </div>
       </div>
 
       <!-- pair C -->
       <div class="pair">
-        <div class="pair-title"><span class="pt-n">PAIR C / 3</span><h3>Retry budget &mdash; a mutex the event loop doesn&rsquo;t need (with one trap)</h3></div>
+        <div class="pair-title"><span class="pt-n">配對 C / 3</span><h3>重試預算 — 事件迴圈不需要的 Mutex（但有一個陷阱）</h3></div>
         <div class="pair-grid">
           <div class="card codecard">
             <div class="chead"><span class="fp">vendor/rate-limiter/src/budget.rs:58</span><span class="lang rust">Rust</span></div>
@@ -467,15 +467,15 @@
         b.balance -= <span class="ty">WITHDRAW_COST</span>;<sup>8</sup></mark>
         <span class="kw">true</span>
     } <span class="kw">else</span> {
-        <mark class="hl" data-p="c3"><span class="kw">false</span> <span class="cm">// refuse retry, don&rsquo;t queue</span><sup>9</sup></mark>
+        <mark class="hl" data-p="c3"><span class="kw">false</span> <span class="cm">// 拒絕重試，不要排入佇列</span><sup>9</sup></mark>
     }
 }</code></pre>
           </div>
           <div class="card codecard">
             <div class="chead"><span class="fp">src/api/retry/budget.ts (proposed)</span><span class="lang ts">TS</span></div>
             <pre><code><span class="fn2">tryWithdraw</span>(): <span class="ty">boolean</span> {
-  <span class="cm">// <mark class="hl" data-p="c1">no lock: single-threaded event loop<sup>7</sup></mark> —</span>
-  <span class="cm">// but NO await between check and debit.</span>
+  <span class="cm">// <mark class="hl" data-p="c1">沒有 lock：單一執行緒的事件迴圈<sup>7</sup></mark> —</span>
+  <span class="cm">// 但檢查與扣款之間絕對不能有 await。</span>
   <span class="kw">this</span>.depositDrip(<span class="kw">this</span>.clock());
   <span class="kw">if</span> (<mark class="hl" data-p="c2"><span class="kw">this</span>.balance &gt;= <span class="ty">WITHDRAW_COST</span>) {
     <span class="kw">this</span>.balance -= <span class="ty">WITHDRAW_COST</span>;<sup>8</sup></mark>
@@ -486,43 +486,43 @@
           </div>
         </div>
         <div class="notes">
-          <div class="note" data-p="c1"><span class="nmark">7</span><span><b>Thread-safety &rarr; event loop.</b> The crate&rsquo;s <code>Mutex</code> exists because Rust callers withdraw from worker threads. Acme&rsquo;s client runs on one event loop, so the lock disappears &mdash; <em>but the atomicity it provided must be preserved by convention</em>: <code>tryWithdraw</code> is synchronous end-to-end, and I&rsquo;ll add an eslint <code>no-await-in-budget</code> boundary comment plus a test that the method never returns a Promise.</span></div>
-          <div class="note" data-p="c2"><span class="nmark">8</span><span><b>Check-then-debit stays fused.</b> Same shape both sides. The failure mode isn&rsquo;t data races here &mdash; it&rsquo;s a future refactor inserting an <code>await</code> (e.g., to log) between the check and the debit, letting two in-flight retries both pass the check.</span></div>
-          <div class="note" data-p="c3"><span class="nmark">9</span><span><b>Refuse, never queue.</b> On an empty budget the crate returns <code>false</code> immediately &mdash; the request either goes out as a first try or fails fast. The port must <em>not</em> &ldquo;helpfully&rdquo; enqueue the retry for later; that would rebuild the retry storm the budget exists to prevent.</span></div>
+          <div class="note" data-p="c1"><span class="nmark">7</span><span><b>從執行緒安全到事件迴圈。</b> Crate 裡會用 <code>Mutex</code>，是因為 Rust 的呼叫端可能會有好幾個 worker 執行緒在扣款。Acme 的 client 跑在單一事件迴圈上，所以鎖可以拿掉。不過，當初那個鎖保證的「不可分割性」，還是得靠規矩來維持：<code>tryWithdraw</code> 從頭到尾都是同步執行的。我會在 eslint 加一條 <code>no-await-in-budget</code> 邊界註解，並且寫一個測試，確保這個方法永遠不會回傳 Promise。</span></div>
+          <div class="note" data-p="c2"><span class="nmark">8</span><span><b>檢查與扣款必須連在一起。</b> 兩邊的結構是一樣的。這裡最怕的不是資料競態，而是未來有人改程式時，不小心在檢查跟扣款中間塞了一個 <code>await</code>（比如說想加 log），結果讓兩個還在飛行中的重試同時通過檢查。</span></div>
+          <div class="note" data-p="c3"><span class="nmark">9</span><span><b>直接拒絕，不要排隊。</b> 預算用完時，crate 會直接回傳 <code>false</code>。這個請求不是當作第一次發送出去，就是直接失敗。移植版絕對不能「雞婆」地把重試排到後面再送；如果這樣做，就等於把這個預算機制想要擋下的重試風暴又給請回來了。</span></div>
         </div>
       </div>
     </section>
 
     <!-- ── 3. preserved / changed / dropped ── -->
     <section class="sec">
-      <div class="sec-eyebrow"><span class="num">3</span> Behaviors: preserved / deliberately changed / dropped</div>
+      <div class="sec-eyebrow"><span class="num">3</span> 行為：完整保留 / 刻意調整 / 捨棄不用</div>
       <div class="three">
         <div class="card col keep">
-          <div class="colhead"><span class="dot"></span>Preserved exactly</div>
+          <div class="colhead"><span class="dot"></span>完整保留</div>
           <ul>
-            <li><b>Refill truncation + guard</b> &mdash; whole tokens only; <code>lastRefill</code> advances only on mint</li>
-            <li><b>Jitter formula</b> &mdash; uniform over <code>[base, min(prev&times;3, cap)]</code>, inclusive both ends</li>
-            <li><b>Budget economics</b> &mdash; +1 per first-try success, &minus;10 per retry, ceiling 1000</li>
-            <li><b>Bucket starts full</b> &mdash; 40-request cold burst is intentional (matches crate test <code>burst_at_t0</code>)</li>
-            <li><b>Caller classifies errors</b> &mdash; limiter never inspects failures</li>
+            <li><b>回補的捨去機制與判斷</b> &mdash; 只認完整的 token；<code>lastRefill</code> 只有在真的生出 token 時才更新</li>
+            <li><b>抖動公式</b> &mdash; 在 <code>[base, min(prev&times;3, cap)]</code> 區間均勻分佈，頭尾都包含在內</li>
+            <li><b>預算的會計規則</b> &mdash; 第一次成功 +1，重試 -10，上限 1000</li>
+            <li><b>桶子一開始是全滿的</b> &mdash; 可以瞬間打出 40 個請求是刻意的（跟 crate 的測試 <code>burst_at_t0</code> 對應）</li>
+            <li><b>錯誤分類交給呼叫端</b> &mdash; 限制器完全不碰錯誤內容</li>
           </ul>
         </div>
         <div class="card col chg">
-          <div class="colhead"><span class="dot"></span>Deliberately changed</div>
+          <div class="colhead"><span class="dot"></span>刻意調整</div>
           <ul>
-            <li><b><code>Instant</code> &rarr; <code>performance.now()</code></b> &mdash; both monotonic; ms resolution is sufficient at rate 8/s</li>
-            <li><b><code>u64</code> nanos &rarr; <code>number</code> ms</b> &mdash; all products provably &lt; 2&#8309;&sup3;; <code>Math.floor</code> replays integer division</li>
-            <li><b><code>Mutex&lt;Budget&gt;</code> &rarr; plain fields</b> &mdash; atomicity by sync-only convention + test</li>
-            <li><b><code>SmallRng</code> &rarr; injected <code>random()</code></b> &mdash; defaults to <code>Math.random</code>, seeded stub in tests</li>
+            <li><b><code>Instant</code> &rarr; <code>performance.now()</code></b> &mdash; 兩者都是單調時鐘；在速率 8/s 下毫秒解析度夠用了</li>
+            <li><b><code>u64</code> 奈秒 &rarr; <code>number</code> 毫秒</b> &mdash; 所有乘積都保證小於 2&#8309;&sup3;；靠 <code>Math.floor</code> 模擬整數除法</li>
+            <li><b><code>Mutex&lt;Budget&gt;</code> &rarr; 一般欄位</b> &mdash; 靠「全同步」的規矩與測試來確保不可分割性</li>
+            <li><b><code>SmallRng</code> &rarr; 注入式的 <code>random()</code></b> &mdash; 預設用 <code>Math.random</code>，測試時則注入帶種子的假物件</li>
           </ul>
         </div>
         <div class="card col drop">
-          <div class="colhead"><span class="dot"></span>Dropped (not needed)</div>
+          <div class="colhead"><span class="dot"></span>捨棄（用不到）</div>
           <ul>
-            <li><b><code>saturating_mul</code> overflow guards</b> &mdash; unreachable once cap is applied in ms range</li>
-            <li><b><code>Send + Sync</code> impls, <code>Arc</code> cloning</b> &mdash; no threads to share across</li>
-            <li><b><code>tokio</code>/<code>async-std</code> feature flags</b> &mdash; port is runtime-agnostic by construction</li>
-            <li><b>Prometheus counters</b> &mdash; Acme emits via <code>telemetry.track()</code> instead; hook points kept</li>
+            <li><b><code>saturating_mul</code> 溢位保護</b> &mdash; 換成毫秒範圍並套用上限後，根本走不到這段</li>
+            <li><b><code>Send + Sync</code> 實作與 <code>Arc</code> 複製</b> &mdash; 沒有多執行緒需要共享</li>
+            <li><b><code>tokio</code> / <code>async-std</code> 功能旗標（feature flag）</b> &mdash; 移植版天生就不綁特定執行階</li>
+            <li><b>Prometheus 計數器</b> &mdash; Acme 改用 <code>telemetry.track()</code> 處理；掛鉤點保留下來</li>
           </ul>
         </div>
       </div>
@@ -530,67 +530,67 @@
 
     <!-- ── 4. edge cases ── -->
     <section class="sec">
-      <div class="sec-eyebrow"><span class="num">4</span> Edge cases: expected behavior on both sides</div>
+      <div class="sec-eyebrow"><span class="num">4</span> 邊界情境：兩邊預期的行為</div>
       <div class="tbl-scroll">
         <table>
           <thead>
-            <tr><th style="width:22%">Edge case</th><th style="width:31%">Rust crate</th><th style="width:31%">TypeScript port</th><th>Match</th></tr>
+            <tr><th style="width:22%">邊界情境</th><th style="width:31%">Rust crate</th><th style="width:31%">TypeScript 移植</th><th>結果</th></tr>
           </thead>
           <tbody>
             <tr>
-              <td><b>Clock skew</b><br>system clock steps back 5s mid-session</td>
-              <td><code>Instant</code> is monotonic &mdash; unaffected. <code>saturating_duration_since</code> is a second fence.</td>
-              <td><code>performance.now()</code> is monotonic &mdash; unaffected. <code>Math.max(0,&hellip;)</code> kept as the same second fence.</td>
-              <td><span class="pill same">identical</span></td>
+              <td><b>時鐘誤差</b><br>連線中途系統時鐘倒退 5 秒</td>
+              <td><code>Instant</code> 是單調的，不受影響。<code>saturating_duration_since</code> 是第二道防線。</td>
+              <td><code>performance.now()</code> 也是單調的，不受影響。同樣保留 <code>Math.max(0,&hellip;)</code> 做為第二道防線。</td>
+              <td><span class="pill same">完全一致</span></td>
             </tr>
             <tr>
-              <td><b>Burst at t=0</b><br>fresh client fires 45 requests at once</td>
-              <td>First 40 admitted instantly (bucket starts full); 41&ndash;45 rejected until refill. Crate test: <code>burst_at_t0</code>.</td>
-              <td>Same: 40 admitted, 5 rejected with <code>RateLimited</code>. Port test replays the crate&rsquo;s fixture numbers verbatim.</td>
-              <td><span class="pill same">identical</span></td>
+              <td><b>t=0 的瞬間高負載</b><br>全新的 client 一次打出 45 個請求</td>
+              <td>前 40 個瞬間放行（桶子一開始是滿的）；41 到 45 在回補前會被拒絕。Crate 測試：<code>burst_at_t0</code>。</td>
+              <td>行為一樣：40 個放行，5 個以 <code>RateLimited</code> 拒絕。移植版的測試直接拿 crate 的測試資料來跑。</td>
+              <td><span class="pill same">完全一致</span></td>
             </tr>
             <tr>
-              <td><b>Budget exhaustion</b><br>sustained 100% failure for 60s</td>
-              <td>Balance drains to 0 in ~10 retries; further retries refused, first-tries continue. Retry rate settles at deposit&divide;cost = 10% of success rate (0 here).</td>
-              <td>Same economics, same settle point. Difference: refusal surfaces as <code>RetryBudgetExhausted</code> error so Acme&rsquo;s upload queue can show &ldquo;reconnecting&rdquo; instead of failing silently.</td>
-              <td><span class="pill equiv">equivalent*</span></td>
+              <td><b>預算耗盡</b><br>持續 100% 錯誤 60 秒</td>
+              <td>重試約 10 次後餘額歸 0；之後重試全被拒絕，但第一次請求照常送出。重試率會穩定在 (存入 &divide; 成本) = 成功率的 10%（在這裡成功率是 0）。</td>
+              <td>會計規則與收斂點都一樣。差別在於：被拒絕時會丟出 <code>RetryBudgetExhausted</code> 錯誤，這樣 Acme 的上傳佇列就能顯示「重新連線中」，而不是默默失敗。</td>
+              <td><span class="pill equiv">等效*</span></td>
             </tr>
             <tr>
-              <td><b>Slow drip</b><br>rate 8/s but polled every 20ms (0.16 tokens/poll)</td>
-              <td>Guard carries sub-token time forward; a token mints every ~125ms regardless of poll cadence.</td>
-              <td>Same, via the preserved <code>newTokens &gt; 0</code> guard (Pair A, note 3). Regression test asserts mint cadence at 20ms polling.</td>
-              <td><span class="pill same">identical</span></td>
+              <td><b>低速滴漏</b><br>速率 8/s 但每 20ms 輪詢一次（每次 0.16 個 token）</td>
+              <td>判斷機制會把未滿一個 token 的時間累積下去；不管輪詢頻率多高，大約每 125ms 就會生出一個 token。</td>
+              <td>行為一樣，靠保留下的 <code>newTokens &gt; 0</code> 判斷達成（配對 A，註解 3）。回歸測試會驗證在 20ms 輪詢下的產生頻率。</td>
+              <td><span class="pill same">完全一致</span></td>
             </tr>
             <tr>
-              <td><b>Delay at cap</b><br>10th consecutive failure</td>
-              <td>Draw range collapses toward <code>[250ms, 30s]</code>; delay stays &le; 30s but still jittered &mdash; never a fixed 30s (avoids re-synchronizing clients).</td>
-              <td>Same bounds, same non-degenerate jitter &mdash; verified with a seeded RNG replaying the crate&rsquo;s <code>cap_still_jitters</code> test vector.</td>
-              <td><span class="pill same">identical</span></td>
+              <td><b>延遲達上限</b><br>連續第 10 次錯誤</td>
+              <td>抽取區間會逼近 <code>[250ms, 30s]</code>；延遲維持在 &le; 30s，但依然有抖動，絕對不會變成固定的 30s（避免所有 client 重新同步）。</td>
+              <td>邊界相同，抖動行為也沒退化。驗證方式是帶入種子 RNG，重跑 crate 的 <code>cap_still_jitters</code> 測試資料。</td>
+              <td><span class="pill same">完全一致</span></td>
             </tr>
           </tbody>
         </table>
       </div>
-      <p class="art-sub" style="margin-top:10px;font-size:13px">* &ldquo;equivalent&rdquo; = same decision, different surface. The crate returns bare <code>false</code>; the port wraps it in a typed error because Acme&rsquo;s UI needs to distinguish &ldquo;rate limited&rdquo; from &ldquo;offline&rdquo;. Flag this row if you&rsquo;d rather keep the bare boolean.</p>
+      <p class="art-sub" style="margin-top:10px;font-size:13px">* 「等效」= 決策邏輯一樣，但對外行為不同。Crate 只回傳單純的 <code>false</code>；移植版則包裝成有型別的錯誤，因為 Acme 的介面需要區分「被速率限制」跟「斷線」。如果你希望維持單純回傳 boolean，請在這一列註記。</p>
     </section>
 
     <!-- ── 5. confirm ── -->
     <section class="sec">
-      <div class="sec-eyebrow"><span class="num">5</span> Sign-off</div>
+      <div class="sec-eyebrow"><span class="num">5</span> 簽核</div>
       <div class="card confirm">
         <div class="ctext">
-          <h3>Ready to port when you are</h3>
-          <p>Reply <b>&ldquo;semantics confirmed&rdquo;</b> and I&rsquo;ll implement <code>tokenBucket.ts</code>, <code>backoff.ts</code>, and <code>budget.ts</code> with the crate&rsquo;s 14 tests translated first. Or correct any row above &mdash; quote its number (e.g. &ldquo;note 5&rdquo;, &ldquo;budget exhaustion row&rdquo;) and I&rsquo;ll revise the map before writing code.</p>
+          <h3>只要你說好，我就開始改寫</h3>
+          <p>回覆 <b>「semantics confirmed」</b>，我就會動手實作 <code>tokenBucket.ts</code>、<code>backoff.ts</code> 與 <code>budget.ts</code>，並且優先把 crate 裡那 14 個測試翻過來。如果你想修正上面任何一列，直接附上編號（比如「註解 5」、「預算耗盡那列」），我會在寫程式前先更新這份對照表。</p>
         </div>
         <div class="cbtns">
-          <button class="btn primary" id="confirmBtn">copy &ldquo;semantics confirmed&rdquo;</button>
-          <button class="btn ghost" id="correctBtn">copy correction template</button>
+          <button class="btn primary" id="confirmBtn">複製「semantics confirmed」</button>
+          <button class="btn ghost" id="correctBtn">複製修正範本</button>
         </div>
       </div>
     </section>
 
   </div>
 
-  <footer>Part of <a href="index.html">Know your unknowns</a> &mdash; companion examples to the blog post.</footer>
+  <footer>屬於<a href="index.html">搞清楚你的未知</a>系列 &mdash; 是該部落格文章的附帶範例。</footer>
 </div>
 
 <script>

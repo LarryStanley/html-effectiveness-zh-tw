@@ -1,10 +1,10 @@
 <!-- Copyright 2026 Anthropic PBC · SPDX-License-Identifier: Apache-2.0 -->
 <!doctype html>
-<html lang="en">
+<html lang="zh-Hant-TW">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Brainstorm the intervention — Know your unknowns</title>
+<title>腦力激盪介入方案 — 搞清楚你的未知</title>
 <style>
   :root {
     --ivory:  #FAF9F5;
@@ -451,44 +451,44 @@
 <div class="wrap">
 
   <header class="page-head">
-    <a class="back" href="index.html">&larr; All examples</a>
-    <div class="eyebrow">Know your unknowns &middot; Pre-implementation</div>
-    <h1>Brainstorm the intervention</h1>
-    <p class="lede">Before committing to a fix, ask for the whole option space — grounded in what actually exists in the code — so the choice you make is informed by alternatives you didn't know you had.</p>
+    <a class="back" href="index.html">&larr; 所有範例</a>
+    <div class="eyebrow">搞清楚你的未知 &middot; 動手前的準備</div>
+    <h1>腦力激盪介入方案</h1>
+    <p class="lede">在決定怎麼修之前，先請 AI 把所有選項都列出來，而且是要根據程式碼裡實際存在的東西來建議。這樣你做決定時，才看得到那些原本沒想到的做法。</p>
 
     <div class="prompt-card">
-      <div class="prompt-label">The prompt</div>
-      <blockquote>&ldquo;Here's my rough problem: Acme users churn after onboarding. Search the codebase and brainstorm 10 places we could intervene, from cheapest to most ambitious. I'll tell you which ones resonate.&rdquo;</blockquote>
-      <button class="copy-prompt" id="copyPrompt" type="button">copy prompt</button>
+      <div class="prompt-label">提示詞</div>
+      <blockquote>&ldquo;我現在遇到一個還很模糊的問題：Acme 的使用者在 onboarding 之後就流失了。請搜尋程式碼庫，然後腦力激盪出 10 個可以介入的點，從最省事到最有野心的做法都列出來。我會告訴你哪些方案打中痛點。&rdquo;</blockquote>
+      <button class="copy-prompt" id="copyPrompt" type="button">複製提示詞</button>
     </div>
   </header>
 
-  <div class="divider">What Claude produced</div>
+  <div class="divider">Claude 生出的結果</div>
 
   <div class="artifact">
-    <div class="art-eyebrow">Acme &middot; post-onboarding churn</div>
-    <h2>10 places to intervene, cheapest to most ambitious</h2>
-    <p class="art-sub">I searched <code>apps/web</code>, <code>services/</code>, and <code>packages/</code> for onboarding, invite, and first-session code paths. A pattern showed up: <strong>a lot of retention machinery already exists but is disconnected</strong> — the cheapest options below are mostly wiring, not building. Check the ones that resonate and copy the reply at the bottom.</p>
+    <div class="art-eyebrow">Acme &middot; onboarding 後的流失</div>
+    <h2>10 個可以介入的點，從最省事到最有野心</h2>
+    <p class="art-sub">我搜了 <code>apps/web</code>、<code>services/</code> 和 <code>packages/</code> 裡跟 onboarding、邀請、首次工作階段相關的程式碼。結果發現一個共通模式：<strong>其實已經有一大堆留住使用者的機制寫好了，只是各自孤立沒接起來</strong>。所以下面最省事的做法，基本上都是在把現成的東西串起來，而不是從頭打造新功能。勾選打中你的方案，然後複製最下方的回覆字串。</p>
 
     <div class="spectrum">
       <div class="spec-labels">
-        <span class="lo">Ship this afternoon</span>
-        <span class="hi">Quarter-long bet</span>
+        <span class="lo">今天下午就能上線</span>
+        <span class="hi">得押上一整季的大工程</span>
       </div>
       <div class="spec-track" id="specTrack">
         <div class="spec-line"></div>
-        <button class="spec-dot" style="left:3%"  data-n="1"  type="button" title="Fix the dead-end empty state">1</button>
-        <button class="spec-dot" style="left:10%" data-n="2"  type="button" title="Turn on the sample project">2</button>
-        <button class="spec-dot" style="left:19%" data-n="3"  type="button" title="Show pending invites in-app">3</button>
-        <button class="spec-dot" style="left:29%" data-n="4"  type="button" title="Wire up the milestones checklist">4</button>
-        <button class="spec-dot" style="left:39%" data-n="5"  type="button" title="Engineer the first-comment moment">5</button>
-        <button class="spec-dot" style="left:49%" data-n="6"  type="button" title="Rescue silently failed first uploads">6</button>
-        <button class="spec-dot" style="left:60%" data-n="7"  type="button" title="Watch-together first session">7</button>
-        <button class="spec-dot" style="left:71%" data-n="8"  type="button" title="Review workflow templates">8</button>
-        <button class="spec-dot" style="left:84%" data-n="9"  type="button" title="Built-in quick screen recording">9</button>
-        <button class="spec-dot" style="left:96%" data-n="10" type="button" title="First-class client review portals">10</button>
+        <button class="spec-dot" style="left:3%"  data-n="1"  type="button" title="修好死胡同的空狀態">1</button>
+        <button class="spec-dot" style="left:10%" data-n="2"  type="button" title="開啟現成的範例專案">2</button>
+        <button class="spec-dot" style="left:19%" data-n="3"  type="button" title="在 App 裡顯示待接受的邀請">3</button>
+        <button class="spec-dot" style="left:29%" data-n="4"  type="button" title="把里程碑清單接上 Dashboard">4</button>
+        <button class="spec-dot" style="left:39%" data-n="5"  type="button" title="打造第一次留言的體驗">5</button>
+        <button class="spec-dot" style="left:49%" data-n="6"  type="button" title="救援無聲失敗的首次上傳">6</button>
+        <button class="spec-dot" style="left:60%" data-n="7"  type="button" title="團隊共同觀看的首場 session">7</button>
+        <button class="spec-dot" style="left:71%" data-n="8"  type="button" title="審查流程範本">8</button>
+        <button class="spec-dot" style="left:84%" data-n="9"  type="button" title="內建螢幕快速錄影">9</button>
+        <button class="spec-dot" style="left:96%" data-n="10" type="button" title="第一等的客戶審查入口">10</button>
       </div>
-      <div class="spec-ticks"><span>wiring</span><span>new UI</span><span>new lifecycle</span><span>new surface</span></div>
+      <div class="spec-ticks"><span>接線</span><span>新 UI</span><span>新生命週期</span><span>新介面</span></div>
     </div>
 
     <div class="cards">
@@ -496,134 +496,134 @@
       <div class="iv" id="iv1">
         <div class="iv-top">
           <span class="iv-num">#1</span>
-          <h3>Fix the dead-end empty state</h3>
+          <h3>修好死胡同的空狀態</h3>
           <div class="chips"><span class="effort s">S</span></div>
         </div>
         <span class="path">apps/web/src/onboarding/EmptyState.tsx</span>
-        <p class="iv-body"><span class="iv-found">Found in code —</span> The zero-projects dashboard renders the illustration and the copy <em>&ldquo;No projects yet&rdquo;</em> — and nothing else. <code>NewProjectButton</code> exists two directories over but was never imported here; the only way forward is the tiny &ldquo;+&rdquo; in the top nav. Every churned user's last screen was probably this one.</p>
-        <div class="iv-impact"><span class="tag">Impact</span>100% of new users hit this screen; a real CTA plus a &ldquo;drop a video anywhere&rdquo; hint removes the most literal dead end in the product.</div>
-        <div class="iv-foot"><label class="resonate"><input type="checkbox" data-n="1"> This resonates</label></div>
+        <p class="iv-body"><span class="iv-found">在程式碼裡發現 —</span> 當專案數為零時，Dashboard 只會畫一張插圖，配上 <em>&ldquo;還沒有專案&rdquo;</em> 這幾個字，然後就沒了。<code>NewProjectButton</code> 明明就在隔壁資料夾，卻從來沒被引入這裡。使用者唯一的出路，是去點頂端導覽列上那個小小的 &ldquo;+&rdquo;。每個流失的使用者，最後看到的畫面八成就是這個。</p>
+        <div class="iv-impact"><span class="tag">影響</span>100% 的新使用者都會看到這個畫面。放一個真正的 CTA，加上 &ldquo;把影片拖到任意位置&rdquo; 的提示，就能消滅產品裡最明顯的死胡同。</div>
+        <div class="iv-foot"><label class="resonate"><input type="checkbox" data-n="1"> 這個方案打中痛點</label></div>
       </div>
 
       <div class="iv" id="iv2">
         <div class="iv-top">
           <span class="iv-num">#2</span>
-          <h3>Turn on the sample project that already exists</h3>
+          <h3>開啟現成的範例專案</h3>
           <div class="chips"><span class="effort s">S</span></div>
         </div>
         <span class="path">apps/web/src/projects/sampleProject.ts</span>
-        <p class="iv-body"><span class="iv-found">Found in code —</span> Someone built a complete seeded demo project — &ldquo;Product teaser v3&rdquo; with a 45s clip, four timestamped comments, and one resolved thread — behind the flag <code>sample_project_v1</code>. The flag is still <strong>false for everyone</strong> and the file hasn't been touched in 8 months. The feature is done; it was just never shipped.</p>
-        <div class="iv-impact"><span class="tag">Impact</span>New users see what a live review looks like before they've uploaded anything. Cheapest possible &ldquo;aha&rdquo; — flip a flag, verify the seed script.</div>
-        <div class="iv-foot"><label class="resonate"><input type="checkbox" data-n="2"> This resonates</label></div>
+        <p class="iv-body"><span class="iv-found">在程式碼裡發現 —</span> 有人早就寫好一個完整的 demo 專案了，裡面有 &ldquo;Product teaser v3&rdquo;、一支 45 秒的短片、四則帶時間軸的留言，還有一串已解決的討論。只是它被藏在 <code>sample_project_v1</code> 這個功能旗標背後，而且 <strong>對所有人都是關閉狀態</strong>，檔案也已經八個月沒人動過。功能其實做完了，只是從來沒上線。</p>
+        <div class="iv-impact"><span class="tag">影響</span>新使用者在上傳任何東西之前，就能先看看實際的審查畫面長什麼樣。這是最省成本的 &ldquo;aha moment&rdquo;，只要開個旗標，再確認一下 seed script 就搞定。</div>
+        <div class="iv-foot"><label class="resonate"><input type="checkbox" data-n="2"> 這個方案打中痛點</label></div>
       </div>
 
       <div class="iv" id="iv3">
         <div class="iv-top">
           <span class="iv-num">#3</span>
-          <h3>Show pending invites inside the app</h3>
+          <h3>在 App 裡顯示待接受的邀請</h3>
           <div class="chips"><span class="effort s">S</span></div>
         </div>
         <span class="path">services/mailer/templates/invite.mjml &middot; apps/web/src/team/TeamPanel.tsx</span>
-        <p class="iv-body"><span class="iv-found">Found in code —</span> Invites go out as email only. <code>TeamPanel</code> queries <code>team_members</code> but ignores the <code>invites</code> table entirely — an inviter can't see that their teammate never accepted, and there's no resend. For a <strong>collaborative</strong> review tool, a solo user is a churn-in-waiting.</p>
-        <div class="iv-impact"><span class="tag">Impact</span>Surfacing &ldquo;2 invites pending &middot; resend&rdquo; turns invisible invite decay into a visible, fixable state.</div>
-        <div class="iv-foot"><label class="resonate"><input type="checkbox" data-n="3"> This resonates</label></div>
+        <p class="iv-body"><span class="iv-found">在程式碼裡發現 —</span> 目前邀請只透過 Email 寄送。<code>TeamPanel</code> 會去查 <code>team_members</code>，卻完全無視 <code>invites</code> 這張表。這代表發邀請的人根本看不到隊友有沒有接受，也沒有重發的功能。對一個訴求<strong>協同合作</strong>的審查工具來說，孤單的使用者隨時都可能流失。</p>
+        <div class="iv-impact"><span class="tag">影響</span>把 &ldquo;有 2 則邀請待接受 &middot; 重發&rdquo; 顯示出來，就能把那種默默失效的邀請，變成一個看得到也修得了的狀態。</div>
+        <div class="iv-foot"><label class="resonate"><input type="checkbox" data-n="3"> 這個方案打中痛點</label></div>
       </div>
 
       <div class="iv" id="iv4">
         <div class="iv-top">
           <span class="iv-num">#4</span>
-          <h3>Wire the milestones table to a dashboard checklist</h3>
+          <h3>把里程碑資料表接上 Dashboard 的清單</h3>
           <div class="chips"><span class="effort m">M</span></div>
         </div>
         <span class="path">services/api/src/models/userMilestones.ts &middot; apps/web/src/dashboard/Dashboard.tsx</span>
-        <p class="iv-body"><span class="iv-found">Found in code —</span> The backend already records <code>first_upload</code>, <code>first_comment</code>, <code>first_invite_accepted</code>, and <code>first_approval</code> in <code>user_milestones</code> — but <strong>no client code reads the table</strong>. It exists purely for an analytics dashboard. All the ingredients for a &ldquo;3 of 4 steps done&rdquo; checklist are sitting there.</p>
-        <div class="iv-impact"><span class="tag">Impact</span>Checklists reliably lift activation; this one needs one endpoint and one component because tracking already works.</div>
-        <div class="iv-foot"><label class="resonate"><input type="checkbox" data-n="4"> This resonates</label></div>
+        <p class="iv-body"><span class="iv-found">在程式碼裡發現 —</span> 後端早就把 <code>first_upload</code>、<code>first_comment</code>、<code>first_invite_accepted</code> 和 <code>first_approval</code> 寫進 <code>user_milestones</code> 裡了。但<strong>前端的程式碼根本沒有人在讀這張 table</strong>，它單純只是拿來餵給數據分析 Dashboard 而已。要做成 &ldquo;4 步已完成 3 步&rdquo; 的清單，所有材料都已經躺在那邊了。</p>
+        <div class="iv-impact"><span class="tag">影響</span>清單這種東西向來都能有效拉高啟用率。這個做法只要新增一個端點和一個元件就搞定，因為追蹤機制本身已經能用了。</div>
+        <div class="iv-foot"><label class="resonate"><input type="checkbox" data-n="4"> 這個方案打中痛點</label></div>
       </div>
 
       <div class="iv" id="iv5">
         <div class="iv-top">
           <span class="iv-num">#5</span>
-          <h3>Engineer the first-comment moment</h3>
+          <h3>打造第一次留言的體驗</h3>
           <div class="chips"><span class="effort m">M</span></div>
         </div>
         <span class="path">apps/web/src/review/CommentComposer.tsx &middot; apps/web/src/review/Timeline.tsx</span>
-        <p class="iv-body"><span class="iv-found">Found in code —</span> Timestamped comments are Acme's core loop, but the affordance is hidden: clicking the timeline seeds the timestamp into the composer, and nothing teaches this. <code>Timeline.tsx</code> has a <code>TODO: first-run hint?</code> from the original author. Add a ghost pin on first play — &ldquo;click anywhere to comment at this moment&rdquo;.</p>
-        <div class="iv-impact"><span class="tag">Impact</span>If first-session comment rate is the activation metric (it should be), this is the most direct lever on it.</div>
-        <div class="iv-foot"><label class="resonate"><input type="checkbox" data-n="5"> This resonates</label></div>
+        <p class="iv-body"><span class="iv-found">在程式碼裡發現 —</span> 帶時間軸的留言是 Acme 的核心迴圈，但這個功能藏得太深了：點時間軸會把時間帶入留言框，但沒有任何地方告訴使用者這件事。<code>Timeline.tsx</code> 裡還留了一行當初作者寫的 <code>TODO: first-run hint?</code>。只要在第一次播放時加上一個幽靈圖釘，提示 &ldquo;點這裡可以在這個時間點留言&rdquo; 就行了。</p>
+        <div class="iv-impact"><span class="tag">影響</span>如果首次工作階段的留言率是啟用指標（絕對應該是），那這個做法就是最直接的槓桿。</div>
+        <div class="iv-foot"><label class="resonate"><input type="checkbox" data-n="5"> 這個方案打中痛點</label></div>
       </div>
 
       <div class="iv" id="iv6">
         <div class="iv-top">
           <span class="iv-num">#6</span>
-          <h3>Rescue silently failed first uploads</h3>
+          <h3>救援無聲失敗的首次上傳</h3>
           <div class="chips"><span class="effort m">M</span></div>
         </div>
         <span class="path">services/ingest/src/transcode/queue.ts</span>
-        <p class="iv-body"><span class="iv-found">Found in code —</span> When transcode fails (unsupported codec, oversized ProRes, corrupt moov atom), the job moves to <code>failed</code>, logs to Sentry, and <strong>tells the user nothing</strong> — the project card just shows a spinner forever. There's a retry-with-fallback-preset code path that's only reachable from an internal admin script.</p>
-        <div class="iv-impact"><span class="tag">Impact</span>A user whose first upload hangs forever doesn't file a ticket — they leave. Auto-retry plus an honest error email converts a silent churn path into a support path.</div>
-        <div class="iv-foot"><label class="resonate"><input type="checkbox" data-n="6"> This resonates</label></div>
+        <p class="iv-body"><span class="iv-found">在程式碼裡發現 —</span> 當轉檔失敗時（不支援的 codec、ProRes 太大、moov atom 損壞等等），這個 job 會被丟到 <code>failed</code> 狀態，在 Sentry 留下 log，然後<strong>完全不通知使用者</strong>。專案卡片只會永遠顯示載入中的轉圈圈。其實有一條後備重試的路徑，但只有內部管理工具才呼叫得到。</p>
+        <div class="iv-impact"><span class="tag">影響</span>使用者第一次上傳如果卡到死，他們不會回報問題，只會直接走人。加上自動重試和一封誠實的錯誤通知信，就能把這條默默流失的管道，變成可以救得回來的支援管道。</div>
+        <div class="iv-foot"><label class="resonate"><input type="checkbox" data-n="6"> 這個方案打中痛點</label></div>
       </div>
 
       <div class="iv" id="iv7">
         <div class="iv-top">
           <span class="iv-num">#7</span>
-          <h3>Watch-together first session for teams</h3>
+          <h3>團隊共同觀看的首場 session</h3>
           <div class="chips"><span class="effort l">L</span></div>
         </div>
         <span class="path">apps/web/src/review/PresenceProvider.tsx &middot; services/realtime/</span>
-        <p class="iv-body"><span class="iv-found">Found in code —</span> Live presence is fully built — shared playhead, live cursors, &ldquo;Maya is watching&rdquo; badges — but it only lights up if two people <em>happen</em> to open the same review. Nothing engineers that coincidence. Add a &ldquo;review together&rdquo; scheduling nudge when a teammate accepts an invite, deep-linking both into the same session.</p>
-        <div class="iv-impact"><span class="tag">Impact</span>Teams that experience one live session likely retain at a different rate than solo users; this makes the multiplayer moment deliberate instead of lucky.</div>
-        <div class="iv-foot"><label class="resonate"><input type="checkbox" data-n="7"> This resonates</label></div>
+        <p class="iv-body"><span class="iv-found">在程式碼裡發現 —</span> 即時上線狀態其實已經全部做好了，舉凡共享播放頭、即時游標、&ldquo;Maya 正在觀看&rdquo; 之類的徽章都有。但這些功能只有在兩個人剛好<em>同時</em>打開同一個審查頁面時才會觸發。沒有任何機制在促成這個巧合。只要在隊友接受邀請時，加上一個 &ldquo;一起看&rdquo; 的排程提示，直接把兩人都 deep-link 進同一個 session 就行了。</p>
+        <div class="iv-impact"><span class="tag">影響</span>體驗過即時共同觀看的團隊，留存率應該會跟單人使用者差很多。這個做法能讓多人協作的時刻變成刻意安排的，而不是只能碰運氣。</div>
+        <div class="iv-foot"><label class="resonate"><input type="checkbox" data-n="7"> 這個方案打中痛點</label></div>
       </div>
 
       <div class="iv" id="iv8">
         <div class="iv-top">
           <span class="iv-num">#8</span>
-          <h3>Ship five review-workflow templates</h3>
+          <h3>推出五款審查流程範本</h3>
           <div class="chips"><span class="effort l">L</span></div>
         </div>
         <span class="path">packages/workflows/src/definitions/</span>
-        <p class="iv-body"><span class="iv-found">Found in code —</span> Approval workflows (rough cut &rarr; client review &rarr; final sign-off) are fully configurable — and start <strong>completely blank</strong>. The definitions directory contains only <code>__fixtures__</code> for tests. Judging by a comment in <code>WorkflowEditor.tsx</code>, power users copy a shared Notion doc to set theirs up. Ship 5 opinionated templates: agency delivery, YouTube pipeline, client sign-off, internal QA, localization pass.</p>
-        <div class="iv-impact"><span class="tag">Impact</span>Templates convert &ldquo;configure this abstraction&rdquo; into &ldquo;pick your job&rdquo; — the classic fix for blank-canvas churn in workflow tools.</div>
-        <div class="iv-foot"><label class="resonate"><input type="checkbox" data-n="8"> This resonates</label></div>
+        <p class="iv-body"><span class="iv-found">在程式碼裡發現 —</span> 審查流程（粗剪 &rarr; 客戶審查 &rarr; 最終確認）的設定完全可以自訂，但<strong>一開始完全是空白的</strong>。definitions 目錄底下只有測試用的 <code>__fixtures__</code>。從 <code>WorkflowEditor.tsx</code> 裡的留言來看，重度使用者是直接複製某份共用的 Notion 文件來做設定的。乾脆直接推出 5 個有主見的範本：代理商交付、YouTube 製作管線、客戶確認、內部 QA、多語系處理。</p>
+        <div class="iv-impact"><span class="tag">影響</span>範本可以把 &ldquo;設定一堆抽象參數&rdquo; 變成 &ldquo;選一個符合你需求的&rdquo;，這是解決工作流工具中面對空白畫面就放棄的經典解法。</div>
+        <div class="iv-foot"><label class="resonate"><input type="checkbox" data-n="8"> 這個方案打中痛點</label></div>
       </div>
 
       <div class="iv" id="iv9">
         <div class="iv-top">
           <span class="iv-num">#9</span>
-          <h3>Built-in quick screen &amp; camera recording</h3>
+          <h3>內建螢幕與攝影機快速錄影</h3>
           <div class="chips"><span class="effort xl">XL</span></div>
         </div>
-        <span class="path">new surface &middot; services/ingest already accepts chunked webm</span>
-        <p class="iv-body"><span class="iv-found">Found in code —</span> Today Acme's onboarding has a hard external dependency: <strong>you need a finished video before the product is useful</strong>. But <code>services/ingest</code> already accepts chunked webm uploads (built for the mobile app), so a MediaRecorder-based &ldquo;record your screen, get feedback&rdquo; flow needs no pipeline work — &ldquo;just&rdquo; the capture UI. Removes the biggest reason a trial goes idle: nothing to review yet.</p>
-        <div class="iv-impact"><span class="tag">Impact</span>Changes who can activate — designers and PMs without an editor can create the first reviewable artifact themselves. Big build, big surface area.</div>
-        <div class="iv-foot"><label class="resonate"><input type="checkbox" data-n="9"> This resonates</label></div>
+        <span class="path">新介面 &middot; services/ingest 已經支援分塊的 webm 上傳</span>
+        <p class="iv-body"><span class="iv-found">在程式碼裡發現 —</span> 目前 Acme 的 onboarding 有一個硬性的外部相依：<strong>你得先有一支做好的影片，這個產品才派得上用場</strong>。但其實 <code>services/ingest</code> 早就支援分塊的 webm 上傳了（當初是為了行動版 App 做的）。所以一個用 MediaRecorder 做的 &ldquo;錄下你的螢幕，直接拿回饋&rdquo; 流程，根本不用動到後端管線，&ldquo;只是&rdquo; 需要做個擷取 UI 而已。這能消滅試用期閒置的最大原因：根本還沒有東西可以審。</p>
+        <div class="iv-impact"><span class="tag">影響</span>這會改變誰能成為啟用使用者。像設計師或 PM 這種手邊沒有剪輯軟體的人，也能自己生出第一份可以審查的東西。工程不小，介面也會變大。</div>
+        <div class="iv-foot"><label class="resonate"><input type="checkbox" data-n="9"> 這個方案打中痛點</label></div>
       </div>
 
       <div class="iv" id="iv10">
         <div class="iv-top">
           <span class="iv-num">#10</span>
-          <h3>First-class client review portals</h3>
+          <h3>第一等的客戶審查入口</h3>
           <div class="chips"><span class="effort xl">XL</span></div>
         </div>
         <span class="path">services/auth/src/guestTokens.ts &middot; apps/web/src/share/</span>
-        <p class="iv-body"><span class="iv-found">Found in code —</span> Guest share links exist but are deliberately crippled: tokens expire after 24h, guests can't comment, and there's a <code>// TODO(sasha): revisit guest perms after launch</code> from two years ago. The users who churn are often the ones whose <em>clients</em> wouldn't sign up. Make guests first-class — persistent portal, comment-with-name, no account — and every external review becomes a retention loop (and an acquisition one).</p>
-        <div class="iv-impact"><span class="tag">Impact</span>Attacks the structural cause: Acme's value depends on people who refuse to create accounts. Quarter-long bet with auth, billing, and abuse-prevention implications.</div>
-        <div class="iv-foot"><label class="resonate"><input type="checkbox" data-n="10"> This resonates</label></div>
+        <p class="iv-body"><span class="iv-found">在程式碼裡發現 —</span> 訪客分享連結早就有了，但被刻意閹割：token 在 24 小時後就失效，訪客不能留言，而且還留了一行兩年前寫的 <code>// TODO(sasha): revisit guest perms after launch</code>。那些流失的使用者，有很多是因為他們的<em>客戶</em>根本不願意註冊帳號。把訪客升級成一等公民，給他們一個常駐的入口、能直接留名留言、而且不用註冊帳號。這樣一來，每一次對外的審查都會變成留住使用者的循環（順便還能帶來新使用者）。</p>
+        <div class="iv-impact"><span class="tag">影響</span>這個做法直搗結構性的病因：Acme 的價值，其實是建立在那些死都不肯註冊帳號的人身上。這會是得押上一整季的大工程，而且還牽涉到身分驗證、帳單和防堵濫用的問題。</div>
+        <div class="iv-foot"><label class="resonate"><input type="checkbox" data-n="10"> 這個方案打中痛點</label></div>
       </div>
 
     </div>
   </div>
 
-  <footer>Part of <a href="index.html">Know your unknowns</a> — companion examples to the blog post.</footer>
+  <footer>屬於<a href="index.html">搞清楚你的未知</a>系列 — 是部落格文章的配套範例。</footer>
 </div>
 
 <div class="replybar">
   <div class="replybar-inner">
-    <span class="rb-count"><b id="rbNum">0</b> resonate</span>
-    <span class="rb-reply" id="rbReply">Check the interventions that resonate — your reply builds here.</span>
-    <button class="rb-copy" id="rbCopy" type="button" disabled>copy reply</button>
+    <span class="rb-count"><b id="rbNum">0</b> 個打中痛點</span>
+    <span class="rb-reply" id="rbReply">勾選打中痛點的介入方案，你的回覆字串就會出現在這裡。</span>
+    <button class="rb-copy" id="rbCopy" type="button" disabled>複製回覆</button>
   </div>
 </div>
 
@@ -658,7 +658,7 @@
 
   var copyPromptBtn = document.getElementById('copyPrompt');
   copyPromptBtn.addEventListener('click', function () {
-    copyText(PROMPT, copyPromptBtn, 'copy prompt', 'copied');
+    copyText(PROMPT, copyPromptBtn, '複製提示詞', '已複製');
   });
 
   var boxes = Array.prototype.slice.call(document.querySelectorAll('label.resonate input'));
@@ -692,13 +692,13 @@
     rbNum.textContent = picked.length;
     if (picked.length === 0) {
       currentReply = '';
-      rbReply.textContent = 'Check the interventions that resonate — your reply builds here.';
+      rbReply.textContent = '勾選打中痛點的介入方案，你的回覆字串就會出現在這裡。';
       rbReply.classList.remove('live');
       rbCopy.disabled = true;
     } else {
       var list = picked.map(function (n) { return '#' + n; }).join(', ');
       currentReply = 'These resonate: ' + list + ' — start with #' + picked[0];
-      rbReply.textContent = '“' + currentReply + '”';
+      rbReply.textContent = '「' + currentReply + '」';
       rbReply.classList.add('live');
       rbCopy.disabled = false;
     }
@@ -706,7 +706,7 @@
 
   boxes.forEach(function (b) { b.addEventListener('change', update); });
   rbCopy.addEventListener('click', function () {
-    if (currentReply) copyText(currentReply, rbCopy, 'copy reply', 'copied');
+    if (currentReply) copyText(currentReply, rbCopy, '複製回覆', '已複製');
   });
 
   update();

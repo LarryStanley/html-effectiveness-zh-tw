@@ -1,41 +1,34 @@
-# The unreasonable effectiveness of HTML — examples
+# HTML 為什麼這麼好用 — 範例
 
-> **Sample code. Not maintained and not accepting contributions.**
+> **這只是範例程式碼，沒有在維護，也不接受 PR。**
 
-A gallery of standalone HTML examples that accompany the blog post on using HTML
-as a flexible output format. Each file is a self-contained `.html` page (no build
-step, no dependencies) demonstrating a different use case — from code review and
-design systems to slide decks, status reports, and small interactive editors.
+這裡收錄了一系列獨立的 HTML 範例，搭配那篇討論「把 HTML 當作彈性輸出格式」的部落格文章。每個檔案都是一個獨立的 `.html` 頁面（不用編譯、沒有相依套件），各自展示不同的使用情境，從程式碼審查、設計系統，到簡報、狀態報告，甚至是輕量級的互動編輯器都有。
 
-Open [`index.html`](index.html) for the full, categorized index, or open any
-numbered file directly in a browser.
+直接打開 [`index.html`](index.html) 就能看到完整分類過的列表，或者你也可以在瀏覽器裡直接開任何一個編號過的檔案。
 
-## Contents
+## 目錄
 
-| Category | Examples |
+| 分類 | 範例 |
 |---|---|
-| Exploration | code approaches, visual designs |
-| Code | review, understanding, design systems, component variants |
-| Prototyping | animation, interaction |
-| Communication | slide deck, status report, incident report, PR write-up |
-| Diagrams & research | flowchart, feature/concept explainers |
-| Custom editing UIs | triage board, feature flags, prompt tuner |
+| 探索 | 程式寫法、視覺設計 |
+| 程式碼 | 審查、理解、設計系統、元件變體 |
+| 原型 | 動畫、互動 |
+| 溝通 | 簡報、狀態報告、事故報告、PR 說明 |
+| 圖表與研究 | 流程圖、功能或概念說明頁 |
+| 自訂編輯介面 | 分流看板、功能旗標（feature flag）、提示詞調校器（prompt tuner） |
 
-## Running
+## 怎麼跑
 
-There is nothing to install or build. Clone the repo and open `index.html` (or
-any individual file) in a web browser.
+不用安裝任何東西，也不用編譯。把 repo 複製下來，直接用瀏覽器打開 `index.html`（或任何一個檔案）就行了。
 
-## A note on sample data
+| 關於範例資料
 
-All product names, data, and scenarios in these examples are fictional and used
-only for illustration. The placeholder brand "Acme" and any figures shown are
-not real.
+這些範例裡出現的產品名稱、資料和情境全都是虛構的，純粹是為了示範。裡面用的品牌名稱 "Acme" 還有看到的任何數據都不是真的。
 
-## Security
+## 資訊安全
 
-See [SECURITY.md](SECURITY.md) for how to report a vulnerability.
+如果你發現了安全漏洞，請參考 [SECURITY.md](SECURITY.md) 了解怎麼回報。
 
-## License
+## 授權條款
 
-Released under the [Apache License 2.0](LICENSE).
+採用 [Apache License 2.0](LICENSE) 授權。

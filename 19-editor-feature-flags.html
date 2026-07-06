@@ -1,6 +1,6 @@
 <!-- Copyright 2026 Anthropic PBC · SPDX-License-Identifier: Apache-2.0 -->
 <!doctype html>
-<html lang="en">
+<html lang="zh-Hant-TW">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -308,29 +308,28 @@
   <header>
     <div class="eyebrow">Acme / editor / feature-flags</div>
     <h1>flags.production.json</h1>
-    <p class="sub">A form-based editor for the production feature-flag config.
-      Toggle flags, fix dependency warnings as they surface, then copy out
-      only the lines that changed.</p>
+    <p class="sub">這是一個用來編輯正式環境功能旗標（feature flag）的表單介面。
+      你可以切換旗標狀態，一邊解決冒出來的相依套件警告，最後再把有變動的行數複製出來就好。</p>
   </header>
 
   <div class="layout">
     <div class="banner" id="banner">
       <span class="glyph">&#9888;</span>
-      <span id="bannerText">1 flag is enabled without its prerequisite</span>
+      <span id="bannerText">1 個旗標在缺少前置條件的情況下被啟用了</span>
     </div>
 
     <div class="form-col" id="formCol"><!-- groups injected --></div>
 
     <aside class="sidebar">
       <div>
-        <div class="side-label">Pending changes</div>
-        <div class="side-count" id="sideCount">0 changed</div>
+        <div class="side-label">待提交的變更</div>
+        <div class="side-count" id="sideCount">0 個變更</div>
       </div>
-      <pre class="diff" id="diff"><span class="empty">// no changes yet</span></pre>
+      <pre class="diff" id="diff"><span class="empty">// 目前沒有任何變更</span></pre>
       <div class="btn-stack">
-        <button class="btn primary" id="copyDiff" disabled>Copy diff</button>
-        <button class="btn ghost" id="copyJson">Copy full JSON</button>
-        <button class="btn ghost" id="reset">Reset</button>
+        <button class="btn primary" id="copyDiff" disabled>複製 diff</button>
+        <button class="btn ghost" id="copyJson">複製完整 JSON</button>
+        <button class="btn ghost" id="reset">還原變更</button>
       </div>
     </aside>
   </div>
@@ -564,13 +563,13 @@ function update() {
     }
     const meta = formCol.querySelector(
       '.group[data-group="' + g.id + '"] [data-meta]');
-    meta.textContent = g.flags.length + " flags, " + onCount + " on";
+    meta.textContent = g.flags.length + " 個旗標，" + onCount + " 個已啟用";
   }
 
   // diff + sidebar
   const lines = computeDiff(state);
   if (lines.length === 0) {
-    diffEl.innerHTML = '<span class="empty">// no changes yet</span>';
+    diffEl.innerHTML = '<span class="empty">// 目前沒有任何變更</span>';
     copyDiffBtn.disabled = true;
   } else {
     diffEl.innerHTML = lines.map(l =>
@@ -581,18 +580,18 @@ function update() {
   }
 
   sideCount.innerHTML =
-    lines.length + " changed" +
+    lines.length + " 個變更" +
     '<span class="sep">&middot;</span>' +
     '<span class="' + (warnCount ? "warn-n" : "") + '">' +
-      warnCount + " warning" + (warnCount === 1 ? "" : "s") +
+      warnCount + " 個警告" +
     "</span>";
 
   // banner
   if (warnCount > 0) {
     bannerTxt.textContent =
       warnCount === 1
-        ? "1 flag is enabled without its prerequisite"
-        : warnCount + " flags are enabled without their prerequisites";
+        ? "1 個旗標在缺少前置條件的情況下被啟用了"
+        : warnCount + " 個旗標在缺少前置條件的情況下被啟用了";
     banner.classList.add("show");
   } else {
     banner.classList.remove("show");
@@ -635,11 +634,11 @@ function writeClipboard(text) {
 copyDiffBtn.addEventListener("click", () => {
   const lines = computeDiff(currentState());
   if (!lines.length) return;
-  writeClipboard(diffText(lines)).then(() => flash(copyDiffBtn, "Copied ✓"));
+  writeClipboard(diffText(lines)).then(() => flash(copyDiffBtn, "已複製 ✓"));
 });
 
 copyJsonBtn.addEventListener("click", () => {
-  writeClipboard(fullJson(currentState())).then(() => flash(copyJsonBtn, "Copied ✓"));
+  writeClipboard(fullJson(currentState())).then(() => flash(copyJsonBtn, "已複製 ✓"));
 });
 
 resetBtn.addEventListener("click", () => {

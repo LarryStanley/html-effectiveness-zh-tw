@@ -1,10 +1,10 @@
 <!-- Copyright 2026 Anthropic PBC · SPDX-License-Identifier: Apache-2.0 -->
 <!doctype html>
-<html lang="en">
+<html lang="zh-Hant-TW">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The interview — Know your unknowns</title>
+<title>訪談 — 搞清楚你的未知</title>
 <style>
   :root {
     --ivory:  #FAF9F5;
@@ -319,32 +319,32 @@
 <div class="wrap">
 
   <header>
-    <div class="eyebrow">Know your unknowns · Pre-implementation</div>
-    <a class="backlink" href="index.html">← All examples</a>
-    <h1>The interview</h1>
-    <p class="lede">Instead of guessing at ambiguous requirements, ask Claude to interview you — one question at a time, ordered by how much each answer would change the architecture.</p>
+    <div class="eyebrow">搞清楚你的未知 · 動手寫程式前</div>
+    <a class="backlink" href="index.html">← 所有範例</a>
+    <h1>訪談</h1>
+    <p class="lede">與其在模糊的需求裡瞎猜，不如讓 Claude 來訪談你。一次問一個問題，而且會根據每個答案對架構的影響程度來排序。</p>
 
     <div class="promptbox">
-      <div class="label">The prompt</div>
-      <button class="copybtn" id="copyPrompt">copy prompt</button>
-      <blockquote id="promptText">Interview me one question at a time about anything still ambiguous in the annotation-export feature. Prioritize questions where my answer would change the architecture.</blockquote>
+      <div class="label">提示詞</div>
+      <button class="copybtn" id="copyPrompt">複製提示詞</button>
+      <blockquote id="promptText">針對標記匯出功能裡還很模糊的地方，一次問我一個問題來釐清。請優先問那些我的答案會直接改變架構設計的問題。</blockquote>
     </div>
   </header>
 
-  <div class="divider">What Claude produced</div>
+  <div class="divider">Claude 生出的結果</div>
 
   <div class="artifact">
     <div class="art-head">
-      <span class="t">Annotation export — spec interview</span>
-      <span class="s">acme/web · 7 open questions · ordered by blast radius</span>
+      <span class="t">標記匯出 — 規格訪談</span>
+      <span class="s">acme/web · 7 個待釐清問題 · 按影響範圍排序</span>
     </div>
     <div class="art-body">
-      <nav class="rail" id="rail" aria-label="Interview progress"></nav>
+      <nav class="rail" id="rail" aria-label="訪談進度"></nav>
       <div class="stage" id="stage"></div>
     </div>
   </div>
 
-  <footer>Part of <a href="index.html">Know your unknowns</a> — companion examples to the blog post.</footer>
+  <footer>屬於<a href="index.html">搞清楚你的未知</a>系列 — 部落格文章的附帶範例。</footer>
 </div>
 
 <script>
@@ -352,103 +352,103 @@
   "use strict";
 
   var RADII = {
-    arch:  { label: "Architecture", color: "var(--clay)" },
-    data:  { label: "Data model",   color: "var(--clay-d)" },
+    arch:  { label: "架構", color: "var(--clay)" },
+    data:  { label: "資料模型",   color: "var(--clay-d)" },
     ux:    { label: "UX",           color: "var(--olive)" },
-    pol:   { label: "Polish",       color: "var(--g500)" }
+    pol:   { label: "細節",       color: "var(--g500)" }
   };
 
   var QUESTIONS = [
     {
       id: "runtime",
       radius: "arch",
-      short: "Where exports run",
-      topic: "Execution model",
-      q: "Where should export generation actually run?",
-      why: "This decides whether we need a job queue, a notification path, and an artifacts bucket — or none of those. Everything else layers on top.",
+      short: "在哪裡跑匯出",
+      topic: "執行模型",
+      q: "匯出作業到底該在哪裡跑？",
+      why: "這會決定我們需不需要 job queue、通知機制和檔案存放空間，還是這些全都不用。其他所有決定都建立在這上面。",
       opts: [
-        { t: "Synchronously in the API request", d: "Simple, but a 400-comment review on a 2-hour cut will blow past the 30s gateway timeout." },
-        { t: "Background job via the existing sidekiq queue", d: "Reuses jobs/export_worker patterns from proxy transcodes; needs a “ready” notification." },
-        { t: "Entirely client-side from the annotations API", d: "Zero new backend, but caps us at formats the browser can assemble, and leaks nothing to support later." }
+        { t: "在 API request 中同步處理完畢", d: "很簡單，但如果遇到一則有 400 則留言、要花 2 小時剪輯的 review，馬上就會超過 30 秒的 gateway timeout。" },
+        { t: "靠現有的 sidekiq queue 跑背景作業", d: "直接沿用 proxy 轉檔的 jobs/export_worker 模式；但需要一個「處理完畢」的通知。" },
+        { t: "完全在 client 端透過 annotations API 處理", d: "後端完全不用動，但只能輸出瀏覽器湊得出來的格式，而且後續沒辦法提供任何支援查詢。" }
       ]
     },
     {
       id: "scope",
       radius: "arch",
-      short: "Export scope",
-      topic: "Scope of one export",
-      q: "What is the unit of a single export?",
-      why: "Project-level export means fan-out across videos, pagination, and a manifest format — roughly 3× the surface of per-video.",
+      short: "匯出範圍",
+      topic: "單次匯出的單位",
+      q: "一次匯出的單位是什麼？",
+      why: "如果是以「專案」為單位匯出，就代表要跨影片處理、做分頁，還要設計 manifest 格式，整個工作量大約是「單一影片」的三倍。",
       opts: [
-        { t: "One video at a time", d: "Matches the review-page mental model; a project export is just N clicks for now." },
-        { t: "A whole project (all videos)", d: "What the Meridian Post account asked for; implies zip bundling and per-video manifests." },
-        { t: "Arbitrary user-picked selection", d: "Most flexible, most UI; needs a selection model that doesn’t exist anywhere yet." }
+        { t: "一次匯出一部影片", d: "符合 review 頁面的操作習慣；目前專案級匯出就只是讓使用者多點 N 次而已。" },
+        { t: "整個專案（所有影片）", d: "Meridian Post 帳號想要的功能；表示需要打包成 zip，還要為每部影片產生 manifest。" },
+        { t: "讓使用者自己隨意挑選", d: "最靈活但也最需要做 UI；目前系統裡根本還沒有選取機制可以用。" }
       ]
     },
     {
       id: "drawings",
       radius: "data",
-      short: "Drawings included?",
-      topic: "Drawing annotations",
-      q: "Do frame drawings export, or only text comments?",
-      why: "Drawings live as canvas stroke JSON in annotation_shapes; including them means rasterizing server-side or shipping raw vectors.",
+      short: "是否包含畫記",
+      topic: "繪圖標記",
+      q: "影格上的畫記要匯出嗎？還是只匯出文字留言？",
+      why: "畫記目前是以 canvas stroke JSON 存在 annotation_shapes 裡；如果要包含進來，不是在 server 端轉成圖片，就是得直接輸出原始向量資料。",
       opts: [
-        { t: "Text comments only (v1)", d: "Ships fastest; drawings show as “[drawing on frame 4211]” placeholders." },
-        { t: "Rasterize drawings to PNG stills", d: "Best for PDF reports; needs a headless render step — the thumbnail worker is close but not identical." },
-        { t: "Include raw stroke JSON", d: "Lossless and cheap, but only useful to someone re-importing into Acme." }
+        { t: "只匯出文字留言（v1）", d: "出貨最快；畫記會顯示成「[frame 4211 上有畫記]」這樣的佔位文字。" },
+        { t: "將畫記轉成 PNG 靜態圖片", d: "最適合用於 PDF 報告；需要一個 headless render 步驟，跟目前的縮圖 worker 很像但不完全一樣。" },
+        { t: "直接輸出原始 stroke JSON", d: "不失真又省事，但只有要把資料重新匯入 Acme 的人才用得到。" }
       ]
     },
     {
       id: "timecode",
       radius: "data",
-      short: "Timestamp format",
-      topic: "Timestamp representation",
-      q: "How should annotation timestamps be represented in the export?",
-      why: "We store milliseconds; editors live in SMPTE timecode. Converting needs the source fps, which is null for 3% of legacy uploads.",
+      short: "時間碼格式",
+      topic: "時間戳記表示法",
+      q: "標記的時間戳記在匯出檔裡應該長什麼樣子？",
+      why: "我們存的是毫秒，但剪接師看的是 SMPTE timecode。轉換時需要原始影片的 fps，而有 3% 的舊影片沒有這個資料。",
       opts: [
-        { t: "SMPTE timecode (HH:MM:SS:FF)", d: "What Resolve and Premiere expect; requires an fps backfill for legacy videos." },
-        { t: "Plain seconds / milliseconds", d: "No conversion risk, but every editor will hand-convert and some will do it wrong." },
-        { t: "Both columns, always", d: "Slightly wider files; nobody ever has to ask which one is authoritative." }
+        { t: "SMPTE timecode（HH:MM:SS:FF）", d: "Resolve 和 Premiere 期望的格式；但需要回頭為舊影片補上 fps 資料。" },
+        { t: "單純的秒數 / 毫秒", d: "沒有轉換風險，但每個剪接師都得自己算，而且一定有人會算錯。" },
+        { t: "兩種都放，固定輸出", d: "檔案會稍微寬一點；但再也不會有人來問到底哪個才是標準。" }
       ]
     },
     {
       id: "formats",
       radius: "ux",
-      short: "v1 formats",
-      topic: "Export formats",
-      q: "Which formats does v1 ship with?",
-      why: "Each format is mostly independent work, but the choice signals who the feature is for — producers, editors, or clients.",
+      short: "v1 支援格式",
+      topic: "匯出格式",
+      q: "v1 要支援哪些格式？",
+      why: "每種格式的工作量大致獨立，但這個選擇會透露出這個功能是做給誰用的：製作人、剪接師，還是客戶。",
       opts: [
-        { t: "CSV only", d: "One afternoon of work once the pipeline exists; producers can pivot it however they like." },
-        { t: "PDF review report", d: "Client-facing artifact with thumbnails; only meaningful if drawings rasterize." },
-        { t: "NLE marker file (EDL / Resolve CSV)", d: "The power-user ask from the forum thread; timecode question becomes load-bearing." },
-        { t: "CSV + NLE markers, PDF later", d: "Covers both internal and editor workflows without blocking on rasterization." }
+        { t: "只有 CSV", d: "pipeline 好之後，一個下午就能搞定；製作人想怎麼樞紐分析都可以。" },
+        { t: "PDF 審查報告", d: "面對客戶的產出物，內含縮圖；但只有在我們把畫記轉成圖片時才有意義。" },
+        { t: "NLE 標記檔（EDL / Resolve CSV）", d: "論壇上進階使用者敲碗的功能；這樣一來，timecode 的問題就變成必須先解決的硬需求。" },
+        { t: "先做 CSV + NLE 標記，PDF 以後再說", d: "同時滿足內部和剪接師的工作流程，而且不用卡在轉圖片這關。" }
       ]
     },
     {
       id: "access",
       radius: "ux",
-      short: "Who can export",
-      topic: "Export permissions",
-      q: "Who is allowed to export?",
-      why: "Guest reviewers use unauthenticated share links — if they can export, annotations silently leave the permission boundary.",
+      short: "誰能匯出",
+      topic: "匯出權限",
+      q: "誰有權限可以匯出？",
+      why: "訪客審查者用的是未驗證的分享連結；如果他們也能匯出，標記資料就會在無聲無息中流出權限邊界。",
       opts: [
-        { t: "Anyone who can view the video", d: "Includes share-link guests; simplest rule, biggest data-egress surface." },
-        { t: "Project members only", d: "Guests keep commenting but can’t bulk-extract; needs a disabled-state explanation in the UI." },
-        { t: "Owner and admins only", d: "Most conservative; likely generates “can you export this for me” busywork." }
+        { t: "任何看得到影片的人", d: "包含拿分享連結的訪客；規則最簡單，但資料外洩的面積也最大。" },
+        { t: "只有專案成員", d: "訪客還是能留言，但不能大量打包匯出；UI 上需要設計一個被停用狀態的說明。" },
+        { t: "只有擁有者和管理員", d: "最保守的做法；但很可能會衍生出一堆「能不能幫我匯出這份」的雜事。" }
       ]
     },
     {
       id: "naming",
       radius: "pol",
-      short: "Files & naming",
-      topic: "File naming & bundling",
-      q: "How are export files named and bundled?",
-      why: "Pure convention, but the first support ticket after launch is always “which file is which cut.”",
+      short: "檔案與命名",
+      topic: "檔案命名與打包",
+      q: "匯出檔案要怎麼命名跟打包？",
+      why: "純粹是慣例問題，但上線後第一張客服單絕對是「哪個檔案是哪一版 cut」。",
       opts: [
-        { t: "{project}_{video}_{date}.csv, flat", d: "Predictable and grep-able; long titles get truncated at 80 chars." },
-        { t: "Zip per export with a manifest.json", d: "One artifact per export regardless of scope; slight friction for single-file cases." },
-        { t: "Let the user pick at export time", d: "A settings surface for something almost nobody will change." }
+        { t: "{project}_{video}_{date}.csv，全部攤平", d: "好預測、可以 grep；超過 80 個字的標題會被截斷。" },
+        { t: "每次匯出包成 zip，附帶一個 manifest.json", d: "不管範圍多大，每次匯出就是一個產出物；但對只需要單一檔案的情境來說有點麻煩。" },
+        { t: "讓使用者在匯出時自己選", d: "為了一個幾乎沒人會去改的東西，多做一整組設定介面。" }
       ]
     }
   ];
@@ -467,7 +467,7 @@
   }
 
   function renderRail() {
-    var html = '<div class="rail-label">Interview progress</div>';
+    var html = '<div class="rail-label">訪談進度</div>';
     QUESTIONS.forEach(function (q, i) {
       var r = RADII[q.radius];
       var cls = "rail-item" + (i === current ? " current" : "") + (answers[i] ? " done" : "");
@@ -476,11 +476,11 @@
         '<span class="rail-dot"></span><span class="rail-q">' + esc(q.short) + '</span>' +
         (answers[i] ? '<span class="tick">✓</span>' : '') + '</button>';
     });
-    html += '<div class="rail-meta"><b>' + answeredCount() + '</b> of 7 answered<br>' +
-      '<span style="color:var(--clay)">●</span> architecture &nbsp;' +
-      '<span style="color:var(--clay-d)">●</span> data<br>' +
-      '<span style="color:var(--olive)">●</span> ux &nbsp;' +
-      '<span style="color:var(--g500)">●</span> polish</div>';
+    html += '<div class="rail-meta">已回答 <b>' + answeredCount() + '</b> / 7<br>' +
+      '<span style="color:var(--clay)">●</span> 架構 &nbsp;' +
+      '<span style="color:var(--clay-d)">●</span> 資料<br>' +
+      '<span style="color:var(--olive)">●</span> UX &nbsp;' +
+      '<span style="color:var(--g500)">●</span> 細節</div>';
     rail.innerHTML = html;
     rail.querySelectorAll(".rail-item.done").forEach(function (el) {
       el.addEventListener("click", function () { go(parseInt(el.dataset.i, 10)); });
@@ -493,7 +493,7 @@
     var picked = answers[current];
     var html = '<div class="qcard">' +
       '<span class="badge" style="background:' + r.color + '">' + esc(r.label) + '</span>' +
-      '<span class="qnum">Question ' + (current + 1) + ' of ' + QUESTIONS.length + '</span>' +
+      '<span class="qnum">第 ' + (current + 1) + ' 題，共 ' + QUESTIONS.length + ' 題</span>' +
       '<h2 class="qtext">' + esc(q.q) + '</h2>' +
       '<p class="why">' + esc(q.why) + '</p>' +
       '<div class="opts">';
@@ -504,12 +504,12 @@
     });
     html += '</div>' +
       '<div class="otherrow">' +
-      '<input type="text" id="otherInput" placeholder="Other — type your own answer…" value="' +
+      '<input type="text" id="otherInput" placeholder="其他 — 自己打一個答案…" value="' +
         (picked && picked.custom ? esc(picked.text) : '') + '">' +
-      '<button type="button" id="otherGo">answer ↵</button></div>' +
+      '<button type="button" id="otherGo">回答 ↵</button></div>' +
       '<div class="navrow">' +
-      '<button type="button" class="backbtn" id="backBtn"' + (current === 0 ? ' disabled' : '') + '>← previous question</button>' +
-      '<span class="navhint">pick a card to continue</span>' +
+      '<button type="button" class="backbtn" id="backBtn"' + (current === 0 ? ' disabled' : '') + '>← 上一題</button>' +
+      '<span class="navhint">選一張卡片繼續</span>' +
       '</div></div>';
     stage.innerHTML = html;
 
@@ -537,19 +537,19 @@
 
   function buildFollowupPrompt() {
     var lines = [
-      "Here's what we decided in the interview — implement the",
-      "annotation-export feature with these constraints:",
+      "以下是我們在訪談中決定的事項 — 請實作",
+      "標記匯出功能，並遵循以下限制：",
       ""
     ];
     QUESTIONS.forEach(function (q, i) {
       var a = answers[i];
-      lines.push((i + 1) + ". " + q.topic + ": " + (a ? a.text : "(unanswered — use your judgment)") +
-        (a && a.custom ? " [my own wording — ask if unclear]" : ""));
+      lines.push((i + 1) + ". " + q.topic + ": " + (a ? a.text : "（未回答 — 請自行判斷）") +
+        (a && a.custom ? " [我自己的措辭 — 如果不清楚請發問]" : ""));
     });
     lines.push("");
-    lines.push("Treat the architecture and data-model decisions (1–4) as fixed.");
-    lines.push("If anything in 5–7 conflicts with them, flag it before writing code.");
-    lines.push("Start with a short plan, then implement.");
+    lines.push("請將架構與資料模型的決策（1–4）視為已定案。");
+    lines.push("如果 5–7 項中有任何與之衝突的地方，在寫程式前請先提出來。");
+    lines.push("先給我一份簡短計畫，然後再開始實作。");
     return lines.join("\n");
   }
 
@@ -561,23 +561,23 @@
       rows += "<tr>" +
         '<td><span class="pill" style="background:' + r.color + '">' + esc(r.label) + '</span></td>' +
         '<td class="topic">' + esc(q.topic) + '</td>' +
-        '<td class="dec">' + (a ? esc(a.text) + (a.custom ? ' <span style="font-weight:400;color:var(--g500)">(your wording)</span>' : '') : '<span style="color:var(--g500)">—</span>') + '</td>' +
-        '<td><button type="button" class="redo" data-i="' + i + '">edit</button></td>' +
+        '<td class="dec">' + (a ? esc(a.text) + (a.custom ? ' <span style="font-weight:400;color:var(--g500)">(你的措辭)</span>' : '') : '<span style="color:var(--g500)">—</span>') + '</td>' +
+        '<td><button type="button" class="redo" data-i="' + i + '">編輯</button></td>' +
         "</tr>";
     });
     stage.innerHTML = '<div class="qcard">' +
-      '<span class="badge" style="background:var(--olive)">Interview complete</span>' +
-      '<h2 class="sum-h">Seven decisions, zero assumptions.</h2>' +
-      '<p class="sum-sub">Every answer below would otherwise have been guessed silently during implementation.</p>' +
+      '<span class="badge" style="background:var(--olive)">訪談完成</span>' +
+      '<h2 class="sum-h">七個決定，零假設。</h2>' +
+      '<p class="sum-sub">如果沒有先問過，下面每個決定在實作時都會變成默默的瞎猜。</p>' +
       '<div class="dtable-scroll"><table class="dtable"><thead><tr>' +
-      '<th>Radius</th><th>Question</th><th>Decision</th><th></th>' +
+      '<th>影響範圍</th><th>問題</th><th>決定</th><th></th>' +
       '</tr></thead><tbody>' + rows + '</tbody></table></div>' +
       '<div class="genblock">' +
-      '<div class="gb-label">Generated follow-up prompt</div>' +
-      '<div class="genwrap"><button type="button" class="copybtn" id="copyGen">copy</button>' +
+      '<div class="gb-label">產生的後續提示詞</div>' +
+      '<div class="genwrap"><button type="button" class="copybtn" id="copyGen">複製</button>' +
       '<pre id="genPre">' + esc(buildFollowupPrompt()) + '</pre></div>' +
       '</div>' +
-      '<button type="button" class="restart" id="restartBtn">↺ start over</button>' +
+      '<button type="button" class="restart" id="restartBtn">↺ 重新開始</button>' +
       '</div>';
 
     stage.querySelectorAll(".redo").forEach(function (el) {
@@ -611,7 +611,7 @@
       var text = getText();
       var done = function () {
         var orig = btn.textContent;
-        btn.textContent = "copied ✓";
+        btn.textContent = "已複製 ✓";
         btn.classList.add("done");
         setTimeout(function () { btn.textContent = orig; btn.classList.remove("done"); }, 1600);
       };

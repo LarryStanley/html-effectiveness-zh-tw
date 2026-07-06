@@ -1,10 +1,10 @@
 <!-- Copyright 2026 Anthropic PBC · SPDX-License-Identifier: Apache-2.0 -->
 <!doctype html>
-<html lang="en">
+<html lang="zh-Hant-TW">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Acme — Sidebar drag-to-reorder</title>
+<title>Acme — 側欄拖曳排序</title>
 <style>
   :root {
     --ivory: #FAF9F5;
@@ -247,12 +247,12 @@
 <div class="wrap">
 
   <header>
-    <div class="eyebrow">Acme / prototype / interaction</div>
-    <h1>Sidebar drag-to-reorder</h1>
+    <div class="eyebrow">Acme / 原型 / 互動</div>
+    <h1>側欄拖曳排序</h1>
     <p class="sub">
-      Throwaway HTML so we can <em>feel</em> the reorder before porting it to
-      React. Native <code class="inline">dragstart / dragover / drop</code>,
-      ~40 lines of JS, no libraries. Grab a row by the dots and move it.
+      這是一份用完即丟的 HTML，讓我們在把功能搬進
+      React 之前，先實際<em>感受</em>一下排序的手感。直接用原生的 <code class="inline">dragstart / dragover / drop</code>，
+      大概 40 行 JS，不靠任何函式庫。抓住圓點，就能拖曳整列。
     </p>
   </header>
 
@@ -295,42 +295,38 @@
           <div class="indicator" id="indicator"></div>
         </ul>
       </nav>
-      <p class="footnote">Order persists in the DOM only — refresh to reset.</p>
+      <p class="footnote">排序結果只留在目前的 DOM 裡，重新整理就會回到預設狀態。</p>
     </div>
 
     <div>
       <section class="notes">
-        <h2>What you're feeling</h2>
-        <p class="lede">Design decisions baked into this prototype, so you can push back on them.</p>
+        <h2>你現在感受到的設計考量</h2>
+        <p class="lede">這個原型裡藏了一些設計決策，列出來讓你可以直接給意見。</p>
         <ul>
           <li>
-            <b>Drop indicator snaps to the nearest gap</b>, not the raw cursor Y.
-            It only moves when you cross a row's midpoint — feels more decisive,
-            less jittery.
+            <b>放置指示線會自動吸附到最近的間距</b>，而不是死跟著游標的 Y 軸跑。
+            只有在你越過某一列的中線時才會移動；這樣操作起來更明確，也不會抖來抖去。
           </li>
           <li>
-            <b>Dragged row stays in place at 35% opacity</b> with a 2&deg; tilt.
-            Keeping the ghost in the list preserves your sense of where you
-            started; the tilt reads as "lifted."
+            <b>被拖曳的列會留在原地，維持 35% 透明度</b>，並帶點 2&deg; 的傾斜。
+            讓殘影留在清單裡，可以幫你記住出發點；傾斜則營造出「被抬起來」的感覺。
           </li>
           <li>
-            <b>Grip dots are the affordance, but the whole row is draggable.</b>
-            Dots darken on hover to teach the gesture without forcing a
-            tiny hit target.
+            <b>拖曳點是視覺提示，但整列都可以拖。</b>
+            滑鼠移過去時圓點會變深，引導使用者操作，同時不用硬把點擊範圍縮得很小。
           </li>
           <li>
-            <b>No auto-scroll, no drop animation.</b> Left out on purpose so the
-            core feel is easy to judge — say the word and we add them next.
+            <b>沒有自動捲動，也沒有放下的動畫。</b> 這些是刻意拿掉的，讓核心手感更容易被審視；只要說一聲，我們下一版馬上加。
           </li>
         </ul>
       </section>
 
       <section class="questions">
-        <h2>Open questions</h2>
+        <h2>待確認的問題</h2>
         <ol>
-          <li>Should <b>Trash</b> (and maybe <b>Archive</b>) be pinned to the bottom and excluded from reordering?</li>
-          <li>Do we want rows to <b>slide</b> to their new slot on drop, or is the instant snap acceptable?</li>
-          <li>Keyboard path: is <code class="inline">Alt + Arrow</code> to move the focused row enough for the first ship?</li>
+          <li><b>Trash</b>（可能還包含 <b>Archive</b>）是不是該固定在最下面，排除在排序範圍外？</li>
+          <li>放下的時候，我們要不要讓列用<b>滑</b>到新位置？還是像現在這樣瞬間到位就好？</li>
+          <li>鍵盤操作：用 <code class="inline">Alt + Arrow</code> 來移動焦點所在的列，這樣夠不夠應付第一次上線？</li>
         </ol>
       </section>
     </div>

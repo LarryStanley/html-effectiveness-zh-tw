@@ -1,10 +1,10 @@
 <!-- Copyright 2026 Anthropic PBC · SPDX-License-Identifier: Apache-2.0 -->
 <!doctype html>
-<html lang="en">
+<html lang="zh-Hant-TW">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Acme — Support reply prompt tuner</title>
+<title>Acme — 客服回覆提示詞調校器（prompt tuner）</title>
 <style>
   :root {
     --ivory: #FAF9F5;
@@ -292,15 +292,15 @@
 
   <header>
     <div class="eyebrow">Acme / editor / prompt-tuner</div>
-    <h1>Support reply draft prompt</h1>
-    <p class="sub">Edit the system prompt on the left and watch three sample tickets re-render the filled template on the right, live as you type. When it reads well across all three moods, copy the template out.</p>
+    <h1>客服回覆草稿提示詞</h1>
+    <p class="sub">在左邊編輯系統提示詞，右邊會即時拿三張測試單來套版預覽。等到這三種情境的回覆讀起來都順了，就可以把模板複製出來。</p>
   </header>
 
   <div class="toolbar">
-    <button id="copyBtn" class="btn-primary">Copy prompt</button>
-    <button id="resetBtn" class="btn-ghost">Reset</button>
+    <button id="copyBtn" class="btn-primary">複製提示詞</button>
+    <button id="resetBtn" class="btn-ghost">重設</button>
     <div class="spacer"></div>
-    <div class="hint">slots use <strong>{{double_brace}}</strong> syntax</div>
+    <div class="hint">變數使用 <strong>{{double_brace}}</strong> 語法</div>
   </div>
 
   <div class="cols">
@@ -308,26 +308,26 @@
     <!-- left -->
     <section class="panel">
       <div class="ed-toolbar">
-        <span class="ed-label">Template</span>
+        <span class="ed-label">模板</span>
         <div class="spacer"></div>
-        <span id="counter" class="counter">0 chars · ~0 tokens</span>
+        <span id="counter" class="counter">0 字元 · ~0 tokens</span>
       </div>
       <div id="editor" class="editor" contenteditable="true" spellcheck="false" autocapitalize="off" autocorrect="off"></div>
       <div class="legend">
-        <div class="legend-label">Available slots</div>
+        <div class="legend-label">可用變數</div>
         <div id="legendChips" class="legend-chips"></div>
       </div>
     </section>
 
     <!-- right -->
     <section class="panel preview-panel">
-      <div class="preview-head">Live preview · 3 sample tickets</div>
+      <div class="preview-head">即時預覽 · 3 張測試單</div>
       <div id="samples"></div>
     </section>
 
   </div>
 
-  <footer>Highlighted slots fill from each sample's ticket fields. Anything underlined in dashed clay isn't a known field and will pass through unfilled.</footer>
+  <footer>標示起來的變數會用各張測試單的欄位資料填入。如果有看到底線是虛線的變數，代表系統不認得那個欄位，會直接以原樣輸出。</footer>
 
 </div>
 
@@ -340,49 +340,49 @@
   // ---------------------------------------------------------------------------
 
   var DEFAULT_TEMPLATE =
-'You are a support agent for Acme, a project workspace for small teams.\n' +
+'你是 Acme 的客服 agent，Acme 是一個專為小團隊設計的專案工作區。\n' +
 '\n' +
-'A customer named {{customer_name}} on the {{plan_tier}} plan wrote in about:\n' +
+'一位 {{plan_tier}} 方案的客戶 {{customer_name}} 來信詢問：\n' +
 '"{{ticket_subject}}"\n' +
 '\n' +
-'Their message:\n' +
+'他們的訊息如下：\n' +
 '{{ticket_body}}\n' +
 '\n' +
-'Write a reply that is {{tone}}, no more than 120 words, and ends with a single concrete next step.\n' +
-'Never promise a refund without escalating. Sign off as "The Acme team."';
+'請撰寫一封 {{tone}} 的回覆，不超過 120 字，最後要提供一個明確的下一步。\n' +
+'未經上級核准，絕對不能承諾退款。最後請署名 "The Acme team."。';
 
   var SAMPLES = [
     {
-      label: 'SAMPLE 1',
+      label: '範例 1',
       planClass: 'free',
       data: {
         customer_name: 'Priya N.',
         plan_tier: 'Free',
-        ticket_subject: 'Where did my board go?',
-        ticket_body: 'Hi — I made a board yesterday called "Spring launch" with my coworker and today I can’t find it anywhere. I’m new to Acme and I’m not sure if I deleted it by accident or if I’m just looking in the wrong place. Can you help?',
-        tone: 'warm and patient'
+        ticket_subject: '我的看板跑去哪裡了？',
+        ticket_body: '嗨 —— 我昨天和同事一起建了一個叫「春季發表」的看板，結果今天怎麼樣都找不到。我才剛開始用 Acme，不確定是自己不小心刪掉了，還是我找錯地方。能幫我看看嗎？',
+        tone: '親切且有耐心'
       }
     },
     {
-      label: 'SAMPLE 2',
+      label: '範例 2',
       planClass: 'team',
       data: {
         customer_name: 'Marcus D.',
         plan_tier: 'Team',
-        ticket_subject: 'Sync keeps dropping comments',
-        ticket_body: 'This is the third time this week. I leave comments on cards from my laptop, switch to my phone on the train, and they’re gone. My team thinks I’m ignoring them. We pay for 14 seats and this is genuinely making us look bad to a client.',
-        tone: 'direct and apologetic'
+        ticket_subject: '同步功能一直把留言弄丟',
+        ticket_body: '這已經是本週第三次了。我在筆電上給卡片加了留言，結果搭火車時切到手機看，那些留言全都不見了。我團隊還以為我在搞失蹤。我們付了 14 個座位的錢，這問題真的讓我們在客戶面前很難看。',
+        tone: '直接且充滿歉意'
       }
     },
     {
-      label: 'SAMPLE 3',
+      label: '範例 3',
       planClass: 'studio',
       data: {
         customer_name: 'Lena K.',
         plan_tier: 'Studio',
-        ticket_subject: 'Update billing entity on next invoice',
-        ticket_body: 'Hey folks! We just spun up a new holding company (ACME Corp Oy) and finance would love the May invoice to use that name + our new VAT ID, FI00000000. No rush at all, just want it sorted before the cycle runs. Thanks a million.',
-        tone: 'brisk and friendly'
+        ticket_subject: '下一張發票請更新公司抬頭',
+        ticket_body: '嗨！我們剛成立了一家新的控股公司（ACME Corp Oy），財務部希望五月發票能改用這個名字，加上我們新的營業稅號 FI00000000。完全不急，只要在結帳週期跑出來前弄好就行。非常感謝！',
+        tone: '俐落且友善'
       }
     }
   ];
@@ -611,7 +611,7 @@
   function updateCounter(text) {
     var chars = text.length;
     var tokens = Math.round(chars / 4.2);
-    counterEl.textContent = chars + ' chars · ~' + tokens + ' tokens';
+    counterEl.textContent = chars + ' 字元 · ~' + tokens + ' tokens';
   }
 
   // ---- Master refresh ----
@@ -678,11 +678,11 @@
   copyBtn.addEventListener('click', function () {
     var text = getPlainText();
     var done = function () {
-      copyBtn.textContent = 'Copied ✓';
+      copyBtn.textContent = '已複製 ✓';
       copyBtn.classList.add('copied');
       if (copyTimer) clearTimeout(copyTimer);
       copyTimer = setTimeout(function () {
-        copyBtn.textContent = 'Copy prompt';
+        copyBtn.textContent = '複製提示詞';
         copyBtn.classList.remove('copied');
       }, 1200);
     };

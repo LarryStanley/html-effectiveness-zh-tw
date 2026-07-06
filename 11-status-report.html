@@ -1,10 +1,10 @@
 <!-- Copyright 2026 Anthropic PBC · SPDX-License-Identifier: Apache-2.0 -->
 <!doctype html>
-<html lang="en">
+<html lang="zh-Hant-TW">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Acme — Engineering Status — Week 11</title>
+<title>Acme — 工程狀態報告 — 第 11 週</title>
 <style>
   :root {
     --ivory: #FAF9F5;
@@ -307,11 +307,11 @@
 
     <header>
       <div class="header-top">
-        <h1>Engineering Status &mdash; Week 11</h1>
-        <span class="auto-pill">auto-generated</span>
+        <h1>工程狀態報告 &mdash; 第 11 週</h1>
+        <span class="auto-pill">自動產生</span>
       </div>
       <div class="date-range">
-        Mar 10 &ndash; Mar 16, 2025 &nbsp;&middot;&nbsp;
+        2025 年 3 月 10 日 &ndash; 3 月 16 日 &nbsp;&middot;&nbsp;
         <span class="repo">acme/app @ main</span>
       </div>
     </header>
@@ -321,111 +321,108 @@
       <div class="summary-band">
         <div class="stat-card">
           <div class="stat-num">14</div>
-          <div class="stat-label">PRs merged</div>
-          <div class="stat-delta up">+3 vs wk10</div>
+          <div class="stat-label">合併的 PR</div>
+          <div class="stat-delta up">比第 10 週多 3 個</div>
         </div>
         <div class="stat-card">
           <div class="stat-num">6</div>
-          <div class="stat-label">Deploys</div>
+          <div class="stat-label">部署次數</div>
           <div class="stat-delta flat">&plusmn;0</div>
         </div>
         <div class="stat-card warn">
           <div class="stat-num">1</div>
-          <div class="stat-label">Incidents</div>
-          <div class="stat-delta flat">SEV-2 &middot; 47m</div>
+          <div class="stat-label">事故</div>
+          <div class="stat-delta flat">SEV-2 &middot; 47 分鐘</div>
         </div>
         <div class="stat-card">
           <div class="stat-num">3</div>
-          <div class="stat-label">Flaky tests fixed</div>
-          <div class="stat-delta up">suite now 99.1%</div>
+          <div class="stat-label">修好的不穩定測試</div>
+          <div class="stat-delta up">測試套件目前 99.1%</div>
         </div>
       </div>
     </section>
 
     <!-- Highlights -->
     <section>
-      <h2>Highlights</h2>
+      <h2>重點摘要</h2>
       <hr class="rule">
       <ul class="highlights">
         <li>
-          <strong>Bulk task editing shipped to 100%.</strong> The multi-select
-          toolbar landed behind a flag on Monday and ramped to all workspaces by
-          Thursday with no error-rate regression.
+          <strong>大量編輯任務功能已全量上線。</strong>
+          多選工具列週一先用功能旗標（feature flag）上線，到了週四已經推播到所有工作區，而且錯誤率完全沒有上升。
         </li>
         <li>
-          <strong>Sync API p95 down 38%.</strong> Replacing per-task auth checks
-          with a scoped batch lookup cut the hot path from 410ms to 255ms on the
-          staging load test.
+          <strong>Sync API 的 p95 延遲降了 38%。</strong>
+          我們把原本逐一檢查任務權限的做法，換成限定範圍的批次查詢；在 staging 的壓力測試中，熱點路徑就從 410ms 降到了 255ms。
         </li>
         <li>
-          <strong>One SEV-2 on Wednesday</strong> &mdash; a config rollout pushed
-          a bad connection-pool limit to the sync workers. Mitigated in 47 minutes;
-          full postmortem linked below.
+          <strong>週三發生了一起 SEV-2 事故</strong> &mdash; 一次設定部署不小心把錯誤的連線池上限推給了 sync worker。
+          我們在 47 分鐘內完成處置；完整的檢討報告連結在下面。
         </li>
       </ul>
     </section>
 
     <!-- Shipped -->
     <section>
-      <h2>Shipped</h2>
+      <h2>已上線</h2>
       <hr class="rule">
       <table class="shipped">
         <thead>
           <tr>
             <th style="width: 90px;">PR</th>
-            <th>Title</th>
-            <th style="width: 140px;">Author</th>
-            <th style="width: 100px;">Risk</th>
+            <th>標題</th>
+            <th style="width: 140px;">作者</th>
+            <th style="width: 100px;">風險</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td><a class="pr-link" href="#">#4871</a></td>
-            <td>Bulk edit toolbar: selection model + keyboard shortcuts</td>
+            <td>大量編輯工具列：選取機制與鍵盤快捷鍵</td>
             <td class="author">Mira Okafor</td>
-            <td><span class="risk"><span class="risk-dot med"></span>Med</span></td>
+            <td><span class="risk"><span class="risk-dot med"></span>中</span></td>
           </tr>
           <tr>
             <td><a class="pr-link" href="#">#4874</a></td>
-            <td>Batch auth lookup for <code>/v2/sync</code> hot path</td>
+            <td><code>/v2/sync</code> 熱點路徑的批次權限查詢</td>
             <td class="author">Devon Park</td>
-            <td><span class="risk"><span class="risk-dot med"></span>Med</span></td>
+            <td><span class="risk"><span class="risk-dot med"></span>中</span></td>
           </tr>
           <tr>
             <td><a class="pr-link" href="#">#4878</a></td>
-            <td>Fix race in attachment uploader retry loop</td>
+            <td>修復附件上傳器重試迴圈的競爭狀況</td>
             <td class="author">Sam Reyes</td>
-            <td><span class="risk"><span class="risk-dot low"></span>Low</span></td>
+            <td><span class="risk"><span class="risk-dot low"></span>低</span></td>
           </tr>
           <tr>
             <td><a class="pr-link" href="#">#4879</a></td>
-            <td>Migrate reminder scheduler to idempotent job keys</td>
+            <td>將提醒排程器移轉至冪等任務金鑰</td>
             <td class="author">Priya Anand</td>
-            <td><span class="risk"><span class="risk-dot high"></span>High</span></td>
+            <td><span class="risk"><span class="risk-dot high"></span>高</span></td>
           </tr>
           <tr>
             <td><a class="pr-link" href="#">#4882</a></td>
-            <td>Board view: collapse empty swimlanes by default</td>
+            <td>看板檢視：預設將空的泳道摺疊起來</td>
             <td class="author">Mira Okafor</td>
-            <td><span class="risk"><span class="risk-dot low"></span>Low</span></td>
+            <td><span class="risk"><span class="risk-dot low"></span>低</span></td>
           </tr>
           <tr>
             <td><a class="pr-link" href="#">#4885</a></td>
-            <td>Quarantine 3 flaky webhook integration tests</td>
+            <td>隔離 3 個不穩定的 webhook 整合測試</td>
             <td class="author">Jules Tan</td>
-            <td><span class="risk"><span class="risk-dot low"></span>Low</span></td>
+            <td><span class="risk"><span class="risk-dot low"></span>低</span></td>
           </tr>
           <tr>
             <td><a class="pr-link" href="#">#4888</a></td>
-            <td>Connection pool limits configurable per worker tier</td>
+            <td>連線池上限可依 worker 層級個別設定</td>
             <td class="author">Devon Park</td>
-            <td><span class="risk"><span class="risk-dot med"></span>Med</span></td>
+            <td><span class="risk"><span class="risk-dot med"></span>中</span></td>
           </tr>
           <tr>
             <td><a class="pr-link" href="#">#4891</a></td>
-            <td>Dark mode pass on settings &amp; billing panels</td>
+            <td>設定與帳單面板的深色模式調整</td>
             <td class="author">Noor Halabi</td>
-            <td><span class="risk"><span class="risk-dot low"></span>Low</span></td>
+            <td><span class="risk"><span class="risk-dot low"></span>低</span></td>
           </tr>
         </tbody>
       </table>
@@ -433,7 +430,7 @@
 
     <!-- Velocity -->
     <section>
-      <h2>Velocity</h2>
+      <h2>開發速度</h2>
       <hr class="rule">
       <div class="chart-panel">
         <svg viewBox="0 0 640 180" role="img" aria-label="PRs merged per day">
@@ -485,34 +482,34 @@
           <text x="572" y="158" text-anchor="middle" font-family="system-ui" font-size="11" fill="#87867F">Sun</text>
         </svg>
         <div class="chart-caption">
-          PRs merged per day. Thursday spike is the bulk-edit feature train (4 PRs landed together).
+          每日合併的 PR 數量。週四的尖峰是大量編輯功能的一系列 PR（總共 4 個 PR 一起合併）。
         </div>
       </div>
     </section>
 
     <!-- Carryover -->
     <section>
-      <h2>Carryover</h2>
+      <h2>待辦與延後項目</h2>
       <hr class="rule">
       <div class="carryover">
         <div class="carry-item">
-          <span class="carry-tag">In review</span>
+          <span class="carry-tag">審查中</span>
           <div class="carry-body">
-            Workspace export to CSV &mdash; waiting on pagination review.
+            工作區匯出 CSV &mdash; 等待分頁機制的審查。
             <span class="who">&middot; Sam Reyes</span>
           </div>
         </div>
         <div class="carry-item">
-          <span class="carry-tag">Blocked</span>
+          <span class="carry-tag">卡住</span>
           <div class="carry-body">
-            SSO group mapping &mdash; blocked on staging IdP credentials from IT.
+            SSO 群組對應 &mdash; 卡在等 IT 提供 staging 環境的 IdP 憑證。
             <span class="who">&middot; Priya Anand</span>
           </div>
         </div>
         <div class="carry-item">
-          <span class="carry-tag">Slipped</span>
+          <span class="carry-tag">延後</span>
           <div class="carry-body">
-            Mobile push reliability dashboard &mdash; deprioritized for incident follow-up.
+            行動版推播可靠度儀表板 &mdash; 為了處理事故後續追蹤而調降了優先順序。
             <span class="who">&middot; Devon Park</span>
           </div>
         </div>
@@ -520,8 +517,8 @@
     </section>
 
     <footer>
-      Sources: git log main..HEAD &middot; CI dashboard &middot; deploy log
-      &nbsp;&mdash;&nbsp; generated Mar 16 2025 18:02
+      資料來源：git log main..HEAD &middot; CI 儀表板 &middot; 部署 log
+      &nbsp;&mdash;&nbsp; 產生時間：2025 年 3 月 16 日 18:02
     </footer>
 
   </div>
