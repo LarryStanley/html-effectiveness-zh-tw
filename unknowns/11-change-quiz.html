@@ -1,10 +1,10 @@
 <!-- Copyright 2026 Anthropic PBC · SPDX-License-Identifier: Apache-2.0 -->
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="zh-Hant-TW">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Quiz me before I merge — Know your unknowns</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>合併前先考我 — 搞清楚你不知道的事</title>
 <style>
   :root{
     --ivory:#FAF9F5; --paper:#FFFFFF; --slate:#141413; --clay:#D97757; --clay-d:#B85C3E;
@@ -205,98 +205,98 @@
 
   <!-- ============ PAGE HEADER ============ -->
   <div class="topline">
-    <div class="eyebrow">Know your unknowns &middot; Post-implementation</div>
-    <a class="backlink" href="index.html">&larr; All examples</a>
+    <div class="eyebrow">搞清楚你不知道的事 &middot; 實作完成後</div>
+    <a class="backlink" href="index.html">&larr; 所有範例</a>
   </div>
-  <h1 class="pagetitle">Quiz me before I merge</h1>
-  <p class="lede">Asking for a report <em>with a quiz you must pass</em> turns "I skimmed the diff" into verified understanding — the artifact won't let you feel done until you actually are.</p>
+  <h1 class="pagetitle">合併前先考我</h1>
+  <p class="lede">要求一份<em>必須通過隨堂測驗</em>的報告，能把「我快速掃過 diff」變成真正搞懂。這份產出就是不放水，在你真的準備好之前，不會讓你有「做完了」的錯覺。</p>
 
   <div class="promptcard">
-    <div class="label">The Prompt</div>
-    <button class="copybtn" id="copyBtn">Copy prompt</button>
-    <blockquote id="promptText">I want to make sure I understand everything that happened in this change before I merge. Give me an HTML report on the export-feature diff — context, intuition, what was done — with a quiz at the bottom that I must pass.</blockquote>
+    <div class="label">提示詞</div>
+    <button class="copybtn" id="copyBtn">複製提示詞</button>
+    <blockquote id="promptText">我想確保自己完全理解這次變更的所有細節，然後才要合併。請給我一份關於匯出功能 diff 的 HTML 報告，包含來龍去脈、直覺想法、實際做了什麼，最後附上一份我必須通過的隨堂測驗。</blockquote>
   </div>
 
-  <div class="divider">What Claude Produced</div>
+  <div class="divider">Claude 的產出</div>
 
   <!-- ============ ARTIFACT ============ -->
   <div class="artifact">
     <div class="art-head">
-      <div class="art-eyebrow">Acme &middot; Merge readiness report</div>
-      <h2>Clip export: what changed and why</h2>
-      <p class="sub">A 14-file diff that adds server-side clip export to review threads. Read the three sections below, then pass the quiz. If you can't, you're not ready to merge — and that's the point.</p>
-      <div class="branchline">feature/clip-export<span class="arr">&rarr;</span>main &middot; 14 files &middot; 9 commits</div>
+      <div class="art-eyebrow">Acme &middot; 合併準備就緒報告</div>
+      <h2>片段匯出：改了什麼、為什麼</h2>
+      <p class="sub">這是一個涉及 14 個檔案的 diff，在審查討論串裡加入了伺服器端的片段匯出功能。請先讀完以下三個段落，然後通過底部的測驗。如果通不過，就代表你還沒準備好合併，而這正是這份報告的目的。</p>
+      <div class="branchline">feature/clip-export<span class="arr">&rarr;</span>main &middot; 14 個檔案 &middot; 9 個 commit</div>
     </div>
 
     <div class="art-body">
 
       <!-- stats -->
       <div class="stats">
-        <div class="statchip"><div class="num">14</div><div class="cap">files changed</div></div>
-        <div class="statchip"><div class="num add">+612</div><div class="cap">lines added</div></div>
-        <div class="statchip"><div class="num del">&minus;148</div><div class="cap">lines removed</div></div>
+        <div class="statchip"><div class="num">14</div><div class="cap">變更檔案數</div></div>
+        <div class="statchip"><div class="num add">+612</div><div class="cap">新增行數</div></div>
+        <div class="statchip"><div class="num del">&minus;148</div><div class="cap">刪除行數</div></div>
       </div>
 
       <!-- mental model -->
       <div class="art-section" id="sec-model">
-        <h3>The mental model</h3>
-        <p class="secnote">One diagram is worth 14 files: where an export request goes now vs. before.</p>
-        <p>Before this change, "export a clip" meant the browser stitched frames client-side with <code>MediaRecorder</code> and uploaded the result — slow, tab-locked, and broken on Safari. Now the client only <strong>requests</strong> an export; a new worker renders it server-side from the original media and the client polls a job until a signed download URL appears.</p>
+        <h3>心智模型</h3>
+        <p class="secnote">一張圖勝過 14 個檔案：現在和以前相比，匯出請求到底怎麼跑的。</p>
+        <p>在這次變更之前，「匯出片段」代表瀏覽器要用 <code>MediaRecorder</code> 在客戶端把影格串起來，然後上傳結果。這樣做很慢、會把分頁卡住，而且在 Safari 上直接壞掉。現在客戶端只要<strong>發出</strong>匯出請求就好；新的 worker 會從原始媒體生出結果，客戶端再去輪詢工作狀態，等到出現一個帶簽章的下載 URL 就搞定了。</p>
         <div class="flow-pair">
           <div class="flowcard before">
-            <div class="fc-label">Before &middot; client-side render</div>
+            <div class="fc-label">改版前 &middot; 客戶端算繪</div>
             <div class="fnode">ReviewPlayer.tsx</div>
             <div class="farrow">&darr;</div>
-            <div class="fnode">MediaRecorder capture (in-tab)</div>
-            <div class="farrow lab"><span>&darr;</span><span>~40&ndash;90s, tab locked</span></div>
-            <div class="fnode">PUT /uploads (whole file)</div>
+            <div class="fnode">MediaRecorder 擷取（分頁內）</div>
+            <div class="farrow lab"><span>&darr;</span><span>約 40&ndash;90 秒，分頁卡住</span></div>
+            <div class="fnode">PUT /uploads（整個檔案）</div>
             <div class="farrow">&darr;</div>
-            <div class="fnode oatf">S3 exports/ bucket</div>
+            <div class="fnode oatf">S3 exports/ 儲存貯體</div>
           </div>
           <div class="flowcard after">
-            <div class="fc-label">After &middot; server-side job</div>
+            <div class="fc-label">改版後 &middot; 伺服器端工作</div>
             <div class="fnode">ReviewPlayer.tsx</div>
-            <div class="farrow lab"><span>&darr;</span><span>POST /api/exports (returns job id)</span></div>
-            <div class="fnode new">export-worker (new, ffmpeg)</div>
+            <div class="farrow lab"><span>&darr;</span><span>POST /api/exports（回傳工作 id）</span></div>
+            <div class="fnode new">export-worker（新增，ffmpeg）</div>
             <div class="fsplit">
-              <div><div class="farrow">&darr;</div><div class="fnode oatf">S3 exports/ bucket</div></div>
-              <div><div class="farrow">&darr;</div><div class="fnode new">jobs table (new)</div></div>
+              <div><div class="farrow">&darr;</div><div class="fnode oatf">S3 exports/ 儲存貯體</div></div>
+              <div><div class="farrow">&darr;</div><div class="fnode new">jobs 資料表（新增）</div></div>
             </div>
-            <div class="farrow lab"><span>&darr;</span><span>client polls every 2s</span></div>
-            <div class="fnode">GET /api/exports/:id &rarr; signed URL</div>
+            <div class="farrow lab"><span>&darr;</span><span>客戶端每 2 秒輪詢一次</span></div>
+            <div class="fnode">GET /api/exports/:id &rarr; 帶簽章的 URL</div>
           </div>
         </div>
       </div>
 
       <!-- non-obvious behaviors -->
       <div class="art-section" id="sec-behaviors">
-        <h3>Three non-obvious behaviors this introduces</h3>
-        <p class="secnote">The parts a diff skim won't tell you. Each one is deliberate — here's the reasoning.</p>
+        <h3>這次引入的三個非直觀行為</h3>
+        <p class="secnote">這些是隨便掃過 diff 看不出來的眉角。每一個都是刻意設計的，以下附上原因。</p>
 
         <div class="beh" id="beh-1">
-          <div class="beh-head"><span class="beh-num">01</span><h4>Exports render from the original upload, not the proxy the reviewer watched</h4></div>
+          <div class="beh-head"><span class="beh-num">01</span><h4>匯出是從原始上傳檔案算繪的，不是審查者看的那個代理檔案</h4></div>
           <div class="beh-body">
-            <div class="beh-row"><span class="k">What</span><span class="v">The worker pulls <code class="fchip">media/originals/</code>, never the 720p review proxy. An exported clip can therefore look <em>sharper</em> than what the reviewer saw when they drew their annotations.</span></div>
-            <div class="beh-row"><span class="k">Why</span><span class="v">Editors export clips to hand off to clients; shipping the compressed proxy would embarrass them. Annotation coordinates are stored normalized (0&ndash;1), so they re-project onto the full-res frame correctly.</span></div>
-            <div class="beh-row"><span class="k">Where</span><span class="v"><span class="fchip">worker/export/render.ts:41</span> <span class="fchip">worker/export/burn_in.ts:88</span></span></div>
+            <div class="beh-row"><span class="k">內容</span><span class="v">Worker 會抓 <code class="fchip">media/originals/</code>，絕對不會拿 720p 的審查代理檔案。因此，匯出出來的片段看起來會比審查者畫標記時看到的<em>更清晰</em>。</span></div>
+            <div class="beh-row"><span class="k">原因</span><span class="v">剪輯師匯出片段是為了交給客戶，如果給人家壓縮過的代理檔案就太丟臉了。標記座標是用常規化（0&ndash;1）格式儲存的，所以可以正確重新投影到全解析度的影格上。</span></div>
+            <div class="beh-row"><span class="k">位置</span><span class="v"><span class="fchip">worker/export/render.ts:41</span> <span class="fchip">worker/export/burn_in.ts:88</span></span></div>
           </div>
         </div>
 
         <div class="beh" id="beh-2">
-          <div class="beh-head"><span class="beh-num">02</span><h4>Export jobs survive a worker crash — via a visibility timeout, not retries</h4></div>
+          <div class="beh-head"><span class="beh-num">02</span><h4>匯出工作在 worker 崩潰後依然存活，靠的是可視度逾時，不是重試機制</h4></div>
           <div class="beh-body">
-            <div class="beh-row"><span class="k">What</span><span class="v">A job row is claimed by setting <code class="fchip">locked_until = now() + 10min</code>. If the worker dies mid-render, no retry fires; the lock simply expires and the next idle worker picks the job up from scratch.</span></div>
-            <div class="beh-row"><span class="k">Why</span><span class="v">ffmpeg renders aren't idempotent mid-flight, and a retry queue would need dead-letter handling we don't want yet. Lock expiry gives at-least-once semantics with one column. Consequence: a crashed job looks "processing" for up to 10 minutes before recovering.</span></div>
-            <div class="beh-row"><span class="k">Where</span><span class="v"><span class="fchip">db/migrations/0142_export_jobs.sql</span> <span class="fchip">worker/export/claim.ts:19</span></span></div>
+            <div class="beh-row"><span class="k">內容</span><span class="v">系統會透過設定 <code class="fchip">locked_until = now() + 10min</code> 來認領工作。如果 worker 在算繪過程中陣亡，並不會觸發重試；鎖定到期後，下一個有空檔的 worker 會從頭接手這項工作。</span></div>
+            <div class="beh-row"><span class="k">原因</span><span class="v">ffmpeg 的算繪過程並不是冪等的，而且我們目前不想處理重試佇列需要的寄不出去信件（dead-letter）邏輯。鎖定到期機制只用一個欄位，就做到了「至少送達一次」的語意。代價是：崩潰的工作在恢復前，會看起來「處理中」長達 10 分鐘。</span></div>
+            <div class="beh-row"><span class="k">位置</span><span class="v"><span class="fchip">db/migrations/0142_export_jobs.sql</span> <span class="fchip">worker/export/claim.ts:19</span></span></div>
           </div>
         </div>
 
         <div class="beh" id="beh-3">
-          <div class="beh-head"><span class="beh-num">03</span><h4>Download URLs expire after 24 hours — the export itself lives 7 days</h4></div>
+          <div class="beh-head"><span class="beh-num">03</span><h4>下載 URL 在 24 小時後失效，但匯出檔案本身會保留 7 天</h4></div>
           <div class="beh-body">
-            <div class="beh-row"><span class="k">What</span><span class="v">The signed S3 URL returned by <code class="fchip">GET /api/exports/:id</code> is valid for 24h, but the underlying object isn't deleted until a 7-day lifecycle rule fires. Re-hitting the endpoint mints a fresh URL with no re-render.</span></div>
-            <div class="beh-row"><span class="k">Why</span><span class="v">Short URLs limit link-forwarding outside the workspace (exports can contain unreleased footage); the longer object TTL means a stale Slack link costs one API call to revive, not a 90-second re-render.</span></div>
-            <div class="beh-row"><span class="k">Where</span><span class="v"><span class="fchip">api/exports/get.ts:57</span> <span class="fchip">infra/s3_lifecycle.tf:23</span></span></div>
+            <div class="beh-row"><span class="k">內容</span><span class="v"><code class="fchip">GET /api/exports/:id</code> 回傳的 S3 簽章 URL 有效期只有 24 小時，但底層的物件在 7 天的生命週期規則觸發前都不會被刪除。重新呼叫這個端點會產生一組新的 URL，不需要重新算繪。</span></div>
+            <div class="beh-row"><span class="k">原因</span><span class="v">較短的 URL 有效期可以限制連結被轉發到工作區外（匯出檔案可能包含未公開的畫面）；較長的物件保留時間意味著，一個過期的 Slack 連結只需要花一次 API 呼叫就能救回來，不需要重新花 90 秒算繪。</span></div>
+            <div class="beh-row"><span class="k">位置</span><span class="v"><span class="fchip">api/exports/get.ts:57</span> <span class="fchip">infra/s3_lifecycle.tf:23</span></span></div>
           </div>
         </div>
       </div>
@@ -304,19 +304,19 @@
       <!-- leans on -->
       <div class="art-section" id="sec-leans">
         <div class="leans">
-          <div class="lab">Existing behavior this leans on</div>
-          <p><strong>Workspace-scoped signed-URL auth.</strong> <span class="fchip">GET /api/exports/:id</span> does no permission check of its own — it reuses the <span class="fchip">requireWorkspaceMember</span> middleware that already guards every media route. If that middleware's session handling ever changes (there's an open ticket, BL-2214, about guest reviewer sessions), export downloads change with it. Nothing in this diff would flag that.</p>
+          <div class="lab">依賴的現有行為</div>
+          <p><strong>以工作區為範圍的簽章 URL 驗證。</strong> <span class="fchip">GET /api/exports/:id</span> 本身沒有做任何權限檢查，它直接沿用 <span class="fchip">requireWorkspaceMember</span> 這個中介層，這個中介層本來就把守著所有媒體相關的路由。如果這個中介層的 session 處理邏輯將來改變了（現在剛好有一張關於訪客審查者 session 的 ticket，BL-2214），匯出下載的行為就會跟著變。而這份 diff 裡面沒有任何東西會提醒你這件事。</p>
         </div>
       </div>
 
       <!-- ============ QUIZ ============ -->
-      <div class="quiz-rule">Part 2 &middot; Prove it</div>
+      <div class="quiz-rule">第二部分 &middot; 證明你懂了</div>
       <div class="quiz-intro">
         <div>
-          <h3>Six questions before you merge</h3>
-          <div class="qsub">Not trivia — each one is a decision you'd have to make correctly during an incident or a review.</div>
+          <h3>合併前的六個問題</h3>
+          <div class="qsub">這不是常識考題，每一題都是在發生事故或程式碼審查時，你必須做出正確判斷的決策。</div>
         </div>
-        <div class="scorebox">Score: <b id="scoreNow">0</b> / <b>6</b> &middot; <span id="answeredNow">0</span> answered</div>
+        <div class="scorebox">分數：<b id="scoreNow">0</b> / <b>6</b> &middot; 已作答 <span id="answeredNow">0</span> 題</div>
       </div>
 
       <div id="quiz"></div>
@@ -324,32 +324,32 @@
       <!-- results -->
       <div class="result" id="resPass">
         <div class="cleared">
-          <div class="clr-head"><div class="clr-badge">&#10003;</div><h3>Cleared to merge</h3></div>
-          <p class="clr-sub">6/6 — you can explain this change to whoever gets paged for it. Standard checklist below.</p>
+          <div class="clr-head"><div class="clr-badge">&#10003;</div><h3>過關，可以合併了</h3></div>
+          <p class="clr-sub">6/6 — 你已經能向任何接手處理事故的人解釋這次變更了。以下是標準檢查清單。</p>
           <ul class="mergelist">
-            <li><span class="tick">&#10003;</span>Understanding verified (this quiz, 6/6)</li>
-            <li><span class="tick">&#10003;</span>CI green on feature/clip-export &middot; 412 tests</li>
-            <li><span class="tick">&#10003;</span>Migration 0142 reviewed &mdash; additive, no backfill</li>
-            <li><span class="pend">&#9675;</span>Squash-merge with the summary above as the commit body</li>
-            <li><span class="pend">&#9675;</span>Watch export-worker dashboards for 30 min post-deploy</li>
-            <li><span class="pend">&#9675;</span>Note BL-2214 dependency in the merge comment</li>
+            <li><span class="tick">&#10003;</span>理解已驗證（這份測驗，6/6）</li>
+            <li><span class="tick">&#10003;</span>feature/clip-export 的 CI 全綠 &middot; 412 個測試</li>
+            <li><span class="tick">&#10003;</span>0142 資料庫遷移已審查 &mdash; 純新增，不需回填</li>
+            <li><span class="pend">&#9675;</span>以 Squash 方式合併，並使用上方的摘要作為 commit 內容</li>
+            <li><span class="pend">&#9675;</span>部署後盯著 export-worker 儀表板 30 分鐘</li>
+            <li><span class="pend">&#9675;</span>在合併留言中註記 BL-2214 相依性</li>
           </ul>
         </div>
       </div>
 
       <div class="result" id="resFail">
         <div class="reread">
-          <h3 id="failTitle">Not yet — re-read these sections</h3>
-          <p>You missed the questions below. The gaps map straight back to the report:</p>
+          <h3 id="failTitle">還不行 — 請重讀這幾個段落</h3>
+          <p>你漏掉了以下這些問題。這些知識缺口可以直接對應回報告的段落：</p>
           <ul id="failLinks"></ul>
-          <button class="retry" id="retryBtn">Reset quiz &amp; try again</button>
+          <button class="retry" id="retryBtn">重置測驗 &amp; 再試一次</button>
         </div>
       </div>
 
     </div><!-- /art-body -->
   </div><!-- /artifact -->
 
-  <footer>Part of <a href="index.html">Know your unknowns</a> &mdash; companion examples to the blog post.</footer>
+  <footer>屬於<a href="index.html">搞清楚你不知道的事</a>系列 &mdash; 部落格文章的搭配範例。</footer>
 </div>
 
 <script>
@@ -358,8 +358,8 @@
   var copyBtn = document.getElementById('copyBtn');
   copyBtn.addEventListener('click', function(){
     var t = document.getElementById('promptText').textContent;
-    function done(){ copyBtn.textContent='Copied'; copyBtn.classList.add('copied');
-      setTimeout(function(){copyBtn.textContent='Copy prompt';copyBtn.classList.remove('copied');},1600); }
+    function done(){ copyBtn.textContent='已複製'; copyBtn.classList.add('copied');
+      setTimeout(function(){copyBtn.textContent='複製提示詞';copyBtn.classList.remove('copied');},1600); }
     if (navigator.clipboard && navigator.clipboard.writeText){
       navigator.clipboard.writeText(t).then(done, function(){ fallback(); });
     } else { fallback(); }
@@ -372,82 +372,82 @@
   // ---- quiz data ----
   var QS = [
     {
-      q:'A reviewer says their exported clip "looks different from what I annotated." Assuming no bug, why?',
+      q:'有位審查者說他匯出的片段「看起來跟我當初畫標記時不一樣」。假設不是 bug，那是為什麼？',
       opts:[
-        'The export re-encodes at a lower bitrate to keep files small',
-        'The export renders from the full-res original, while they reviewed the 720p proxy',
-        'Annotations are dropped when the source is above 1080p',
-        'Safari renders exports differently from Chrome'
+        '匯出時為了縮小檔案，用了較低的位元率重新編碼',
+        '匯出是從全解析度的原始檔案算繪的，而他們當初看的是 720p 代理檔案',
+        '如果來源高於 1080p，標記就會被丟掉',
+        'Safari 和 Chrome 處理匯出的方式本來就不一樣'
       ],
       correct:1,
-      reinforce:'Right — exports pull media/originals/, so the clip can be sharper than the proxy the reviewer watched. Expected, not a bug.',
-      excerptFrom:'Behavior 01', anchor:'beh-1', anchorLabel:'Behavior 01 — exports render from the original',
-      excerpt:'The worker pulls media/originals/, never the 720p review proxy. An exported clip can therefore look sharper than what the reviewer saw when they drew their annotations.'
+      reinforce:'答對了 — 匯出抓的是 media/originals/，所以片段會比審查者看的代理檔案更清晰。這是預期行為，不是 bug。',
+      excerptFrom:'行為 01', anchor:'beh-1', anchorLabel:'行為 01 — 匯出是從原始檔案算繪的',
+      excerpt:'Worker 會抓 media/originals/，絕對不會拿 720p 的審查代理檔案。因此，匯出出來的片段看起來會比審查者畫標記時看到的更清晰。'
     },
     {
-      q:'An export-worker pod is OOM-killed halfway through a render. What happens to that job?',
+      q:'某個 export-worker pod 在算繪到一半時 OOM 被系統殺掉了。這項工作接下來會怎樣？',
       opts:[
-        'It moves to a dead-letter queue for manual replay',
-        'It is retried immediately on another worker',
-        'It shows "processing" until its 10-minute lock expires, then another worker restarts it from scratch',
-        'It fails permanently and the user must click Export again'
+        '它會被丟進寄不出去信件佇列，等待手動重播',
+        '它會立刻被另一個 worker 重試',
+        '它會顯示「處理中」，直到 10 分鐘的鎖定到期，然後另一個 worker 會從頭開始處理',
+        '它會永久失敗，使用者必須再點一次匯出'
       ],
       correct:2,
-      reinforce:'Exactly — no retry queue exists. Recovery is lock expiry: up to 10 minutes of apparent "processing", then a fresh render.',
-      excerptFrom:'Behavior 02', anchor:'beh-2', anchorLabel:'Behavior 02 — crash recovery via lock expiry',
-      excerpt:'If the worker dies mid-render, no retry fires; the lock simply expires and the next idle worker picks the job up from scratch… a crashed job looks "processing" for up to 10 minutes before recovering.'
+      reinforce:'完全正確 — 根本沒有重試佇列。恢復機制就靠鎖定到期：看起來會「處理中」最多 10 分鐘，然後重新算繪。',
+      excerptFrom:'行為 02', anchor:'beh-2', anchorLabel:'行為 02 — 透過鎖定到期來恢復崩潰',
+      excerpt:'如果 worker 在算繪過程中陣亡，並不會觸發重試；鎖定到期後，下一個有空檔的 worker 會從頭接手這項工作……崩潰的工作在恢復前，會看起來「處理中」長達 10 分鐘。'
     },
     {
-      q:'A client pastes an export link into Slack; a teammate clicks it 3 days later and gets an S3 "expired" error. Cheapest fix?',
+      q:'客戶把一個匯出連結貼到 Slack；同事三天後點開，卻收到 S3 的「已過期」錯誤。最省成本的修法是？',
       opts:[
-        'Re-run the export — the file was deleted after 24 hours',
-        'Hit GET /api/exports/:id again — the object still exists for 7 days, so it just mints a fresh signed URL',
-        'Bump the lifecycle rule in s3_lifecycle.tf to 30 days',
-        'Ask an admin to make the exports/ bucket public-read'
+        '重新跑一次匯出 — 檔案 24 小時後就被刪了',
+        '再呼叫一次 GET /api/exports/:id — 物件還會存在 7 天，所以它只會產生一組新的簽章 URL',
+        '把 s3_lifecycle.tf 裡的生命週期規則改成 30 天',
+        '請管理員把 exports/ 儲存貯體設成公開讀取'
       ],
       correct:1,
-      reinforce:'Yes — only the URL expired (24h). The object lives 7 days, so a fresh GET returns a new link with zero re-render cost.',
-      excerptFrom:'Behavior 03', anchor:'beh-3', anchorLabel:'Behavior 03 — URL TTL vs object TTL',
-      excerpt:'The signed S3 URL is valid for 24h, but the underlying object isn’t deleted until a 7-day lifecycle rule fires. Re-hitting the endpoint mints a fresh URL with no re-render.'
+      reinforce:'沒錯 — 只有 URL 過期（24 小時）。物件會活 7 天，所以重新呼叫一次 GET 就會給你新的連結，完全不需要重新算繪。',
+      excerptFrom:'行為 03', anchor:'beh-3', anchorLabel:'行為 03 — URL 存活時間 vs 物件存活時間',
+      excerpt:'S3 的簽章 URL 有效期只有 24 小時，但底層的物件在 7 天的生命週期規則觸發前都不會被刪除。重新呼叫這個端點會產生一組新的 URL，不需要重新算繪。'
     },
     {
-      q:'Ticket BL-2214 changes how guest reviewer sessions are validated. Why does this diff make that ticket riskier?',
+      q:'Ticket BL-2214 改變了訪客審查者 session 的驗證方式。為什麼這份 diff 會讓那張 ticket 變得更危險？',
       opts:[
-        'Guests can now trigger unlimited exports and exhaust the worker pool',
-        'Export downloads have no auth check of their own — they inherit whatever requireWorkspaceMember does, so a session change silently changes who can download',
-        'The jobs table stores guest session tokens in plaintext',
-        'It doesn’t — exports are unrelated to session handling'
+        '訪客現在可以觸發無限次的匯出，把 worker 池耗盡',
+        '匯出下載本身沒有做驗證檢查，它們直接繼承 requireWorkspaceMember 的行為，所以 session 一改，誰能下載也會跟著默默改變',
+        'jobs 資料表用明碼儲存訪客的 session token',
+        '並不會 — 匯出跟 session 處理無關'
       ],
       correct:1,
-      reinforce:'Correct — GET /api/exports/:id borrows requireWorkspaceMember wholesale. Change the middleware, change export access, with nothing in this diff to flag it.',
-      excerptFrom:'Existing behavior this leans on', anchor:'sec-leans', anchorLabel:'Callout — leans on workspace auth middleware',
-      excerpt:'GET /api/exports/:id does no permission check of its own — it reuses the requireWorkspaceMember middleware… If that middleware’s session handling ever changes (BL-2214), export downloads change with it.'
+      reinforce:'正確 — GET /api/exports/:id 完全照搬 requireWorkspaceMember。中介層一改，匯出權限就跟著變，而這份 diff 裡根本沒有任何機制能預警這件事。',
+      excerptFrom:'依賴的現有行為', anchor:'sec-leans', anchorLabel:'注意事項 — 依賴工作區驗證中介層',
+      excerpt:'GET /api/exports/:id 本身沒有做任何權限檢查，它直接沿用 requireWorkspaceMember 中介層……如果這個中介層的 session 處理邏輯將來改變了（BL-2214），匯出下載的行為就會跟著變。'
     },
     {
-      q:'After deploy, a user reports "export stuck at processing for 15 minutes." Given the design, what does 15 minutes tell you?',
+      q:'部署後，有個使用者回報「匯出卡在處理中已經 15 分鐘了」。從設計面來看，15 分鐘代表什麼？',
       opts:[
-        'Nothing — long renders are normal for big clips',
-        'The client’s 2-second polling loop probably disconnected',
-        'Something is wrong beyond a single crash: one crash self-heals within the 10-minute lock window, so 15+ minutes means repeated failures or a stuck worker',
-        'The S3 lifecycle rule deleted the file mid-render'
+        '不代表什麼 — '大檔案本來就需要算繪比較久',
+        '客戶端的 2 秒輪詢迴圈大概斷線了',
+        '情況不對，已經超出單一崩潰的範圍了：一次崩潰會在 10 分鐘的鎖定時間內自我恢復，所以超過 15 分鐘代表不斷失敗或 worker 卡死了',
+        'S3 生命週期規則在算繪到一半時把檔案刪了'
       ],
       correct:2,
-      reinforce:'Right — the 10-minute lock is the self-heal budget. Anything past it means the job is failing repeatedly or a worker is wedged: page-worthy, not wait-worthy.',
-      excerptFrom:'Behavior 02', anchor:'beh-2', anchorLabel:'Behavior 02 — the 10-minute recovery window',
-      excerpt:'Lock expiry gives at-least-once semantics with one column. Consequence: a crashed job looks "processing" for up to 10 minutes before recovering.'
+      reinforce:'對 — 10 分鐘的鎖定就是自我恢復的預算。超過這個時間，代表工作不斷失敗，或者 worker 卡死了：這值得發警示，不值得繼續等。',
+      excerptFrom:'行為 02', anchor:'beh-2', anchorLabel:'行為 02 — 10 分鐘的恢復窗口',
+      excerpt:'鎖定到期機制只用一個欄位，就做到了「至少送達一次」的語意。代價是：崩潰的工作在恢復前，會看起來「處理中」長達 10 分鐘。'
     },
     {
-      q:'Why do annotations still land in the right place even though the export renders at a different resolution than the review player?',
+      q:'為什麼匯出算繪的解析度跟審查播放器不一樣，但標記還是能出現在正確的位置上？',
       opts:[
-        'The worker scales the export down to match the proxy resolution first',
-        'Annotation coordinates are stored normalized (0–1) and re-projected onto whatever frame size is rendered',
-        'The client re-sends annotation pixels at export time',
-        'burn_in.ts snaps annotations to a fixed 1080p grid'
+        'Worker 會先把匯出畫面縮小，去配合代理檔案的解析度',
+        '標記座標是用常規化（0–1）格式儲存的，可以重新投影到任何算繪出來的影格大小上',
+        '客戶端在匯出時會重新傳送標記的像素',
+        'burn_in.ts 會把標記對齊到固定的 1080p 網格上'
       ],
       correct:1,
-      reinforce:'Yes — normalized coordinates are what make "render from the original" safe. Pixel-space storage would have broken every annotation in this diff.',
-      excerptFrom:'Behavior 01', anchor:'beh-1', anchorLabel:'Behavior 01 — normalized annotation coordinates',
-      excerpt:'Annotation coordinates are stored normalized (0–1), so they re-project onto the full-res frame correctly.'
+      reinforce:'是的 — 常規化座標就是讓「從原始檔案算繪」安全過關的關鍵。如果當初是用像素座標儲存，這個 diff 裡的標記就全毀了。',
+      excerptFrom:'行為 01', anchor:'beh-1', anchorLabel:'行為 01 — 常規化的標記座標',
+      excerpt:'標記座標是用常規化（0–1）格式儲存的，所以可以正確重新投影到全解析度的影格上。'
     }
   ];
 
@@ -460,7 +460,7 @@
     answers=new Array(QS.length).fill(null);
     QS.forEach(function(item,qi){
       var qd=document.createElement('div'); qd.className='q'; qd.id='q'+qi;
-      var h='<div class="qnum">Question '+(qi+1)+' of '+QS.length+'</div>'
+      var h='<div class="qnum">第 '+(qi+1)+' 題，共 '+QS.length+' 題</div>'
         +'<div class="qtext">'+item.q+'</div>';
       item.opts.forEach(function(o,oi){
         h+='<button class="opt" data-q="'+qi+'" data-o="'+oi+'"><span class="key">'+KEYS[oi]+'</span><span>'+o+'</span></button>';
@@ -492,11 +492,11 @@
     var fb=document.getElementById('fb'+qi);
     if(right){
       fb.className='fb good show';
-      fb.innerHTML='<div class="fbtag">&#10003; Correct</div>'+item.reinforce;
+      fb.innerHTML='<div class="fbtag">&#10003; 答對了</div>'+item.reinforce;
     } else {
       fb.className='fb bad show';
-      fb.innerHTML='<div class="fbtag">Not quite &mdash; the correct answer is '+KEYS[item.correct]+'</div>'
-        +'From the report:'
+      fb.innerHTML='<div class="fbtag">不完全是喔 &mdash; 正確答案是 '+KEYS[item.correct]+'</div>'
+        +'取自報告內容：'
         +'<div class="excerpt"><span class="exlab">'+item.excerptFrom+'</span>'+item.excerpt+'</div>';
     }
     updateScore();
@@ -517,7 +517,7 @@
       document.getElementById('resPass').scrollIntoView({behavior:'smooth',block:'nearest'});
     } else {
       var missed=[]; answers.forEach(function(a,i){ if(a!==true) missed.push(i); });
-      document.getElementById('failTitle').textContent='Not yet: '+score+'/'+QS.length+' — re-read these sections';
+      document.getElementById('failTitle').textContent='還不行：'+score+'/'+QS.length+' — 請重讀這幾個段落';
       var seen={}, ul=document.getElementById('failLinks'); ul.innerHTML='';
       missed.forEach(function(i){
         var it=QS[i];

@@ -1,10 +1,10 @@
 <!-- Copyright 2026 Anthropic PBC · SPDX-License-Identifier: Apache-2.0 -->
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="zh-Hant-TW">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>How authentication flows through acme/web</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>acme/web 的驗證流程是怎麼跑的</title>
 <style>
   :root {
     --ivory: #FAF9F5;
@@ -256,15 +256,15 @@
 <div class="page">
 
   <header>
-    <div class="repo-line">acme/web · architecture note</div>
-    <h1>How authentication flows through the codebase</h1>
+    <div class="repo-line">acme/web · 架構筆記</div>
+    <h1>整個專案庫的驗證流程是怎麼跑的</h1>
     <p class="summary">
-      Acme uses cookie-based sessions: the browser never holds a bearer token directly. Every authenticated request hits <code>/api/*</code>, passes through a single <code>verifyToken()</code> middleware, and resolves to a <code>Session</code> row that downstream handlers read off <code>req.ctx</code>. The middleware is the only place that talks to the session store, which is the only place that talks to the <code>sessions</code> table — so there's exactly one trust boundary to reason about.
+      Acme 是用 cookie-based session：瀏覽器從頭到尾都不會拿到 bearer token。每個經過驗證的請求都會打到位於 <code>/api/*</code> 的端點，統一過 <code>verifyToken()</code> 這一層中介層，最後在 <code>req.ctx</code> 裡放進一筆 <code>Session</code> 資料讓後續的 handler 直接用。全專案裡，只有這層中介層會去碰 session store，而 session store 則是全專案唯一會去讀寫 <code>sessions</code> 資料表的地方。也就是說，整個信任邊界就這麼一處，很好管理。
     </p>
   </header>
 
   <main>
-    <h2 style="margin-top:0">Request path</h2>
+    <h2 style="margin-top:0">請求路徑</h2>
     <div class="diagram-panel">
       <svg class="flow" viewBox="0 0 720 280" width="720" height="280" role="img" aria-label="Authentication flow diagram">
         <defs>
@@ -313,16 +313,16 @@
       </svg>
     </div>
 
-    <h2>Callstack walkthrough</h2>
+    <h2>呼叫堆疊逐步解析</h2>
 
     <!-- Step 1 -->
     <div class="step">
       <div class="badge">1</div>
       <div class="step-body">
         <div class="step-loc">src/app/providers/AuthProvider.tsx<span class="range"> :22-48</span></div>
-        <p>On mount, the React provider issues a <code style="font-family:var(--mono);font-size:12.5px">GET /api/session</code> with <code style="font-family:var(--mono);font-size:12.5px">credentials: 'include'</code> so the <code style="font-family:var(--mono);font-size:12.5px">fw_sid</code> cookie rides along. The response either hydrates <code style="font-family:var(--mono);font-size:12.5px">currentUser</code> into context or leaves it <code style="font-family:var(--mono);font-size:12.5px">null</code>, which the router treats as "show the sign-in screen".</p>
+        <p>這個 React provider 一掛載，就會直接發一個 <code style="font-family:var(--mono);font-size:12.5px">GET /api/session</code>，而且帶上 <code style="font-family:var(--mono);font-size:12.5px">credentials: 'include'</code>，讓 <code style="font-family:var(--mono);font-size:12.5px">fw_sid</code> cookie 可以跟著送出去。接著看回應內容，把 <code style="font-family:var(--mono);font-size:12.5px">currentUser</code> 塞進 context 裡；如果沒拿到資料就維持 <code style="font-family:var(--mono);font-size:12.5px">null</code>，讓 router 直接跳到登入畫面。</p>
         <details class="snippet">
-          <summary>show source</summary>
+          <summary>顯示原始碼</summary>
 <pre class="code"><span class="dim">// src/app/providers/AuthProvider.tsx</span>
 <span class="kw">export function</span> AuthProvider({ children }: Props) {
   <span class="kw">const</span> [user, setUser] = useState&lt;User | <span class="kw">null</span>&gt;(<span class="kw">null</span>);
@@ -344,9 +344,9 @@
       <div class="badge">2</div>
       <div class="step-body">
         <div class="step-loc">src/server/routes/session.ts<span class="range"> :9-27</span></div>
-        <p>The route itself is thin: it just returns whatever <code style="font-family:var(--mono);font-size:12.5px">req.ctx.session</code> the middleware attached. If the middleware short-circuited with a 401, this handler never runs — so there's no auth logic duplicated here.</p>
+        <p>這個 route 本身其實很薄：它單純把中介層掛上去的 <code style="font-family:var(--mono);font-size:12.5px">req.ctx.session</code> 原封不動回傳而已。如果中介層早就因為 401 直接短路回去了，這個 handler 根本不會被執行，所以這裡也完全不需要重寫驗證邏輯。</p>
         <details class="snippet">
-          <summary>show source</summary>
+          <summary>顯示原始碼</summary>
 <pre class="code"><span class="dim">// src/server/routes/session.ts</span>
 router.get(<span class="str">'/session'</span>, verifyToken, (req, res) =&gt; {
   <span class="kw">const</span> { session } = req.ctx;
@@ -366,9 +366,9 @@ router.get(<span class="str">'/session'</span>, verifyToken, (req, res) =&gt; {
       <div class="badge">3</div>
       <div class="step-body">
         <div class="step-loc">src/middleware/auth.ts<span class="range"> :14-31</span></div>
-        <p>This is the trust boundary. <code style="font-family:var(--mono);font-size:12.5px">verifyToken</code> reads the signed <code style="font-family:var(--mono);font-size:12.5px">fw_sid</code> cookie, asks <code style="font-family:var(--mono);font-size:12.5px">SessionStore</code> to resolve it, and either populates <code style="font-family:var(--mono);font-size:12.5px">req.ctx.session</code> or responds 401. Every protected route in the app is mounted behind this function, so changing its behaviour changes auth globally.</p>
+        <p>這裡就是系統的信任邊界。<code style="font-family:var(--mono);font-size:12.5px">verifyToken</code> 會去讀取已經簽章的 <code style="font-family:var(--mono);font-size:12.5px">fw_sid</code> cookie，交給 <code style="font-family:var(--mono);font-size:12.5px">SessionStore</code> 去查對應的 session 資料，查到就塞進 <code style="font-family:var(--mono);font-size:12.5px">req.ctx.session</code>，查不到就直接回 401。整個專案裡所有受保護的 route 都會掛這個函式，所以只要改這裡的行為，就等於一次改動全專案的驗證邏輯。</p>
         <details class="snippet" open>
-          <summary>show source</summary>
+          <summary>顯示原始碼</summary>
 <pre class="code"><span class="dim">// src/middleware/auth.ts</span>
 <span class="kw">export async function</span> verifyToken(req, res, next) {
   <span class="kw">const</span> raw = req.signedCookies[<span class="str">'fw_sid'</span>];
@@ -391,9 +391,9 @@ router.get(<span class="str">'/session'</span>, verifyToken, (req, res) =&gt; {
       <div class="badge">4</div>
       <div class="step-body">
         <div class="step-loc">src/lib/sessionStore.ts<span class="range"> :8-52</span></div>
-        <p><code style="font-family:var(--mono);font-size:12.5px">SessionStore</code> is a small read-through cache: it checks an in-process LRU first, then falls back to Postgres. Writes (<code style="font-family:var(--mono);font-size:12.5px">create</code>, <code style="font-family:var(--mono);font-size:12.5px">revoke</code>) always go straight to the DB and invalidate the cache entry so other workers don't serve a stale session.</p>
+        <p><code style="font-family:var(--mono);font-size:12.5px">SessionStore</code> 其實就是一個簡單的 read-through 快取：它會先查 in-process 的 LRU，查不到再去 Postgres 撈。寫入操作（像是 <code style="font-family:var(--mono);font-size:12.5px">create</code> 或 <code style="font-family:var(--mono);font-size:12.5px">revoke</code>）則是直接寫進資料庫，同時讓快取失效，確保其他 worker 不會繼續吐過期的 session 資料。</p>
         <details class="snippet">
-          <summary>show source</summary>
+          <summary>顯示原始碼</summary>
 <pre class="code"><span class="dim">// src/lib/sessionStore.ts</span>
 <span class="kw">const</span> cache = <span class="kw">new</span> LRU&lt;string, Session&gt;({ max: 5000, ttl: 60_000 });
 
@@ -416,9 +416,9 @@ router.get(<span class="str">'/session'</span>, verifyToken, (req, res) =&gt; {
       <div class="badge">5</div>
       <div class="step-body">
         <div class="step-loc">db/migrations/004_sessions.sql<span class="range"> :1-18</span></div>
-        <p>The <code style="font-family:var(--mono);font-size:12.5px">sessions</code> table is keyed on a random 32-byte id (the cookie value) with a covering index on <code style="font-family:var(--mono);font-size:12.5px">user_id</code> for "sign out everywhere". Expiry is enforced both here (<code style="font-family:var(--mono);font-size:12.5px">expires_at</code>) and again in the middleware as defence in depth.</p>
+        <p><code style="font-family:var(--mono);font-size:12.5px">sessions</code> 資料表的 primary key 是隨機產生的 32-byte id（也就是 cookie 的值），並且在 <code style="font-family:var(--mono);font-size:12.5px">user_id</code> 上建了索引，方便用來做「登出所有裝置」這類操作。過期時間一方面在這裡靠 <code style="font-family:var(--mono);font-size:12.5px">expires_at</code> 把關，另一方面在中介層也會再檢查一次，算是雙重保險。</p>
         <details class="snippet">
-          <summary>show source</summary>
+          <summary>顯示原始碼</summary>
 <pre class="code"><span class="dim">-- db/migrations/004_sessions.sql</span>
 <span class="kw">create table</span> sessions (
   id          <span class="kw">text primary key</span>,
@@ -436,40 +436,40 @@ router.get(<span class="str">'/session'</span>, verifyToken, (req, res) =&gt; {
 
   <aside>
     <div class="panel">
-      <h3>Key files</h3>
+      <h3>關鍵檔案</h3>
       <ul class="key-files">
         <li>
           <span class="path">src/middleware/auth.ts</span>
-          <span class="desc">Single entry point for request authentication.</span>
+          <span class="desc">請求驗證的統一入口。</span>
         </li>
         <li>
           <span class="path">src/lib/sessionStore.ts</span>
-          <span class="desc">LRU + Postgres session lookup; only DB caller.</span>
+          <span class="desc">LRU 加 Postgres 的 session 查詢；全專案唯一去碰資料庫的地方。</span>
         </li>
         <li>
           <span class="path">src/server/routes/session.ts</span>
-          <span class="desc">Returns the current session to the client.</span>
+          <span class="desc">把目前的 session 回傳給前端。</span>
         </li>
         <li>
           <span class="path">src/server/routes/login.ts</span>
-          <span class="desc">Exchanges credentials for a cookie via SessionStore.create.</span>
+          <span class="desc">透過 SessionStore.create 把憑證換成 cookie。</span>
         </li>
         <li>
           <span class="path">src/app/providers/AuthProvider.tsx</span>
-          <span class="desc">Client-side context that mirrors the server session.</span>
+          <span class="desc">前端的 context，用來同步 server 端的 session 狀態。</span>
         </li>
         <li>
           <span class="path">db/migrations/004_sessions.sql</span>
-          <span class="desc">Schema for the sessions table and indexes.</span>
+          <span class="desc">sessions 資料表與索引的 schema。</span>
         </li>
       </ul>
     </div>
 
     <div class="gotchas">
-      <h3>Gotchas</h3>
+      <h3>陷阱與眉角</h3>
       <ul>
-        <li>The LRU in <code>SessionStore</code> is per-process. Revoking a session only clears the local cache — other workers may serve it for up to 60s until their TTL lapses.</li>
-        <li><code>verifyToken</code> compares <code>expiresAt</code> against <code>Date.now()</code>, but the column is <code>timestamptz</code>. The driver returns a <code>Date</code>, so the comparison works, but don't refactor it to a raw string without adjusting the check.</li>
+        <li><code>SessionStore</code> 裡的 LRU 是每個 process 各自一份。所以當你 revoke 掉某個 session 時，只會清掉當前 process 的快取，其他 worker 最長可能還是會繼續吐舊資料，直到 60 秒後 TTL 到期才會失效。</li>
+        <li><code>verifyToken</code> 雖然是拿 <code>expiresAt</code> 跟 <code>Date.now()</code> 比大小，但資料庫欄位其實是 <code>timestamptz</code> 型別。資料庫 driver 回傳的時候已經是 <code>Date</code> 物件了，所以直接比沒問題；但如果你之後想重構，千萬不要隨便把它改成純字串比對，除非你連檢查邏輯也一起調整。</li>
       </ul>
     </div>
   </aside>

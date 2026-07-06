@@ -1,6 +1,6 @@
 <!-- Copyright 2026 Anthropic PBC · SPDX-License-Identifier: Apache-2.0 -->
 <!doctype html>
-<html lang="en">
+<html lang="zh-Hant-TW">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -381,8 +381,7 @@
       </svg>
       <h1>Platform Eng<br>— Week of Mar 10</h1>
       <p class="subtitle">
-        What shipped, what's moving, and one decision we need from the
-        room before the Acme 2.4 cut.
+        這週交了什麼、接下來要動什麼，還有在 Acme 2.4 切版前，需要大家幫忙定案的一個決策。
       </p>
       <div class="byline">
         <span>Friday demo</span>
@@ -398,15 +397,14 @@
   <section class="slide" id="s2">
     <div class="slide-inner">
       <div class="eyebrow">Shipped this week</div>
-      <h2>Three things out the door</h2>
+      <h2>三件事已經上線</h2>
       <ul class="ship-list">
         <li class="ship-item">
           <span class="ship-dot"></span>
           <div>
-            <div class="ship-title">Bulk task import</div>
+            <div class="ship-title">大量任務匯入</div>
             <div class="ship-desc">
-              CSV and JSON uploads now land straight into a board with
-              column mapping — no more paste-and-pray.
+              現在可以直接上傳 CSV 或 JSON，匯入看板時還能自動對應欄位，再也不用貼上然後祈禱了。
             </div>
           </div>
           <span class="ship-ref">#4211</span>
@@ -414,10 +412,9 @@
         <li class="ship-item">
           <span class="ship-dot"></span>
           <div>
-            <div class="ship-title">Webhook retries v2</div>
+            <div class="ship-title">Webhook 重試機制 v2</div>
             <div class="ship-desc">
-              Exponential backoff with jitter; dead-letter queue surfaces
-              in the workspace admin panel.
+              改用加了隨機延遲的指數退避策略；無法處理的訊息會進到死信佇列，並顯示在工作區的管理後台。
             </div>
           </div>
           <span class="ship-ref">#4188 #4203</span>
@@ -425,10 +422,9 @@
         <li class="ship-item">
           <span class="ship-dot"></span>
           <div>
-            <div class="ship-title">Postgres 16 migration</div>
+            <div class="ship-title">Postgres 16 升級</div>
             <div class="ship-desc">
-              All read replicas cut over Tuesday night; zero customer-facing
-              downtime, ~9% faster aggregate queries.
+              所有唯讀副本都在週二晚上切換完畢；對使用者零停機，整體查詢速度則快了約 9%。
             </div>
           </div>
           <span class="ship-ref">#4179</span>
@@ -443,28 +439,26 @@
   <section class="slide" id="s3">
     <div class="slide-inner">
       <div class="eyebrow">In progress</div>
-      <h2>Carrying into next week</h2>
+      <h2>延續到下週的工作</h2>
       <ul class="prog-list">
         <li class="prog-item">
           <div class="prog-head">
-            <span class="prog-title">Recurring tasks engine</span>
+            <span class="prog-title">週期性任務引擎</span>
             <span class="prog-pct">~70%</span>
           </div>
           <div class="prog-track"><div class="prog-fill" style="width:70%"></div></div>
           <p class="prog-note">
-            Scheduler and RRULE parsing are done; remaining work is the
-            timezone edge cases and the "skip holidays" toggle.
+            排程器和 RRULE 解析都搞定了；剩下的是處理時區的邊界情境，還有「跳過國定假日」的開關。
           </p>
         </li>
         <li class="prog-item">
           <div class="prog-head">
-            <span class="prog-title">Audit log export</span>
+            <span class="prog-title">稽核日誌匯出</span>
             <span class="prog-pct">~35%</span>
           </div>
           <div class="prog-track"><div class="prog-fill" style="width:35%"></div></div>
           <p class="prog-note">
-            Streaming NDJSON endpoint is up behind a flag; still wiring
-            the S3 destination picker and retention policy UI.
+            串流 NDJSON 端點已經掛在功能旗標（feature flag）後面上線了；接下來還要把 S3 儲存目標選擇器和保留政策的介面接好。
           </p>
         </li>
       </ul>
@@ -477,16 +471,16 @@
   <section class="slide" id="s4">
     <div class="slide-inner">
       <div class="eyebrow">Metrics</div>
-      <h2>Numbers we watch</h2>
+      <h2>我們盯著的數字</h2>
 
       <div class="metrics">
         <div class="metric">
-          <div class="metric-label">API p95 latency</div>
+          <div class="metric-label">API p95 延遲</div>
           <div class="metric-value">184<span style="font-size:28px">ms</span></div>
           <div class="metric-delta down">↓ 12% wk/wk</div>
         </div>
         <div class="metric">
-          <div class="metric-label">Background job error rate</div>
+          <div class="metric-label">背景工作錯誤率</div>
           <div class="metric-value">0.21<span style="font-size:28px">%</span></div>
           <div class="metric-delta down">↓ 0.08pp</div>
         </div>
@@ -505,7 +499,7 @@
           <line x1="0" y1="63" x2="780" y2="63" stroke="#D1CFC5" stroke-width="1"/>
         </svg>
         <div class="sparkline-caption">
-          p95 latency, trailing 8 days — lower is better
+          p95 延遲，過去 8 天的趨勢（越低越好）
         </div>
       </div>
     </div>
@@ -517,23 +511,20 @@
   <section class="slide invert" id="s5">
     <div class="slide-inner">
       <div class="eyebrow">Decision needed</div>
-      <h2>One call to make</h2>
+      <h2>需要定案的一個決策</h2>
 
       <div class="decision-card">
         <p class="decision-q">
-          Do we ship recurring tasks behind a workspace flag in 2.4, or
-          hold one more week for the timezone fixes?
+          我們要在 2.4 版讓週期性任務先掛著工作區旗標上線，還是再多花一週把時區問題修完再出？
         </p>
         <p class="decision-context">
-          Flagged rollout gets it to design partners Friday but means two
-          code paths for ~2 weeks. Holding keeps a single path but slips
-          the partner promise.
+          如果用旗標控制，週五就能交給設計合作夥伴，但接下來約兩週得同時維護兩套程式碼路徑。如果撐住不出，就能維持單一路徑，但會延遲對合作夥伴的承諾。
         </p>
       </div>
 
       <div class="options">
-        <span class="chip lean">A — Flag it, ship Friday</span>
-        <span class="chip">B — Hold for 2.5</span>
+        <span class="chip lean">A — 掛旗標，週五上線</span>
+        <span class="chip">B — 撐到 2.5 版</span>
       </div>
     </div>
   </section>
@@ -544,14 +535,14 @@
   <section class="slide" id="s6">
     <div class="slide-inner">
       <div class="eyebrow">Next week</div>
-      <h2>On deck</h2>
+      <h2>排程待辦</h2>
       <ul class="next-list">
-        <li>Finish recurring tasks — timezone matrix tests, then dogfood on the internal ops board.</li>
-        <li>Audit log export to private beta — three workspaces lined up.</li>
-        <li>Start scoping rate-limit headers for the public API; RFC draft by Thursday.</li>
+        <li>完成週期性任務：跑完時區矩陣測試，然後丟到內部營運看板上自己先用。</li>
+        <li>稽核日誌匯出進入私有測試：已經安排好三個工作區要來用。</li>
+        <li>開始規劃公開 API 的速率限制標頭；週四前生出 RFC 草稿。</li>
       </ul>
       <div class="footnote">
-        Questions → drop them in the platform channel or grab anyone after standup.
+        有問題的話，直接丟到 platform 頻道，或早上開完 standup 後直接抓人問也行。
       </div>
     </div>
   </section>

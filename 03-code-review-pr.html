@@ -1,10 +1,10 @@
 <!-- Copyright 2026 Anthropic PBC · SPDX-License-Identifier: Apache-2.0 -->
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="zh-Hant-TW">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PR #247 — Review Summary</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PR #247 — 程式碼審查摘要</title>
 <style>
   :root {
     --ivory: #FAF9F5;
@@ -399,14 +399,14 @@
 <div class="page">
 
   <header class="pr-head">
-    <div class="repo-line">acme/web · Pull Request #247</div>
-    <h1>Add optimistic updates to task list mutations</h1>
+    <div class="repo-line">acme/web · 拉取請求（PR）#247</div>
+    <h1>為任務列表的更新操作加上樂觀更新</h1>
     <div class="meta-row">
       <div class="author">
         <div class="avatar">MO</div>
         <div>
           <div class="author-name">Mira Okafor</div>
-          <div class="author-sub">opened 2 days ago</div>
+          <div class="author-sub">兩天前建立</div>
         </div>
       </div>
       <div class="branch">
@@ -414,22 +414,22 @@
       </div>
       <div class="stat">
         <span class="add">+142</span> / <span class="del">−38</span>
-        <span class="files">6 files changed</span>
+        <span class="files">變更 6 個檔案</span>
       </div>
     </div>
   </header>
 
   <section class="prose">
-    <h2>What this PR does</h2>
+    <h2>這個 PR 做了什麼</h2>
     <ul>
-      <li>Replaces the await-then-refetch pattern in <code style="font-family:var(--mono);font-size:12.5px;background:var(--gray-150);padding:1px 5px;border-radius:4px">TaskList</code> with optimistic cache writes, so toggling or reordering a task feels instant instead of waiting ~300ms for the round-trip.</li>
-      <li>Introduces a small <code style="font-family:var(--mono);font-size:12.5px;background:var(--gray-150);padding:1px 5px;border-radius:4px">useOptimisticTasks</code> hook that wraps the mutation, snapshots the previous list, and rolls back on error.</li>
-      <li>Extends the API client to accept an idempotency key per mutation and adds a toast when a rollback fires.</li>
+      <li>把 <code style="font-family:var(--mono);font-size:12.5px;background:var(--gray-150);padding:1px 5px;border-radius:4px">TaskList</code> 裡面那套「送出請求、等回應、再重新抓資料」的做法，換成直接寫進樂觀快取。這樣不管是要切換狀態還是重新排序，操作起來都會有秒開的感覺，不用再等大約 300ms 的來回時間。</li>
+      <li>新增了一個小巧的 <code style="font-family:var(--mono);font-size:12.5px;background:var(--gray-150);padding:1px 5px;border-radius:4px">useOptimisticTasks</code> hook。它把更新操作包起來，會先快照目前的列表，等出錯時再自動復原。</li>
+      <li>改了 API client，讓每次更新都能帶上冪等金鑰（idempotency key），而且如果觸發了自動復原，會跳出 toast 提示。</li>
     </ul>
   </section>
 
   <section>
-    <h2>Risk map</h2>
+    <h2>風險分佈</h2>
     <div class="risk-map">
       <a class="chip attention" href="#file-hook"><span class="dot"></span>useOptimisticTasks.ts</a>
       <a class="chip medium" href="#file-tasklist"><span class="dot"></span>TaskList.tsx</a>
@@ -439,14 +439,14 @@
       <a class="chip safe" href="#file-test"><span class="dot"></span>TaskList.test.tsx</a>
     </div>
     <div class="legend">
-      <span><span class="dot" style="background:var(--olive)"></span> safe</span>
-      <span><span class="dot" style="background:#B89B6E"></span> worth a look</span>
-      <span><span class="dot" style="background:var(--clay)"></span> needs attention</span>
+      <span><span class="dot" style="background:var(--olive)"></span> 安全</span>
+      <span><span class="dot" style="background:#B89B6E"></span> 值得一看</span>
+      <span><span class="dot" style="background:var(--clay)"></span> 需要注意</span>
     </div>
   </section>
 
   <section>
-    <h2>Files</h2>
+    <h2>檔案</h2>
 
     <!-- File 1: hook (attention) -->
     <article class="file-card" id="file-hook">
@@ -455,7 +455,7 @@
           <div class="file-path">src/hooks/useOptimisticTasks.ts</div>
         </div>
         <div style="display:flex;align-items:center;gap:12px">
-          <span class="risk-tag attention">needs attention</span>
+          <span class="risk-tag attention">需要注意</span>
           <span class="file-delta"><span class="add">+58</span> <span class="del">−0</span></span>
         </div>
       </div>
@@ -484,12 +484,12 @@
       </div>
       <div class="comments">
         <div class="bubble blocking">
-          <div class="anchor">line 11</div>
-          <p><span class="label">Blocking</span><code>onMutate</code> doesn't call <code>qc.cancelQueries(key)</code> first. If a background refetch lands between the optimistic write and the server response, it will clobber the optimistic state and the UI will flicker back to the old value.</p>
+          <div class="anchor">第 11 行</div>
+          <p><span class="label">阻擋性問題</span><code>onMutate</code> 沒有先呼叫 <code>qc.cancelQueries(key)</code>。如果在樂觀寫入跟伺服器回應之間，剛好背景重新抓資料的請求回來了，就會把樂觀更新的狀態蓋掉，導致畫面閃一下退回舊資料。</p>
         </div>
         <div class="bubble nit">
-          <div class="anchor">line 18</div>
-          <p><span class="label">Nit</span>Rollback restores the list but never surfaces the error. Consider wiring the existing <code>pushToast</code> here so users know the toggle didn't stick.</p>
+          <div class="anchor">第 18 行</div>
+          <p><span class="label">小建議</span>這裡雖然會復原列表，但沒有把錯誤顯示出來。可以考慮把現成的 <code>pushToast</code> 串在這裡，讓使用者知道剛剛的切換其實沒有成功。</p>
         </div>
       </div>
     </article>
@@ -501,7 +501,7 @@
           <div class="file-path">src/components/TaskList.tsx</div>
         </div>
         <div style="display:flex;align-items:center;gap:12px">
-          <span class="risk-tag medium">worth a look</span>
+          <span class="risk-tag medium">值得一看</span>
           <span class="file-delta"><span class="add">+31</span> <span class="del">−24</span></span>
         </div>
       </div>
@@ -529,8 +529,8 @@
       </div>
       <div class="comments">
         <div class="bubble nit">
-          <div class="anchor">line 43</div>
-          <p><span class="label">Nit</span><code>isPending</code> is destructured but never read. Either drop it or pass it to <code>TaskRow</code> so the checkbox can dim while the request is in flight.</p>
+          <div class="anchor">第 43 行</div>
+          <p><span class="label">小建議</span><code>isPending</code> 解構出來了卻沒用到。要不就別拿，要不就把它傳給 <code>TaskRow</code>，讓核取方塊在請求跑的時候可以變暗。</p>
         </div>
       </div>
     </article>
@@ -542,7 +542,7 @@
           <div class="file-path">src/api/tasks.ts</div>
         </div>
         <div style="display:flex;align-items:center;gap:12px">
-          <span class="risk-tag medium">worth a look</span>
+          <span class="risk-tag medium">值得一看</span>
           <span class="file-delta"><span class="add">+19</span> <span class="del">−6</span></span>
         </div>
       </div>
@@ -562,8 +562,8 @@
       </div>
       <div class="comments">
         <div class="bubble blocking">
-          <div class="anchor">line 15</div>
-          <p><span class="label">Blocking</span>Generating the idempotency key as a default parameter means retries from the mutation layer get a <em>new</em> key each time, which defeats the purpose. The key should be minted once in <code>onMutate</code> and threaded through.</p>
+          <div class="anchor">第 15 行</div>
+          <p><span class="label">阻擋性問題</span>把冪等金鑰當成預設參數來產生，代表 mutation 層每次重試都會拿到一個<em>新的</em>金鑰，這樣就失去意義了。金鑰應該在 <code>onMutate</code> 裡產生一次就好，然後一路傳遞下去。</p>
         </div>
       </div>
     </article>
@@ -573,50 +573,50 @@
       <summary>
         <span class="file-path">src/components/Toast.tsx</span>
         <span style="display:flex;align-items:center;gap:12px">
-          <span class="risk-tag safe">safe</span>
+          <span class="risk-tag safe">安全</span>
           <span class="file-delta"><span class="add">+14</span> <span class="del">−2</span></span>
         </span>
       </summary>
-      <div class="body">Adds a <code style="font-family:var(--mono)">variant="warning"</code> style and exports <code style="font-family:var(--mono)">pushToast</code>. Purely additive, no behaviour change for existing call sites.</div>
+      <div class="body">新增了 <code style="font-family:var(--mono)">variant="warning"</code> 樣式，並 export 了 <code style="font-family:var(--mono)">pushToast</code>。純粹是新增功能，本來的呼叫端不會受到任何影響。</div>
     </details>
 
     <details class="file-collapsed" id="file-types">
       <summary>
         <span class="file-path">src/types/task.ts</span>
         <span style="display:flex;align-items:center;gap:12px">
-          <span class="risk-tag safe">safe</span>
+          <span class="risk-tag safe">安全</span>
           <span class="file-delta"><span class="add">+6</span> <span class="del">−2</span></span>
         </span>
       </summary>
-      <div class="body">Widens <code style="font-family:var(--mono)">Task.status</code> to include <code style="font-family:var(--mono)">"archived"</code> and adds an optional <code style="font-family:var(--mono)">updatedAt</code> timestamp. Type-only change.</div>
+      <div class="body">放寬了 <code style="font-family:var(--mono)">Task.status</code> 的型別，加入了 <code style="font-family:var(--mono)">"archived"</code>，並新增了一個選填的 <code style="font-family:var(--mono)">updatedAt</code> 時間戳。只有改動型別定義。</div>
     </details>
 
     <details class="file-collapsed" id="file-test">
       <summary>
         <span class="file-path">src/components/__tests__/TaskList.test.tsx</span>
         <span style="display:flex;align-items:center;gap:12px">
-          <span class="risk-tag safe">safe</span>
+          <span class="risk-tag safe">安全</span>
           <span class="file-delta"><span class="add">+14</span> <span class="del">−4</span></span>
         </span>
       </summary>
-      <div class="body">Adds a test asserting the row updates synchronously after click, and one asserting rollback when the mocked request rejects. Both pass locally.</div>
+      <div class="body">新增了測試，驗證點擊後列表會同步更新；也加了另一個測試，確認當 mock 的請求被拒絕時會觸發復原。兩個測試在本機都跑得過。</div>
     </details>
   </section>
 
   <footer class="next-steps">
-    <h2>Suggested next steps</h2>
+    <h2>建議的下一步</h2>
     <ul class="checklist">
       <li>
         <input type="checkbox" id="step1">
-        <label for="step1">Add <code>await qc.cancelQueries(key)</code> at the top of <code>onMutate</code> in <code>useOptimisticTasks.ts</code>.</label>
+        <label for="step1">在 <code>useOptimisticTasks.ts</code> 的 <code>onMutate</code> 開頭，加上 <code>await qc.cancelQueries(key)</code>。</label>
       </li>
       <li>
         <input type="checkbox" id="step2">
-        <label for="step2">Move idempotency-key generation into the mutation context so retries reuse the same key.</label>
+        <label for="step2">把產生冪等金鑰的邏輯移到 mutation 的 context 裡，讓重試時可以重複用同一把金鑰。</label>
       </li>
       <li>
         <input type="checkbox" id="step3">
-        <label for="step3">Either consume <code>isPending</code> in <code>TaskRow</code> or remove it from the destructure to keep lint clean.</label>
+        <label for="step3">要不就把 <code>isPending</code> 拿去給 <code>TaskRow</code> 用，要不就從解構裡拿掉，讓 lint 保持乾淨。</label>
       </li>
     </ul>
   </footer>

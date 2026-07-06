@@ -1,10 +1,10 @@
 <!-- Copyright 2026 Anthropic PBC · SPDX-License-Identifier: Apache-2.0 -->
 <!doctype html>
-<html lang="en">
+<html lang="zh-Hant-TW">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Deploy pipeline — annotated flowchart</title>
+<title>部署流程 — 帶註解的流程圖</title>
 <style>
   :root {
     --ivory:   #FAF9F5;
@@ -162,11 +162,11 @@
 <div class="sheet">
 
   <header>
-    <div class="eyebrow">Illustrations &amp; Diagrams · Flowchart</div>
-    <h1>What happens when you <code>git push</code></h1>
+    <div class="eyebrow">圖解與示意圖 · 流程圖</div>
+    <h1>當你 <code>git push</code> 之後發生了什麼事</h1>
     <p class="lead">
-      The deploy pipeline for <code>acme/web</code>, drawn from <code>.github/workflows/</code> and the
-      Argo manifests. Click any step to see what runs, how long it usually takes, and where it can short-circuit.
+      這是 <code>acme/web</code> 的部署流程，內容是根據 <code>.github/workflows/</code> 和
+      Argo 的設定檔畫出來的。點擊任何一個步驟，就能看到實際跑了什麼、通常要花多久，還有可能會在哪裡直接中斷。
     </p>
   </header>
 
@@ -192,15 +192,15 @@
           <path class="edge" d="M310,140 L310,176"/>
           <path class="edge" d="M310,224 L310,262"/>
           <path class="edge yes" d="M310,326 L310,368"/>
-          <text class="lbl" x="320" y="350">pass</text>
+          <text class="lbl" x="320" y="350">通過</text>
           <path class="edge no" d="M268,294 C190,294 150,294 150,212 L150,212"/>
-          <text class="lbl" x="138" y="260" fill="#B04A3F">fail → status</text>
+          <text class="lbl" x="138" y="260" fill="#B04A3F">失敗 → 回報狀態</text>
           <path class="edge" d="M310,416 L310,452"/>
           <path class="edge" d="M310,500 L310,538"/>
           <path class="edge yes" d="M310,602 L310,644"/>
-          <text class="lbl" x="320" y="626">healthy</text>
+          <text class="lbl" x="320" y="626">健康</text>
           <path class="edge no" d="M352,570 C470,570 470,690 392,720"/>
-          <text class="lbl" x="448" y="636" fill="#B04A3F">canary fails</text>
+          <text class="lbl" x="448" y="636" fill="#B04A3F">canary 失敗</text>
           <path class="edge" d="M310,692 L310,730"/>
           <path class="edge" d="M310,778 L310,816"/>
 
@@ -212,82 +212,82 @@
 
           <g class="node" data-k="ci">
             <rect x="210" y="92" width="200" height="48"/>
-            <text x="310" y="112" text-anchor="middle">CI · lint + typecheck</text>
-            <text class="sub" x="310" y="128" text-anchor="middle">~2 min · ci.yml</text>
+            <text x="310" y="112" text-anchor="middle">CI · lint + 型別檢查</text>
+            <text class="sub" x="310" y="128" text-anchor="middle">約 2 分鐘 · ci.yml</text>
           </g>
 
           <g class="node" data-k="test">
             <rect x="210" y="176" width="200" height="48"/>
-            <text x="310" y="196" text-anchor="middle">Unit + integration tests</text>
-            <text class="sub" x="310" y="212" text-anchor="middle">~6 min · 3 shards</text>
+            <text x="310" y="196" text-anchor="middle">單元 + 整合測試</text>
+            <text class="sub" x="310" y="212" text-anchor="middle">約 6 分鐘 · 分 3 片</text>
           </g>
 
           <g class="node gate" data-k="gate-tests">
             <path d="M310,262 L352,294 L310,326 L268,294 Z"/>
-            <text x="310" y="298" text-anchor="middle">pass?</text>
+            <text x="310" y="298" text-anchor="middle">通過？</text>
           </g>
 
           <g class="node bad" data-k="status">
             <rect x="60" y="176" width="180" height="48"/>
-            <text x="150" y="196" text-anchor="middle">Post failure status</text>
+            <text x="150" y="196" text-anchor="middle">回報失敗狀態</text>
             <text class="sub" x="150" y="212" text-anchor="middle">slack #deploys</text>
           </g>
 
           <g class="node" data-k="build">
             <rect x="210" y="368" width="200" height="48"/>
-            <text x="310" y="388" text-anchor="middle">Build + push image</text>
+            <text x="310" y="388" text-anchor="middle">建置 + 推送映像檔</text>
             <text class="sub" x="310" y="404" text-anchor="middle">ghcr.io/acme/web</text>
           </g>
 
           <g class="node" data-k="canary">
             <rect x="210" y="452" width="200" height="48"/>
             <text x="310" y="472" text-anchor="middle">Argo canary 5%</text>
-            <text class="sub" x="310" y="488" text-anchor="middle">10 min soak</text>
+            <text class="sub" x="310" y="488" text-anchor="middle">觀察 10 分鐘</text>
           </g>
 
           <g class="node gate" data-k="gate-canary">
             <path d="M310,538 L352,570 L310,602 L268,570 Z"/>
-            <text x="310" y="574" text-anchor="middle">SLO ok?</text>
+            <text x="310" y="574" text-anchor="middle">SLO 正常？</text>
           </g>
 
           <g class="node" data-k="promote">
             <rect x="210" y="644" width="200" height="48"/>
-            <text x="310" y="664" text-anchor="middle">Promote 25 → 50 → 100%</text>
-            <text class="sub" x="310" y="680" text-anchor="middle">~8 min</text>
+            <text x="310" y="664" text-anchor="middle">逐步推進 25 → 50 → 100%</text>
+            <text class="sub" x="310" y="680" text-anchor="middle">約 8 分鐘</text>
           </g>
 
           <g class="node bad" data-k="rollback">
             <rect x="392" y="700" width="170" height="48"/>
-            <text x="477" y="720" text-anchor="middle">Auto-rollback</text>
-            <text class="sub" x="477" y="736" text-anchor="middle">revert image tag</text>
+            <text x="477" y="720" text-anchor="middle">自動復原</text>
+            <text class="sub" x="477" y="736" text-anchor="middle">還原映像檔 tag</text>
           </g>
 
           <g class="node" data-k="smoke">
             <rect x="210" y="730" width="200" height="48"/>
-            <text x="310" y="750" text-anchor="middle">Smoke tests in prod</text>
-            <text class="sub" x="310" y="766" text-anchor="middle">playwright · 90s</text>
+            <text x="310" y="750" text-anchor="middle">正式環境冒煙測試</text>
+            <text class="sub" x="310" y="766" text-anchor="middle">playwright · 90 秒</text>
           </g>
 
           <g class="node ok term" data-k="done">
             <rect x="230" y="816" width="160" height="44"/>
-            <text x="310" y="843" text-anchor="middle">✅ Deploy complete</text>
+            <text x="310" y="843" text-anchor="middle">✅ 部署完成</text>
           </g>
         </svg>
       </div>
 
       <div class="legend">
-        <span><i class="chip"></i> process step</span>
-        <span><i class="chip gate"></i> decision</span>
-        <span><i class="chip ok"></i> terminal success</span>
-        <span><i class="chip bad"></i> failure path</span>
+        <span><i class="chip"></i> 處理步驟</span>
+        <span><i class="chip gate"></i> 判斷節點</span>
+        <span><i class="chip ok"></i> 成功結束</span>
+        <span><i class="chip bad"></i> 失敗路徑</span>
       </div>
     </div>
 
     <aside id="panel">
-      <div class="hint">Click a step in the chart →</div>
+      <div class="hint">點擊圖表中的步驟 →</div>
       <h3 id="p-title">git push main</h3>
-      <div class="meta" id="p-meta">trigger · 0s</div>
-      <p id="p-body">A push or merge to <code>main</code> fires the <code>deploy</code> workflow. Pushes to other branches stop after CI and never reach the image build.</p>
+      <div class="meta" id="p-meta">觸發條件 · 0 秒</div>
+      <p id="p-body">只要 push 或 merge 到 <code>main</code>，就會觸發 <code>deploy</code> workflow。至於其他分支的 push，跑完 CI 就停了，根本不會走到建置映像檔那一步。</p>
       <pre id="p-code">on:
   push:
     branches: [main]</pre>
@@ -300,74 +300,74 @@
 const DETAIL = {
   push: {
     title: "git push main",
-    meta: "trigger · 0s",
-    body: "A push or merge to <code>main</code> fires the <code>deploy</code> workflow. Pushes to other branches stop after CI and never reach the image build.",
+    meta: "觸發條件 · 0 秒",
+    body: "只要 push 或 merge 到 <code>main</code>，就會觸發 <code>deploy</code> workflow。至於其他分支的 push，跑完 CI 就停了，根本不會走到建置映像檔那一步。",
     code: "on:\n  push:\n    branches: [main]"
   },
   ci: {
-    title: "CI · lint + typecheck",
-    meta: "github actions · ~2 min",
-    body: "Runs ESLint and <code>tsc --noEmit</code> in parallel. This is the only job that also runs on pull-request branches, so it stays fast on purpose.",
+    title: "CI · lint + 型別檢查",
+    meta: "github actions · 約 2 分鐘",
+    body: "這一步會平行跑 ESLint 和 <code>tsc --noEmit</code>。這也是唯一會在 PR 分支上跑的 job，所以我們刻意讓它保持很快。",
     code: "jobs:\n  lint:\n    run: pnpm lint && pnpm typecheck"
   },
   test: {
-    title: "Unit + integration tests",
-    meta: "github actions · ~6 min · 3 shards",
-    body: "Vitest unit suite plus the API integration tests against an ephemeral Postgres. Sharded three ways; the slowest shard gates the pipeline.",
+    title: "單元 + 整合測試",
+    meta: "github actions · 約 6 分鐘 · 分 3 片",
+    body: "用 Vitest 跑單元測試，同時拿一個暫時的 Postgres 來跑 API 整合測試。測試拆成 3 片平行跑；最慢的那片會決定整個 pipeline 要花多久。",
     code: "strategy:\n  matrix:\n    shard: [1, 2, 3]\nrun: pnpm test --shard ${{ matrix.shard }}/3"
   },
   "gate-tests": {
-    title: "Tests pass?",
-    meta: "decision",
-    body: "Any shard failing short-circuits here. Nothing is built, and a red status is posted back to the PR and to <code>#deploys</code>.",
+    title: "測試通過了嗎？",
+    meta: "判斷節點",
+    body: "只要有任何一片測試失敗，流程就會在這裡直接中斷。什麼都不會建置，同時會在 PR 上回報紅燈狀態，並發訊息到 <code>#deploys</code>。",
     code: "needs: [test]\nif: success()"
   },
   status: {
-    title: "Post failure status",
-    meta: "side-effect · ~5s",
-    body: "The <code>notify</code> job posts the failing shard's summary to Slack and sets the commit status to <code>failure</code>. Pipeline ends.",
+    title: "回報失敗狀態",
+    meta: "附帶動作 · 約 5 秒",
+    body: "<code>notify</code> 這個 job 會把失敗的那片測試摘要貼到 Slack，同時把 commit 狀態改成 <code>failure</code>。到這裡 pipeline 就結束了。",
     code: "uses: slackapi/slack-github-action@v1\nwith:\n  channel: '#deploys'"
   },
   build: {
-    title: "Build + push image",
-    meta: "github actions · ~4 min",
-    body: "Docker buildx with layer caching. Tags the image with the short SHA and pushes to GHCR. This is the first step that produces an artifact.",
+    title: "建置 + 推送映像檔",
+    meta: "github actions · 約 4 分鐘",
+    body: "用 Docker buildx 跑，而且有做 layer 快取。映像檔會標上短 SHA 然後推到 GHCR。這是整個流程裡第一個會產出實際成果的步驟。",
     code: "tags: ghcr.io/acme/web:${{ github.sha }}"
   },
   canary: {
     title: "Argo canary 5%",
-    meta: "argo rollouts · 10 min soak",
-    body: "Argo shifts 5% of traffic to the new ReplicaSet and watches the error-rate and p95 SLOs for ten minutes before deciding.",
+    meta: "argo rollouts · 觀察 10 分鐘",
+    body: "Argo 會把 5% 的流量導到新的 ReplicaSet，然後盯著錯誤率和 p95 的 SLO 看，觀察個十分鐘再做決定。",
     code: "steps:\n  - setWeight: 5\n  - pause: { duration: 10m }\n  - analysis: slo-check"
   },
   "gate-canary": {
-    title: "Canary healthy?",
-    meta: "decision · analysis template",
-    body: "The <code>slo-check</code> analysis compares error rate and p95 against the previous revision. Either metric breaching for two consecutive intervals fails the gate.",
+    title: "Canary 健康嗎？",
+    meta: "判斷節點 · 分析模板",
+    body: "<code>slo-check</code> 分析會拿錯誤率和 p95 跟前一版比較。只要有任何一個指標連續兩次超標，這個關卡就會判定失敗。",
     code: "successCondition: result.error_rate < 0.5\n               && result.p95_ms < 800"
   },
   promote: {
-    title: "Promote 25 → 50 → 100%",
-    meta: "argo rollouts · ~8 min",
-    body: "Three more weight steps with a short pause between each. The same analysis runs at every step, so a late regression still aborts.",
+    title: "逐步推進 25 → 50 → 100%",
+    meta: "argo rollouts · 約 8 分鐘",
+    body: "接下來還會分三步調整流量權重，每步之間都會稍微停一下。每一步都會重跑同樣的分析，所以就算到後面才出問題也一樣會立刻中止。",
     code: "- setWeight: 25\n- pause: { duration: 2m }\n- setWeight: 50\n- pause: { duration: 2m }\n- setWeight: 100"
   },
   rollback: {
-    title: "Auto-rollback",
-    meta: "argo rollouts · ~30s",
-    body: "On a failed analysis Argo flips traffic back to the stable ReplicaSet and marks the rollout <code>Degraded</code>. A page goes to the on-call.",
+    title: "自動復原",
+    meta: "argo rollouts · 約 30 秒",
+    body: "一旦分析判定失敗，Argo 就會把流量全部導回本來穩定的 ReplicaSet，同時把這次 rollout 標記為 <code>Degraded</code>。值班人員會收到告警。",
     code: "abort:\n  scaleDownDelaySeconds: 30"
   },
   smoke: {
-    title: "Smoke tests in prod",
-    meta: "github actions · ~90s",
-    body: "A tiny Playwright suite hits the public URL: load the homepage, sign in with a synthetic account, create and delete one record.",
+    title: "正式環境冒煙測試",
+    meta: "github actions · 約 90 秒",
+    body: "這是一套很輕量的 Playwright 測試，會去打公開的網址：載入首頁、用測試帳號登入，然後新增再刪除一筆資料。",
     code: "run: pnpm playwright test smoke/\nenv:\n  BASE_URL: https://acme.app"
   },
   done: {
-    title: "Deploy complete",
-    meta: "terminal · ~30 min total",
-    body: "Commit status flips to <code>success</code>, the rollout is marked <code>Healthy</code>, and the SHA is recorded as the new stable revision.",
+    title: "部署完成",
+    meta: "終點 · 總計約 30 分鐘",
+    body: "Commit 狀態變成 <code>success</code>，rollout 被標記為 <code>Healthy</code>，同時這個 SHA 就會被記下來，成為新的穩定版本。",
     code: "✓ web@a1b9e3f live on prod"
   }
 };

@@ -1,10 +1,10 @@
 <!-- Copyright 2026 Anthropic PBC · SPDX-License-Identifier: Apache-2.0 -->
 <!doctype html>
-<html lang="en">
+<html lang="zh-Hant-TW">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>How rate limiting works in acme/api</title>
+<title>acme/api 的速率限制是怎麼運作的</title>
 <style>
   :root {
     --ivory:   #FAF9F5;
@@ -225,18 +225,18 @@
 
   <!-- ── side nav ── -->
   <nav>
-    <div class="label">On this page</div>
-    <a href="#tldr">TL;DR</a>
-    <a href="#path">Request path</a>
-    <a href="#path" class="l2">1. Identify</a>
-    <a href="#path" class="l2">2. Bucket lookup</a>
-    <a href="#path" class="l2">3. Consume</a>
-    <a href="#path" class="l2">4. Reject</a>
-    <a href="#config">Configuring a route</a>
-    <a href="#gotchas">Gotchas</a>
+    <div class="label">本頁目錄</div>
+    <a href="#tldr">一句話重點（TL;DR）</a>
+    <a href="#path">請求流程</a>
+    <a href="#path" class="l2">1. 確認來源</a>
+    <a href="#path" class="l2">2. 查詢權杖桶</a>
+    <a href="#path" class="l2">3. 消耗</a>
+    <a href="#path" class="l2">4. 拒絕</a>
+    <a href="#config">設定路由</a>
+    <a href="#gotchas">陷阱/眉角</a>
     <a href="#faq">FAQ</a>
     <div class="files">
-      <div class="label">Files read</div>
+      <div class="label">讀取的檔案</div>
       <code>middleware/ratelimit.ts</code>
       <code>lib/tokenBucket.ts</code>
       <code>config/limits.yaml</code>
@@ -247,60 +247,60 @@
   <!-- ── main ── -->
   <main>
     <header>
-      <div class="eyebrow">Research &amp; Learning · feature summary</div>
-      <h1>How rate limiting works in <code>acme/api</code></h1>
+      <div class="eyebrow">Research &amp; Learning · 功能摘要</div>
+      <h1><code>acme/api</code> 的速率限制是怎麼運作的</h1>
       <div class="tldr" id="tldr">
-        <b>TL;DR</b> — Every request passes through <code>rateLimit()</code> middleware, which resolves the
-        caller to a <em>bucket key</em>, fetches a token-bucket from Redis, and either consumes one token or
-        returns <code>429</code>. Limits are declared per-route in <code>config/limits.yaml</code>; routes
-        without an entry inherit the <code>default</code> tier (100 req/min per API key).
+        <b>一句話重點（TL;DR）</b> — 每個請求都會過一層 <code>rateLimit()</code> 中介層。它會把呼叫方
+        解析成一個 <em>桶金鑰</em>（bucket key），去 Redis 撈對應的權杖桶（token bucket），接著要嘛扣
+        掉一個 token，要嘛直接回 <code>429</code>。速率限制是按路由在 <code>config/limits.yaml</code>
+        裡設定的；沒有特別設定的路由，就會套用 <code>default</code> 這組預設值（每支 API 金鑰每分鐘
+        100 次請求）。
       </div>
     </header>
 
-    <h2 id="path">The request path, step by step</h2>
-    <p>Expand each step to see what runs and where it lives. The whole path is ~40 lines and adds about
-      0.4&nbsp;ms p50 to every request.</p>
+    <h2 id="path">請求流程，一步一步來</h2>
+    <p>展開每個步驟，看看背後跑了什麼、程式碼在哪裡。整段流程大概只有 40 行，會給每個請求加上約
+      0.4&nbsp;ms 的 p50 延遲。</p>
 
     <details open>
-      <summary>1 · Identify the caller <span class="where">middleware/ratelimit.ts:21</span></summary>
+      <summary>1 · 確認呼叫方 <span class="where">middleware/ratelimit.ts:21</span></summary>
       <div class="body">
-        <p>The middleware first reduces the request to a <code>bucketKey</code>: API key if an
-          <code>Authorization</code> header is present, otherwise the client IP (via the
-          <code>x-forwarded-for</code> chain, trusting only our own LB). Anonymous IP traffic gets a much
-          lower default tier.</p>
+        <p>中介層會先把請求歸納成一組 <code>bucketKey</code>：如果帶了 <code>Authorization</code>
+          標頭就用 API 金鑰；沒有的話，就退而求其次看客戶端 IP（靠 <code>x-forwarded-for</code>
+          鏈，但我們只信任自家 LB）。匿名 IP 流量會套用嚴格許多的預設限制。</p>
       </div>
     </details>
 
     <details>
-      <summary>2 · Look up the bucket <span class="where">lib/tokenBucket.ts:9</span></summary>
+      <summary>2 · 查詢權杖桶 <span class="where">lib/tokenBucket.ts:9</span></summary>
       <div class="body">
-        <p>The route name plus bucket key map to a Redis hash (<code>rl:{route}:{key}</code>) holding
-          <code>tokens</code> and <code>updatedAt</code>. If the key is missing it's created lazily at full
-          capacity — there's no warm-up.</p>
+        <p>路由名稱加上 bucket key 會對應到一組 Redis hash（<code>rl:{route}:{key}</code>），裡面存了
+          <code>tokens</code> 和 <code>updatedAt</code>。如果這組 key 不存在，系統會直接懶載入建一個
+          滿水量的桶子給你，完全不需要暖機。</p>
       </div>
     </details>
 
     <details>
-      <summary>3 · Refill and consume <span class="where">lib/tokenBucket.ts:31</span></summary>
+      <summary>3 · 補水並扣除 <span class="where">lib/tokenBucket.ts:31</span></summary>
       <div class="body">
-        <p>Refill is computed from elapsed time (<code>rate × Δt</code>, capped at <code>burst</code>), then
-          one token is subtracted. The whole read-modify-write runs as a single Lua script so concurrent
-          requests can't double-spend.</p>
+        <p>系統會根據經過的時間計算補水量（<code>rate × Δt</code>，上限是 <code>burst</code>），然後扣掉
+          一個 token。整段讀取、修改、寫回的過程全包在一個 Lua script 裡頭跑，所以就算同時有多個請求
+          進來，也不會發生重複扣款的問題。</p>
       </div>
     </details>
 
     <details>
-      <summary>4 · Reject when empty <span class="where">middleware/ratelimit.ts:48</span></summary>
+      <summary>4 · 額度空了就拒絕 <span class="where">middleware/ratelimit.ts:48</span></summary>
       <div class="body">
-        <p>If the script returns <code>tokens &lt; 0</code> the middleware short-circuits with
-          <code>429 Too Many Requests</code> and sets <code>Retry-After</code> to the seconds until one token
-          refills. Successful responses always carry <code>X-RateLimit-Remaining</code>.</p>
+        <p>如果 script 算出來 <code>tokens &lt; 0</code>，中介層就會直接短路，回一個
+          <code>429 Too Many Requests</code>，並且把 <code>Retry-After</code> 設成距離下次補滿一個
+          token 所需的秒數。而成功的回應則一定會帶上 <code>X-RateLimit-Remaining</code>。</p>
       </div>
     </details>
 
-    <h2 id="config">Configuring a limit on your route</h2>
-    <p>You don't touch the middleware. Add an entry to <code>config/limits.yaml</code> keyed by route name,
-      and (optionally) tag the route so the middleware can find it.</p>
+    <h2 id="config">幫你的路由加上速率限制</h2>
+    <p>你完全不用動到中介層的程式碼。只要在 <code>config/limits.yaml</code> 裡用路由名稱當 key 加一筆
+      設定，然後（可選）在路由上標個 tag 讓中介層找得到就好。</p>
 
     <div class="tabs" data-tabs>
       <div class="tabbar">
@@ -316,7 +316,7 @@ default:
 <span class="hl">search.query</span>:
   rate: 20/min
   burst: 40
-  key: api_key        <span class="cm"># or: ip</span></pre>
+  key: api_key        <span class="cm"># 或: ip</span></pre>
 <pre><span class="cm">// routes/search.ts</span>
 router.post(
   "/search",
@@ -333,34 +333,35 @@ X-RateLimit-Remaining: 0
 
     <div class="callout">
       <span class="ico">★</span>
-      <div>If you only need the default tier, you don't need a YAML entry at all — just wrap the handler in
-        <code>rateLimit()</code> with no argument. The route name is inferred from the path.</div>
+      <div>如果你只需要預設的限制，其實連 YAML 都不用加。直接把 handler 包進沒有帶參數的
+        <code>rateLimit()</code> 裡就好，路由名稱會自動從路徑推斷出來。</div>
     </div>
 
-    <h2 id="gotchas">Gotchas worth knowing</h2>
+    <h2 id="gotchas">值得知道的陷阱/眉角</h2>
     <ul style="padding-left:20px; max-width:680px;">
-      <li style="margin-bottom:8px;"><b>Limits are per-process in dev.</b> The Redis client falls back to an
-        in-memory map when <code>REDIS_URL</code> is unset, so local testing won't reflect real cluster
-        behaviour.</li>
-      <li style="margin-bottom:8px;"><b>Burst ≠ rate.</b> <code>burst</code> is the bucket capacity; a caller
-        idle for a minute can fire <code>burst</code> requests instantly even if <code>rate</code> is low.</li>
-      <li><b>Streaming responses count once.</b> The token is consumed at request start; a 30-second SSE
-        stream still costs one token.</li>
+      <li style="margin-bottom:8px;"><b>在 dev 環境中，限制是 per-process 的。</b> 如果沒有設定
+        <code>REDIS_URL</code>，Redis client 會 fallback 到 in-memory map，所以本機測試沒辦法
+        反映真實叢集的行為。</li>
+      <li style="margin-bottom:8px;"><b>Burst 不等於 rate。</b> <code>burst</code> 是桶子容量；如果
+        呼叫方閒置了一分鐘，就算 <code>rate</code> 很低，他還是可以在一瞬間打出 <code>burst</code>
+        數量的請求。</li>
+      <li><b>串流回應只算一次。</b> Token 是在請求開始時就扣掉了；所以一個跑 30 秒的 SSE 串流，
+        也只會耗用一個 token。</li>
     </ul>
 
     <h2 id="faq">FAQ</h2>
     <dl class="faq">
-      <dt>How do I exempt internal traffic?</dt>
-      <dd>Set <code>x-acme-internal: 1</code> from the caller; the middleware checks it against the
-        mTLS peer name and skips the bucket entirely.</dd>
+      <dt>我要怎麼讓內部流量不受限制？</dt>
+      <dd>呼叫方加上 <code>x-acme-internal: 1</code> 標頭；中介層會拿這個值去對比 mTLS peer name，
+        確認沒問題就直接跳過權杖桶。</dd>
 
-      <dt>Where do I see who's getting limited?</dt>
-      <dd>Every <code>429</code> emits a <code>ratelimit.rejected</code> metric tagged with route and key
-        type. There's a Grafana panel under <em>API → Health</em>.</dd>
+      <dt>我要去哪看誰被限制住了？</dt>
+      <dd>每次出現 <code>429</code> 都會發出一個 <code>ratelimit.rejected</code> metric，上頭帶有
+        路由和 key 類型的 tag。在 <em>API → Health</em> 那邊有對應的 Grafana 面板可以看。</dd>
 
-      <dt>Can a single user have a higher limit?</dt>
-      <dd>Yes — add their API key under <code>overrides:</code> in the YAML. Overrides are reloaded without
-        a deploy.</dd>
+      <dt>可以給單一使用者更高的限制嗎？</dt>
+      <dd>可以，在 YAML 裡的 <code>overrides:</code> 底下加上他們的 API 金鑰就行。調整
+        overrides 不需要重新部署就能生效。</dd>
     </dl>
   </main>
 

@@ -1,10 +1,10 @@
 <!-- Copyright 2026 Anthropic PBC · SPDX-License-Identifier: Apache-2.0 -->
 <!doctype html>
-<html lang="en">
+<html lang="zh-Hant-TW">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>INC-2025-0412 — Elevated 502s on task sync</title>
+<title>INC-2025-0412 — 任務同步出現異常大量 502 錯誤</title>
 <style>
   :root {
     --ivory: #FAF9F5;
@@ -386,42 +386,41 @@
 <body>
 
   <nav class="toc">
-    <div class="toc-title">On this page</div>
-    <a href="#tldr">TL;DR</a>
-    <a href="#timeline">Timeline</a>
-    <a href="#root-cause">Root cause</a>
-    <a href="#impact">Impact</a>
-    <a href="#actions">Action items</a>
+    <div class="toc-title">本頁目錄</div>
+    <a href="#tldr">一句話重點（TL;DR）</a>
+    <a href="#timeline">事件時間軸</a>
+    <a href="#root-cause">根本原因</a>
+    <a href="#impact">影響範圍</a>
+    <a href="#actions">後續待辦</a>
   </nav>
 
   <div class="page">
 
     <header>
       <div class="inc-id">INC-2025-0412</div>
-      <h1>Elevated 502s on task sync</h1>
+      <h1>任務同步出現異常大量 502 錯誤</h1>
       <div class="meta-row">
         <span class="pill sev">SEV-2</span>
-        <span class="pill resolved">Resolved</span>
-        <span class="pill neutral"><span class="k">Duration</span> <span class="v">47 min</span></span>
-        <span class="pill neutral"><span class="k">Detected</span> <span class="v">Apr 12 &middot; 14:07</span></span>
-        <span class="pill neutral"><span class="k">Owner</span> <span class="v">Devon Park</span></span>
+        <span class="pill resolved">已解決</span>
+        <span class="pill neutral"><span class="k">持續時間</span> <span class="v">47 分鐘</span></span>
+        <span class="pill neutral"><span class="k">偵測時間</span> <span class="v">4 月 12 日 &middot; 14:07</span></span>
+        <span class="pill neutral"><span class="k">負責人</span> <span class="v">Devon Park</span></span>
       </div>
     </header>
 
     <div class="tldr" id="tldr">
-      <div class="tldr-label">TL;DR</div>
+      <div class="tldr-label">一句話重點（TL;DR）</div>
       <p>
-        A config rollout lowered the database connection-pool limit on the
-        <code>sync-worker</code> tier from 64 to 8, exhausting connections under
-        normal afternoon load. The sync API returned 502s for roughly 21% of
-        requests over 47 minutes. We mitigated by reverting the config and
-        cycling the worker fleet; no data was lost.
+        一次 config 部署把 <code>sync-worker</code> 層級的資料庫連線池上限從 64
+        降到 8，結果在平常的下午流量尖峰就吃不消了，連線被耗盡。在這 47 分鐘內，大約
+        21% 的同步 API 請求都收到 502 錯誤。我們的處置是直接還原 config，然後把整個
+        worker 機群重啟一遍；沒有發生任何資料遺失。
       </p>
     </div>
 
     <!-- Timeline -->
     <section id="timeline">
-      <h2>Timeline</h2>
+      <h2>事件時間軸</h2>
       <hr class="rule">
       <div class="timeline">
 
@@ -429,8 +428,7 @@
           <span class="tl-dot"></span>
           <span class="tl-time">14:02</span>
           <div class="tl-body">
-            Config change <code class="inline">cfg-9a12</code> promoted to
-            production via the standard rollout pipeline.
+            Config 變更 <code class="inline">cfg-9a12</code> 透過標準的部署流程發佈到生產環境。
           </div>
         </div>
 
@@ -438,9 +436,7 @@
           <span class="tl-dot impact"></span>
           <span class="tl-time">14:06</span>
           <div class="tl-body">
-            <strong>Impact starts.</strong> Sync workers begin queueing on pool
-            checkout; p95 latency climbs past 4s and the load balancer starts
-            returning 502s.
+            <strong>影響開始。</strong>Sync worker 在取得連線池時開始卡住排隊；p95 延遲飆破 4 秒，負載平衡器開始回傳 502 錯誤。
           </div>
         </div>
 
@@ -448,8 +444,7 @@
           <span class="tl-dot"></span>
           <span class="tl-time">14:07</span>
           <div class="tl-body">
-            Alert fires: <code class="inline">sync_5xx_rate &gt; 2%</code> for 60s.
-            On-call (Devon) acknowledges.
+            警報觸發：<code class="inline">sync_5xx_rate &gt; 2%</code> 持續 60 秒。值班人員（Devon）確認接手。
           </div>
         </div>
 
@@ -457,8 +452,7 @@
           <span class="tl-dot"></span>
           <span class="tl-time">14:18</span>
           <div class="tl-body">
-            Initial hypothesis is a bad deploy of the API service; last two
-            application deploys are rolled back with no effect.
+            一開始猜是 API 服務的部署出包，於是把前兩次的應用程式部署都還原了，但完全沒用。
           </div>
         </div>
 
@@ -466,8 +460,7 @@
           <span class="tl-dot"></span>
           <span class="tl-time">14:31</span>
           <div class="tl-body">
-            Mira joins and notices pool-wait saturation in the worker dashboard.
-            Investigation pivots to infra config rather than app code.
+            Mira 加入幫忙，看到 worker dashboard 裡面連線池等待的數值已經滿了。調查方向於是轉向基礎設施的 config，而不是應用程式碼。
           </div>
         </div>
 
@@ -475,9 +468,7 @@
           <span class="tl-dot mitigated"></span>
           <span class="tl-time">14:44</span>
           <div class="tl-body">
-            <strong>Mitigated.</strong> <code class="inline">cfg-9a12</code>
-            reverted; worker fleet cycled. 5xx rate drops below 0.2% within
-            three minutes.
+            <strong>狀況緩解。</strong>已還原 <code class="inline">cfg-9a12</code>，並重啟 worker 機群。5xx 錯誤率在三分鐘內就降到 0.2% 以下。
           </div>
         </div>
 
@@ -485,8 +476,7 @@
           <span class="tl-dot"></span>
           <span class="tl-time">14:49</span>
           <div class="tl-body">
-            Monitors green for 5 minutes. Incident declared resolved; status
-            page updated.
+            監控恢復正常持續 5 分鐘。宣告事故解決，並更新狀態頁。
           </div>
         </div>
 
@@ -495,21 +485,15 @@
 
     <!-- Root cause -->
     <section id="root-cause">
-      <h2>Root cause</h2>
+      <h2>根本原因</h2>
       <hr class="rule">
       <p>
-        PR <code class="inline">#4888</code> made connection-pool limits
-        configurable per worker tier. The default for the new
-        <code class="inline">sync-worker</code> key was meant to inherit the
-        global value (64) but was hard-coded to 8 during a local test and
-        committed. The config linter only validates type, not magnitude, so the
-        change passed CI.
+        PR <code class="inline">#4888</code> 把連線池上限改成可以按 worker 層級各自設定。新增的
+        <code class="inline">sync-worker</code> 這個 key 本來應該要繼承全域預設值（64），但在本機測試時被寫死成
+        8，然後就這樣 commit 出去了。而 config 的 linter 只檢查了型別，沒檢查數值大小合不合理，所以這個變更就在 CI 通過了。
       </p>
       <p>
-        Because config rollouts and code deploys go through separate pipelines,
-        the on-call's first instinct &mdash; rolling back the most recent
-        application deploys &mdash; had no effect and cost roughly 13 minutes of
-        diagnosis time.
+        因為 config 部署跟程式碼部署是走兩條獨立的 pipeline，值班人員一開始直覺反應去還原最近的應用程式部署，結果當然沒效，這下子白白耗掉了大約 13 分鐘的排查時間。
       </p>
 
       <div class="code-panel">
@@ -525,71 +509,71 @@
 
     <!-- Impact -->
     <section id="impact">
-      <h2>Impact</h2>
+      <h2>影響範圍</h2>
       <hr class="rule">
       <table class="impact">
         <tr>
-          <th>Requests failed (502)</th>
-          <td>~41,200</td>
+          <th>失敗的請求（502）</th>
+          <td>約 41,200</td>
         </tr>
         <tr>
-          <th>Peak error rate</th>
+          <th>最高錯誤率</th>
           <td>21.4%</td>
         </tr>
         <tr>
-          <th>Users affected</th>
-          <td>~2,300 workspaces</td>
+          <th>受影響使用者</th>
+          <td>約 2,300 個工作區</td>
         </tr>
         <tr>
-          <th>Data loss</th>
-          <td>None &mdash; clients retried</td>
+          <th>資料遺失</th>
+          <td>無 &mdash; 客戶端都會重試</td>
         </tr>
         <tr>
-          <th>SLA breach</th>
-          <td>No (within monthly budget)</td>
+          <th>SLA 違約</th>
+          <td>無（在每月容許額度內）</td>
         </tr>
       </table>
     </section>
 
     <!-- Action items -->
     <section id="actions">
-      <h2>Action items</h2>
+      <h2>後續待辦</h2>
       <hr class="rule">
       <div class="actions">
 
         <div class="ai-row done">
           <span class="ai-check"></span>
           <span class="ai-avatar" title="Devon Park">DP</span>
-          <span class="ai-desc">Revert cfg-9a12 and restore pool limit to 64</span>
-          <span class="ai-due">Apr 12</span>
+          <span class="ai-desc">還原 cfg-9a12，把連線池上限調回 64</span>
+          <span class="ai-due">4 月 12 日</span>
         </div>
 
         <div class="ai-row">
           <span class="ai-check"></span>
           <span class="ai-avatar" title="Mira Okafor">MO</span>
-          <span class="ai-desc">Add config-linter range check for <code class="inline">max_connections</code> (warn &lt; 32)</span>
-          <span class="ai-due">Apr 18</span>
+          <span class="ai-desc">在 config linter 加上 <code class="inline">max_connections</code> 的範圍檢查（小於 32 就跳警告）</span>
+          <span class="ai-due">4 月 18 日</span>
         </div>
 
         <div class="ai-row">
           <span class="ai-check"></span>
           <span class="ai-avatar" title="Sam Reyes">SR</span>
-          <span class="ai-desc">Surface &ldquo;recent config rollouts&rdquo; alongside deploys in the on-call dashboard</span>
-          <span class="ai-due">Apr 25</span>
+          <span class="ai-desc">在值班 dashboard 上面，把「最近的 config 部署」跟程式碼部署並排顯示出來</span>
+          <span class="ai-due">4 月 25 日</span>
         </div>
 
         <div class="ai-row">
           <span class="ai-check"></span>
           <span class="ai-avatar" title="Priya Anand">PA</span>
-          <span class="ai-desc">Canary config changes to one worker AZ for 10 min before fleet-wide promote</span>
-          <span class="ai-due">May 02</span>
+          <span class="ai-desc">config 變更先發到單一 worker AZ 跑 10 分鐘 canary，沒事再全面推上去</span>
+          <span class="ai-due">5 月 02 日</span>
         </div>
 
       </div>
     </section>
 
     <footer>
-      Authored from on-call notes + alert history &middot; reviewed by Devon Park, Mira Okafor
+      根據值班紀錄與警報歷史整理 &middot; 由 Devon Park、Mira Okafor 審閱
     </footer>
 
   </div>

@@ -1,10 +1,10 @@
 <!-- Copyright 2026 Anthropic PBC · SPDX-License-Identifier: Apache-2.0 -->
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="zh-Hant-TW">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Implementation plan — Comment threads on task cards</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>實作計畫 — 任務卡片上的討論串</title>
   <style>
     :root {
       --ivory:    #FAF9F5;
@@ -387,69 +387,68 @@
   <div class="page">
 
     <header class="page-head">
-      <div class="eyebrow">Implementation plan · Acme web client</div>
-      <h1>Comment threads on task cards</h1>
+      <div class="eyebrow">實作計畫 · Acme web client</div>
+      <h1>任務卡片上的討論串</h1>
       <div class="prompt-box">
         <span class="label">Prompt</span>
-        Create a thorough implementation plan for adding threaded comments to
-        task cards. Include mockups, the data flow from client to persistence,
-        the key code I'll need to write, and a risk table. Make it easy to
-        skim on a phone — I'm going to pass this to the implementer as-is.
+        請針對在任務卡片加上討論串功能，規劃一份完整的實作計畫。
+        內容要包含 mockup、從前端到資料庫的資料流、需要動手寫的關鍵程式碼，以及風險評估表。
+        排版要方便在手機上快速瀏覽，我打算直接把這份計畫丟給負責實作的人看。
       </div>
     </header>
 
     <!-- ============================================================= -->
 
     <div class="summary">
-      <div class="cell"><div class="k">Effort</div><div class="v accent">~2 weeks</div></div>
-      <div class="cell"><div class="k">Surfaces touched</div><div class="v">3 packages</div></div>
-      <div class="cell"><div class="k">New tables</div><div class="v">2</div></div>
-      <div class="cell"><div class="k">Feature flag</div><div class="v">task_comments_v1</div></div>
+      <div class="cell"><div class="k">預估工時</div><div class="v accent">約 2 週</div></div>
+      <div class="cell"><div class="k">影響範圍</div><div class="v">3 個套件</div></div>
+      <div class="cell"><div class="k">新增資料表</div><div class="v">2 個</div></div>
+      <div class="cell"><div class="k">功能旗標</div><div class="v">task_comments_v1</div></div>
     </div>
 
     <!-- ============================================================= -->
 
     <section>
-      <div class="sec-head"><span class="num">01</span><h2>Milestones</h2></div>
-      <p class="sec-intro">Ship in four slices, each independently reviewable and each behind the flag. Nothing is user-visible until slice&nbsp;4.</p>
+      <div class="sec-head"><span class="num">01</span><h2>開發里程碑</h2></div>
+      <p class="sec-intro">分成四個階段上線，每個階段都能獨立做程式碼審查，而且全都先掛在功能旗標下。在第 4 階段完成前，使用者完全不會看到任何新功能。</p>
 
       <div class="milestones">
         <div class="milestone">
-          <div class="when">Week&nbsp;1 · Mon–Tue</div>
+          <div class="when">第 1 週 · 週一至週二</div>
           <div class="dot-col"><span class="dot done"></span><span class="line"></span></div>
           <div class="body">
-            <h3>Schema &amp; API contract</h3>
-            <p>New <code>comments</code> and <code>comment_reads</code> tables, migrations, and the tRPC router stubs. No UI. Contract reviewed before anything else lands.</p>
+            <h3>資料表結構與 API 合約</h3>
+            <p>建立新的 <code>comments</code> 與 <code>comment_reads</code> 資料表、migration，以及 tRPC router 的骨架。這個階段沒有 UI，但 API 合約必須在其他東西動工前先審查過。</p>
             <div class="tags"><span class="tag">packages/db</span><span class="tag">packages/api</span><span class="tag">migration 0042</span></div>
           </div>
         </div>
 
         <div class="milestone">
-          <div class="when">Week&nbsp;1 · Wed–Fri</div>
+          <div class="when">第 1 週 · 週三至週五</div>
           <div class="dot-col"><span class="dot"></span><span class="line"></span></div>
           <div class="body">
-            <h3>Thread component &amp; composer</h3>
-            <p>Static <code>&lt;CommentThread&gt;</code> rendered from fixtures. Optimistic insert on submit, rollback on failure, one level of nesting only.</p>
+            <h3>討論串元件與輸入框</h3>
+            <p>先用假資料把 <code>&lt;CommentThread&gt;</code> 元件畫出來。送出時要做樂觀寫入，失敗就退回，而且只支援一層巢狀回覆。</p>
             <div class="tags"><span class="tag">apps/web</span><span class="tag">storybook</span></div>
           </div>
         </div>
 
         <div class="milestone">
-          <div class="when">Week&nbsp;2 · Mon–Wed</div>
+          <div class="when">第 2 週 · 週一至週三</div>
           <div class="dot-col"><span class="dot"></span><span class="line"></span></div>
           <div class="body">
-            <h3>Realtime fan-out &amp; unread state</h3>
-            <p>Subscribe the open card to its comment channel. Track per-user read cursors so the sidebar can show an unread count without a second query.</p>
+            <h3>即時推送與未讀狀態</h3>
+            <p>讓開啟的卡片訂閱對應的留言頻道。追蹤每個使用者的閱讀進度，這樣側欄就能直接顯示未讀數，不用再多查一次資料庫。</p>
             <div class="tags"><span class="tag">packages/realtime</span><span class="tag">apps/web</span></div>
           </div>
         </div>
 
         <div class="milestone">
-          <div class="when">Week&nbsp;2 · Thu–Fri</div>
+          <div class="when">第 2 週 · 週四至週五</div>
           <div class="dot-col"><span class="dot"></span><span class="line"></span></div>
           <div class="body">
-            <h3>Notifications, flag ramp, docs</h3>
-            <p>Mention detection → notification row, email digest fallback, ramp <code>task_comments_v1</code> to internal, then 10% → 100% over three days.</p>
+            <h3>通知、旗標逐步開放、文件</h3>
+            <p>偵測 @ 提及並寫入通知資料表，準備 email digest 作為後備方案。把 <code>task_comments_v1</code> 先部署到內部，接著花三天從 10% 慢慢開放到 100%。</p>
             <div class="tags"><span class="tag">packages/notify</span><span class="tag">growthbook</span></div>
           </div>
         </div>
@@ -459,8 +458,8 @@
     <!-- ============================================================= -->
 
     <section>
-      <div class="sec-head"><span class="num">02</span><h2>Data flow</h2></div>
-      <p class="sec-intro">Optimistic write path on the left, fan-out on the right. The read cursor update is fire-and-forget — we never block the thread render on it.</p>
+      <div class="sec-head"><span class="num">02</span><h2>資料流</h2></div>
+      <p class="sec-intro">左邊是樂觀寫入的路徑，右邊則是即時推送。更新閱讀進度是射後不理，我們絕對不會為了它去卡住討論串的畫面。</p>
 
       <div class="diagram">
         <svg viewBox="0 0 860 340" xmlns="http://www.w3.org/2000/svg">
@@ -496,7 +495,7 @@
             <text x="750" y="190" text-anchor="middle" fill="#87867F" font-size="10.5">task:{id}:comments</text>
 
             <rect x="660" y="20"  width="180" height="54" rx="10" fill="#FFFFFF" stroke="#D1CFC5" stroke-width="1.5"/>
-            <text x="750" y="43" text-anchor="middle" font-weight="600">Other viewers</text>
+            <text x="750" y="43" text-anchor="middle" font-weight="600">其他檢視者</text>
             <text x="750" y="60" text-anchor="middle" fill="#87867F" font-size="10.5">subscribed cards</text>
 
             <rect x="660" y="266" width="180" height="54" rx="10" fill="#FFFFFF" stroke="#D1CFC5" stroke-width="1.5"/>
@@ -528,43 +527,43 @@
             <text x="360" y="112" fill="#D97757">reconcile temp id → real id</text>
           </g>
         </svg>
-        <p class="caption">Solid = request/response path. Dashed clay = realtime fan-out. The composer never waits on the dashed path.</p>
+        <p class="caption">實線是請求與回應的路徑。橘色虛線則是即時推送。輸入框絕對不會去等待虛線的非同步流程。</p>
       </div>
     </section>
 
     <!-- ============================================================= -->
 
     <section>
-      <div class="sec-head"><span class="num">03</span><h2>Mockups</h2></div>
-      <p class="sec-intro">Not pixel-final — just enough that the reviewer and I agree on nesting depth, composer placement, and what the sidebar digest looks like.</p>
+      <div class="sec-head"><span class="num">03</span><h2>介面草圖</h2></div>
+      <p class="sec-intro">這不是最終的像素精準稿，只是為了讓我和審查者在巢狀層數、輸入框位置，以及側欄摘要的長相上取得共識。</p>
 
       <div class="mocks">
         <div class="mock">
-          <div class="mock-label">A · Thread inside an open task card</div>
+          <div class="mock-label">A · 展開任務卡片裡的討論串</div>
           <div class="mock-body">
             <div class="card-mock">
-              <div class="cm-title">Ship onboarding empty-state rewrite</div>
-              <div class="cm-meta">BIR-1142 · Assigned to Priya · Due Fri</div>
+              <div class="cm-title">完成 onboarding 空白狀態的重寫</div>
+              <div class="cm-meta">BIR-1142 · 指派給 Priya · 週五到期</div>
               <div class="cm-divider"></div>
               <div class="thread">
                 <div class="comment">
                   <div class="avatar">JM</div>
                   <div class="bubble">
-                    <div class="author">Jonah M. <span class="time">2h ago</span></div>
-                    <div class="text">Should the illustration swap when the workspace already has one project? Feels odd to show the "start here" art twice.</div>
-                    <div class="reply-link">Reply</div>
+                    <div class="author">Jonah M. <span class="time">2 小時前</span></div>
+                    <div class="text">如果工作區裡已經有專案了，插圖是不是該換掉？再顯示一次「從這裡開始」的圖感覺很怪。</div>
+                    <div class="reply-link">回覆</div>
                   </div>
                 </div>
                 <div class="comment nested">
                   <div class="avatar alt">PS</div>
                   <div class="bubble">
-                    <div class="author">Priya S. <span class="time">40m ago</span></div>
-                    <div class="text">Good catch — I'll gate it on <code>projects.count &gt; 0</code> and fall back to the minimal variant.</div>
+                    <div class="author">Priya S. <span class="time">40 分鐘前</span></div>
+                    <div class="text">抓得好，我會用 <code>projects.count &gt; 0</code> 來做判斷，不然就退回使用精簡版的變體。</div>
                   </div>
                 </div>
                 <div class="composer">
-                  <div class="field">Add a comment…</div>
-                  <div class="send">Post</div>
+                  <div class="field">新增留言…</div>
+                  <div class="send">發佈</div>
                 </div>
               </div>
             </div>
@@ -572,20 +571,20 @@
         </div>
 
         <div class="mock">
-          <div class="mock-label">B · Sidebar unread digest</div>
+          <div class="mock-label">B · 側欄未讀摘要</div>
           <div class="mock-body">
             <div class="digest">
               <div class="row unread">
                 <div class="mini-av">JM</div>
-                <div class="txt"><strong>Jonah</strong> commented <span class="on">on BIR-1142</span> — "Should the illustration swap when…"</div>
+                <div class="txt"><strong>Jonah</strong> 留言了 <span class="on">在 BIR-1142</span> — 「如果已經有專案了，插圖是不是該換掉...」</div>
               </div>
               <div class="row unread">
                 <div class="mini-av">AK</div>
-                <div class="txt"><strong>Aiko</strong> mentioned you <span class="on">on BIR-1098</span> — "@priya can you confirm the copy here?"</div>
+                <div class="txt"><strong>Aiko</strong> 提到了你 <span class="on">在 BIR-1098</span> — 「@priya 這裡的文案可以確認一下嗎？」</div>
               </div>
               <div class="row">
                 <div class="mini-av">RW</div>
-                <div class="txt"><strong>Rowan</strong> replied <span class="on">on BIR-0971</span> — "Merged, thanks for the quick turnaround."</div>
+                <div class="txt"><strong>Rowan</strong> 回覆了 <span class="on">在 BIR-0971</span> — 「合併好了，感謝這麼快處理。」</div>
               </div>
             </div>
           </div>
@@ -596,8 +595,8 @@
     <!-- ============================================================= -->
 
     <section>
-      <div class="sec-head"><span class="num">04</span><h2>Key code</h2></div>
-      <p class="sec-intro">The two pieces most likely to be done wrong: the migration (soft deletes, read cursors) and the optimistic mutation (temp-id reconciliation).</p>
+      <div class="sec-head"><span class="num">04</span><h2>關鍵程式碼</h2></div>
+      <p class="sec-intro">有兩個地方最容易出錯：一是 migration（軟刪除與閱讀進度），二是樂觀寫入的 mutation（暫時 ID 的對齊）。</p>
 
       <div class="code-grid">
         <div class="code-block">
@@ -605,12 +604,12 @@
           <div class="code"><pre><span class="kw">create table</span> <span class="fn">comments</span> (
   id          uuid <span class="kw">primary key default</span> gen_random_uuid(),
   task_id     uuid <span class="kw">not null references</span> tasks(id),
-  parent_id   uuid <span class="kw">references</span> comments(id),   <span class="cm">-- one level only,</span>
-                                                <span class="cm">-- enforced in API</span>
+  parent_id   uuid <span class="kw">references</span> comments(id),   <span class="cm">-- 只允許一層巢狀，</span>
+                                                <span class="cm">-- 由 API 強制限制</span>
   author_id   uuid <span class="kw">not null references</span> users(id),
   body        text <span class="kw">not null</span>,
   created_at  timestamptz <span class="kw">not null default</span> now(),
-  deleted_at  timestamptz                       <span class="cm">-- soft delete</span>
+  deleted_at  timestamptz                       <span class="cm">-- 軟刪除欄位</span>
 );
 
 <span class="kw">create table</span> <span class="fn">comment_reads</span> (
@@ -637,8 +636,8 @@
       <span class="kw">return</span> { tempId: temp.id };
     },
     <span class="fn">onSuccess</span>: (row, _v, ctx) =&gt; {
-      <span class="cm">// reconcile temp id → real id so the</span>
-      <span class="cm">// realtime append doesn't duplicate it</span>
+      <span class="cm">// 把暫時 ID 對應成真實 ID，</span>
+      <span class="cm">// 這樣即時推送進來時才不會重複顯示</span>
       qc.<span class="fn">setQueryData</span>(key(taskId), (prev) =&gt;
         prev.map((c) =&gt; c.id === ctx.tempId ? row : c));
     },
@@ -655,27 +654,27 @@
     <!-- ============================================================= -->
 
     <section>
-      <div class="sec-head"><span class="num">05</span><h2>Risks &amp; mitigations</h2></div>
+      <div class="sec-head"><span class="num">05</span><h2>風險與緩解措施</h2></div>
       <div class="risks">
         <div class="row">
-          <div class="cell head">Risk</div>
-          <div class="cell head">Sev</div>
-          <div class="cell head">Mitigation</div>
+          <div class="cell head">風險項目</div>
+          <div class="cell head">嚴重度</div>
+          <div class="cell head">緩解措施</div>
         </div>
         <div class="row">
-          <div class="cell">Realtime duplicate: socket append races with the HTTP response and the temp-id reconcile.</div>
+          <div class="cell">即時重複問題：WebSocket 推送跟 HTTP 回應打架，導致暫時 ID 對齊出問題。</div>
           <div class="cell"><span class="sev high">HIGH</span></div>
-          <div class="cell">Dedupe on server-assigned <code>id</code> in the cache updater; socket payload carries the real id, temp rows are filtered on reconcile.</div>
+          <div class="cell">在快取更新時，直接靠伺服器配發的 <code>id</code> 來去重複；WebSocket 的資料會帶著真實 ID，對齊時把暫時資料過濾掉。</div>
         </div>
         <div class="row">
-          <div class="cell">Unread counts go stale when a user reads the thread on another device.</div>
+          <div class="cell">當使用者在另一台裝置讀過討論串時，未讀數量會卡住不更新。</div>
           <div class="cell"><span class="sev med">MED</span></div>
-          <div class="cell">Broadcast <code>comment_reads</code> upserts on the same channel; client treats its own cursor as max(local, remote).</div>
+          <div class="cell">把 <code>comment_reads</code> 的 upsert 動作廣播到同一個頻道；前端在處理自己的進度時，直接取本地與遠端兩邊的最大值。</div>
         </div>
         <div class="row">
-          <div class="cell">Mention detection false-positives on pasted markdown (<code>@media</code>, <code>@2x</code>).</div>
+          <div class="cell">在貼上 markdown 時，@ 提及的偵測會誤判（例如 <code>@media</code> 或 <code>@2x</code>）。</div>
           <div class="cell"><span class="sev low">LOW</span></div>
-          <div class="cell">Resolve mentions against workspace members only, at write time, and store the resolved user ids — never re-parse on read.</div>
+          <div class="cell">只在寫入資料時，對照工作區成員名單來解析提及對象，並把解析好的使用者 ID 直接存起來，讀取時絕對不再重新解析。</div>
         </div>
       </div>
     </section>
@@ -683,17 +682,17 @@
     <!-- ============================================================= -->
 
     <section>
-      <div class="sec-head"><span class="num">06</span><h2>Open questions</h2></div>
+      <div class="sec-head"><span class="num">06</span><h2>待討論問題</h2></div>
       <div class="open-q">
         <div class="q">
-          <div class="qt">Do we allow editing, or only delete-and-repost?</div>
-          <div class="qd">Editing needs an <code>edited_at</code> column and an "edited" affordance. Delete-and-repost is simpler but loses the reply anchor. Leaning toward delete-only for v1.</div>
-          <div class="owner">Decide with · design, before slice 2</div>
+          <div class="qt">我們要支援編輯，還是只允許刪除後重發？</div>
+          <div class="qd">支援編輯的話，需要多加一個 <code>edited_at</code> 欄位和顯示「已編輯」的 UI。刪除後重發比較簡單，但會丟失原本的回覆錨點。目前傾向在 v1 先做刪除就好。</div>
+          <div class="owner">需與 · 設計團隊討論，在第 2 階段前決定</div>
         </div>
         <div class="q">
-          <div class="qt">Email digest cadence when a user has the app closed</div>
-          <div class="qd">Immediate-per-mention will be noisy. Proposal: batch on a 15-minute window, collapse to one email per task, and respect quiet hours from the existing settings table.</div>
-          <div class="owner">Decide with · platform, before slice 4</div>
+          <div class="qt">當使用者沒有開啟 App 時，email 通知的發送頻率</div>
+          <div class="qd">每次被提及就馬上寄信會太吵。建議做法：以 15 分鐘為單位批次處理，把同一個任務的通知合併成一封信，並遵照現有設定表中的勿擾時段。</div>
+          <div class="owner">需與 · 平台團隊討論，在第 4 階段前決定</div>
         </div>
       </div>
     </section>

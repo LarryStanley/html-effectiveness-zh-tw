@@ -1,10 +1,10 @@
 <!-- Copyright 2026 Anthropic PBC · SPDX-License-Identifier: Apache-2.0 -->
 <!doctype html>
-<html lang="en">
+<html lang="zh-Hant-TW">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Acme — Task completed micro-interaction</title>
+<title>Acme — 任務完成的微互動</title>
 <style>
   :root {
     --ivory: #FAF9F5;
@@ -350,12 +350,11 @@
 <div class="wrap">
 
   <header>
-    <div class="eyebrow">Acme / prototype / micro-interaction</div>
-    <h1>Task completed</h1>
+    <div class="eyebrow">Acme / 原型 / 微互動</div>
+    <h1>任務完成</h1>
     <p class="sub">
-      A single click should feel like a tiny win. Circle fills, check draws,
-      label strikes, a small burst, then the row quietly steps back. Click
-      the row to play; click again to reset.
+      點一下就要讓人覺得有點小成就感。圓圈填滿、畫出打勾、文字加上刪除線，
+      再撒個小碎花，最後整列安靜地退場。點列點一下播放動畫，再點一次就重置。
     </p>
   </header>
 
@@ -366,8 +365,8 @@
         <div class="check">
           <svg viewBox="0 0 16 16"><path d="M3 8.5 L6.5 12 L13 4.5"/></svg>
         </div>
-        <span class="label">Send weekly digest</span>
-        <span class="due">Fri</span>
+        <span class="label">寄出週報</span>
+        <span class="due">週五</span>
         <div class="confetti c1"></div>
         <div class="confetti c2"></div>
         <div class="confetti c3"></div>
@@ -375,22 +374,22 @@
         <div class="confetti c5"></div>
         <div class="confetti c6"></div>
       </div>
-      <div class="hint">click to toggle</div>
+      <div class="hint">點擊切換</div>
     </div>
 
     <aside class="panel">
-      <h2>Easing</h2>
-      <p>Swaps <code>--ease</code> across every transition so you can feel the difference.</p>
+      <h2>緩動效果</h2>
+      <p>切換所有轉場效果的 <code>--ease</code>，讓你感受其中的差異。</p>
       <button class="ease-btn" data-ease="linear">
-        Linear
+        線性
         <code>linear</code>
       </button>
       <button class="ease-btn" data-ease="cubic-bezier(0.16, 1, 0.3, 1)">
-        Ease-out
+        淡出
         <code>cubic-bezier(.16, 1, .3, 1)</code>
       </button>
       <button class="ease-btn active" data-ease="cubic-bezier(0.34, 1.56, 0.64, 1)">
-        Spring
+        彈簧
         <code>cubic-bezier(.34, 1.56, .64, 1)</code>
       </button>
     </aside>
@@ -398,19 +397,19 @@
   </div>
 
   <section class="timeline">
-    <h2>Keyframes</h2>
+    <h2>關鍵影格</h2>
     <div class="track">
-      <div class="key k1"><em>fill</em><span>0ms</span></div>
-      <div class="key k2"><em>check</em><span>80ms</span></div>
-      <div class="key k3"><em>strike</em><span>120ms</span></div>
-      <div class="key k4"><em>confetti</em><span>200ms</span></div>
-      <div class="key k5"><em>collapse</em><span>600ms</span></div>
+      <div class="key k1"><em>填滿</em><span>0ms</span></div>
+      <div class="key k2"><em>打勾</em><span>80ms</span></div>
+      <div class="key k3"><em>刪除線</em><span>120ms</span></div>
+      <div class="key k4"><em>碎花</em><span>200ms</span></div>
+      <div class="key k5"><em>收合</em><span>600ms</span></div>
     </div>
   </section>
 
   <section class="snippet">
-    <h2>Copy-paste CSS</h2>
-<pre><span class="c">/* circle: clay flash, settle to olive with spring overshoot */</span>
+    <h2>可直接複製貼上的 CSS</h2>
+<pre><span class="c">/* 圓圈：先閃過陶土色，再靠彈簧的些微過衝收至橄欖綠 */</span>
 <span class="k">.task.done .check</span> {
   animation: settle 380ms <span class="v">cubic-bezier(.34,1.56,.64,1)</span> forwards;
 }
@@ -420,16 +419,16 @@
   100% { transform: scale(1);   background: <span class="v">#788C5D</span>; }
 }
 
-<span class="c">/* checkmark draws via stroke-dashoffset, 80ms delay */</span>
+<span class="c">/* 打勾圖示靠 stroke-dashoffset 畫出來，延遲 80ms */</span>
 <span class="k">.check path</span>        { stroke-dasharray: 20; stroke-dashoffset: 20;
                      transition: stroke-dashoffset 220ms var(--ease) 80ms; }
 <span class="k">.task.done path</span>    { stroke-dashoffset: 0; }
 
-<span class="c">/* strikethrough grows left → right */</span>
+<span class="c">/* 刪除線從左到右展開 */</span>
 <span class="k">.label::after</span>      { width: 0; transition: width 240ms var(--ease) 120ms; }
 <span class="k">.task.done .label::after</span> { width: 100%; }
 
-<span class="c">/* row steps back after the celebration */</span>
+<span class="c">/* 慶祝完之後，整列退場 */</span>
 <span class="k">.task.done</span>         { max-height: 44px; opacity: .6;
                      transition-delay: 600ms; }</pre>
   </section>

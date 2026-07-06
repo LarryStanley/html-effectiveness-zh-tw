@@ -1,10 +1,10 @@
 <!-- Copyright 2026 Anthropic PBC · SPDX-License-Identifier: Apache-2.0 -->
 <!doctype html>
-<html lang="en">
+<html lang="zh-Hant-TW">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Background jobs — header illustrations</title>
+<title>背景工作 — 頁首插圖</title>
 <style>
   :root {
     --ivory:   #FAF9F5;
@@ -190,13 +190,12 @@
 <div class="sheet">
 
   <header>
-    <h1>Background jobs — header illustrations</h1>
+    <h1>背景工作 — 頁首插圖</h1>
     <p class="lead">
-      Three 720×320 hand-drawn SVGs for the Acme docs section on
-      background jobs. Flat fills, 1.5–2px strokes, palette-locked. Each
-      exports standalone via the button below it.
+      這是三張 720×320 手繪風格的 SVG，用於 Acme 文件中有關背景工作的章節。
+      使用平塗色塊、1.5 到 2px 的線條，並固定配色。每張圖都能靠下方的按鈕單獨匯出。
     </p>
-    <div class="meta">720 × 320 · inline SVG · no external assets</div>
+    <div class="meta">720 × 320 · 內嵌 SVG · 無外部素材</div>
   </header>
 
   <!-- ============================================================
@@ -217,10 +216,10 @@
 
         <rect width="720" height="320" fill="#FAF9F5"/>
 
-        <!-- queue label -->
+        <!-- 佇列標籤 -->
         <text x="60" y="96" class="s" fill="#87867F">queue</text>
 
-        <!-- five job rects -->
+        <!-- 五個工作方塊 -->
         <g>
           <rect x="60"  y="110" width="70" height="100" rx="10" fill="#F0EEE6" stroke="#3D3D3A" stroke-width="1.5"/>
           <text x="95"  y="164" text-anchor="middle" class="m" fill="#3D3D3A">job 5</text>
@@ -234,12 +233,12 @@
           <rect x="300" y="110" width="70" height="100" rx="10" fill="#F0EEE6" stroke="#3D3D3A" stroke-width="1.5"/>
           <text x="335" y="164" text-anchor="middle" class="m" fill="#3D3D3A">job 2</text>
 
-          <!-- head of queue, highlighted -->
+          <!-- 佇列頂端，標示強調色 -->
           <rect x="380" y="110" width="70" height="100" rx="10" fill="#D97757" stroke="#141413" stroke-width="2"/>
           <text x="415" y="164" text-anchor="middle" class="m" fill="#FAF9F5">job 1</text>
         </g>
 
-        <!-- arrow to worker -->
+        <!-- 指向 worker 的箭頭 -->
         <line x1="458" y1="160" x2="522" y2="160" stroke="#87867F" stroke-width="1.5" marker-end="url(#qa)"/>
 
         <!-- worker -->
@@ -247,17 +246,17 @@
         <text x="595" y="156" text-anchor="middle" class="m" fill="#141413">worker</text>
         <text x="595" y="172" text-anchor="middle" class="m" fill="#87867F">pool=4</text>
 
-        <!-- annotations -->
-        <text x="415" y="234" text-anchor="middle" class="s" fill="#87867F">next to run</text>
-        <text x="60"  y="258" class="s" fill="#87867F">Jobs are pulled FIFO; the worker leases one at a time.</text>
+        <!-- 註解 -->
+        <text x="415" y="234" text-anchor="middle" class="s" fill="#87867F">下一個執行</text>
+        <text x="60"  y="258" class="s" fill="#87867F">工作以 FIFO 順序取出；worker 每次只認領一個。</text>
       </svg>
     </div>
     <figcaption>
       <div class="cap-text">
-        <div class="cap-title">Queue</div>
-        <div class="cap-sub">For "How jobs are picked up" — intro page header.</div>
+        <div class="cap-title">佇列</div>
+        <div class="cap-sub">用於「工作如何被取出」簡介頁的頁首。</div>
       </div>
-      <button class="dl" data-target="ill-queue" data-filename="acme-jobs-queue.svg">Download SVG</button>
+      <button class="dl" data-target="ill-queue" data-filename="acme-jobs-queue.svg">下載 SVG</button>
     </figcaption>
   </figure>
 
@@ -276,36 +275,36 @@
 
         <rect width="720" height="320" fill="#FAF9F5"/>
 
-        <!-- timeline axis -->
+        <!-- 時間軸 -->
         <line x1="60" y1="190" x2="660" y2="190" stroke="#D1CFC5" stroke-width="1.5"/>
         <text x="60" y="214" class="s" fill="#87867F">t = 0</text>
-        <text x="660" y="214" text-anchor="end" class="s" fill="#87867F">time →</text>
+        <text x="660" y="214" text-anchor="end" class="s" fill="#87867F">時間 →</text>
 
-        <!-- attempts: exponential spacing at x = 100, 170, 310, 590 -->
-        <!-- attempt 1 (fail) -->
+        <!-- 嘗試次數：以指數間距分佈於 x = 100, 170, 310, 590 -->
+        <!-- 嘗試 1（失敗） -->
         <circle cx="100" cy="190" r="8" fill="#FAF9F5" stroke="#D97757" stroke-width="2"/>
         <line x1="96" y1="186" x2="104" y2="194" stroke="#D97757" stroke-width="1.5"/>
         <line x1="104" y1="186" x2="96" y2="194" stroke="#D97757" stroke-width="1.5"/>
         <text x="100" y="222" text-anchor="middle" class="m" fill="#3D3D3A">try 1</text>
 
-        <!-- attempt 2 (fail) -->
+        <!-- 嘗試 2（失敗） -->
         <circle cx="170" cy="190" r="8" fill="#FAF9F5" stroke="#D97757" stroke-width="2"/>
         <line x1="166" y1="186" x2="174" y2="194" stroke="#D97757" stroke-width="1.5"/>
         <line x1="174" y1="186" x2="166" y2="194" stroke="#D97757" stroke-width="1.5"/>
         <text x="170" y="222" text-anchor="middle" class="m" fill="#3D3D3A">try 2</text>
 
-        <!-- attempt 3 (fail) -->
+        <!-- 嘗試 3（失敗） -->
         <circle cx="310" cy="190" r="8" fill="#FAF9F5" stroke="#D97757" stroke-width="2"/>
         <line x1="306" y1="186" x2="314" y2="194" stroke="#D97757" stroke-width="1.5"/>
         <line x1="314" y1="186" x2="306" y2="194" stroke="#D97757" stroke-width="1.5"/>
         <text x="310" y="222" text-anchor="middle" class="m" fill="#3D3D3A">try 3</text>
 
-        <!-- attempt 4 (success) -->
+        <!-- 嘗試 4（成功） -->
         <circle cx="590" cy="190" r="9" fill="#788C5D" stroke="#141413" stroke-width="1.5"/>
         <path d="M585,190 L589,194 L596,185" fill="none" stroke="#FAF9F5" stroke-width="1.5" stroke-linecap="round"/>
         <text x="590" y="222" text-anchor="middle" class="m" fill="#3D3D3A">try 4</text>
 
-        <!-- dashed backoff arcs (loop back over the gap) -->
+        <!-- 虛線退避弧線（在間隔上方折返） -->
         <path d="M 100 182 Q 135 130 170 182" fill="none" stroke="#87867F" stroke-width="1.5" stroke-dasharray="4 4"/>
         <text x="135" y="124" text-anchor="middle" class="m" fill="#87867F">+1s</text>
 
@@ -315,16 +314,16 @@
         <path d="M 310 182 Q 450 80 590 182" fill="none" stroke="#87867F" stroke-width="1.5" stroke-dasharray="4 4"/>
         <text x="450" y="74" text-anchor="middle" class="m" fill="#87867F">+4s</text>
 
-        <!-- annotation -->
-        <text x="60" y="262" class="s" fill="#87867F">Each failure waits twice as long before re-queuing; jitter not pictured.</text>
+        <!-- 註解 -->
+        <text x="60" y="262" class="s" fill="#87867F">每次失敗後，等待時間會加倍才重新排入佇列；圖中未呈現 jitter。</text>
       </svg>
     </div>
     <figcaption>
       <div class="cap-text">
-        <div class="cap-title">Retry with backoff</div>
-        <div class="cap-sub">For "Handling failures" — retry policy header.</div>
+        <div class="cap-title">退避重試</div>
+        <div class="cap-sub">用於「錯誤處理」重試機制頁面的頁首。</div>
       </div>
-      <button class="dl" data-target="ill-retry" data-filename="acme-jobs-retry.svg">Download SVG</button>
+      <button class="dl" data-target="ill-retry" data-filename="acme-jobs-retry.svg">下載 SVG</button>
     </figcaption>
   </figure>
 
@@ -346,18 +345,18 @@
 
         <rect width="720" height="320" fill="#FAF9F5"/>
 
-        <!-- source -->
+        <!-- 來源 -->
         <rect x="60" y="128" width="110" height="64" rx="10" fill="#E3DACC" stroke="#141413" stroke-width="2"/>
         <text x="115" y="158" text-anchor="middle" class="m" fill="#141413">enqueue</text>
         <text x="115" y="172" text-anchor="middle" class="m" fill="#87867F">batch()</text>
 
-        <!-- fan-out arrows: from (170,160) to four shard boxes at x=300 -->
+        <!-- 扇出箭頭：從 (170,160) 指向 x=300 的四個分片方塊 -->
         <line x1="170" y1="160" x2="296" y2="64"  stroke="#87867F" stroke-width="1.5" marker-end="url(#fa)"/>
         <line x1="170" y1="160" x2="296" y2="128" stroke="#87867F" stroke-width="1.5" marker-end="url(#fa)"/>
         <line x1="170" y1="160" x2="296" y2="192" stroke="#87867F" stroke-width="1.5" marker-end="url(#fa)"/>
         <line x1="170" y1="160" x2="296" y2="256" stroke="#87867F" stroke-width="1.5" marker-end="url(#fa)"/>
 
-        <!-- four shard boxes -->
+        <!-- 四個分片方塊 -->
         <g>
           <rect x="300" y="44"  width="120" height="40" rx="10" fill="#F0EEE6" stroke="#3D3D3A" stroke-width="1.5"/>
           <text x="360" y="69"  text-anchor="middle" class="m" fill="#3D3D3A">shard 0</text>
@@ -372,29 +371,29 @@
           <text x="360" y="261" text-anchor="middle" class="m" fill="#3D3D3A">shard 3</text>
         </g>
 
-        <!-- converge arrows to merge -->
+        <!-- 匯集至 merge 的箭頭 -->
         <line x1="420" y1="64"  x2="546" y2="160" stroke="#87867F" stroke-width="1.5" marker-end="url(#fa)"/>
         <line x1="420" y1="128" x2="546" y2="160" stroke="#87867F" stroke-width="1.5" marker-end="url(#fa)"/>
         <line x1="420" y1="192" x2="546" y2="160" stroke="#87867F" stroke-width="1.5" marker-end="url(#fa)"/>
         <line x1="420" y1="256" x2="546" y2="160" stroke="#87867F" stroke-width="1.5" marker-end="url(#fa)"/>
 
-        <!-- merge box -->
+        <!-- 合併方塊 -->
         <rect x="550" y="128" width="110" height="64" rx="10" fill="#788C5D" stroke="#141413" stroke-width="2"/>
         <text x="605" y="158" text-anchor="middle" class="m" fill="#FAF9F5">merge</text>
         <text x="605" y="172" text-anchor="middle" class="m" fill="#E3DACC">await all</text>
 
-        <!-- annotations -->
+        <!-- 註解 -->
         <text x="232" y="42"  class="s" fill="#87867F">fan-out</text>
         <text x="486" y="42"  text-anchor="end" class="s" fill="#87867F">fan-in</text>
-        <text x="60"  y="300" class="s" fill="#87867F">Parent job spawns N children, then blocks on a completion barrier.</text>
+        <text x="60"  y="300" class="s" fill="#87867F">父工作派生出 N 個子工作，接著卡在完成屏障等待全部結束。</text>
       </svg>
     </div>
     <figcaption>
       <div class="cap-text">
         <div class="cap-title">Fan-out / fan-in</div>
-        <div class="cap-sub">For "Batch and parallel work" — fan-out pattern header.</div>
+        <div class="cap-sub">用於「批次與平行處理」扇出模式頁面的頁首。</div>
       </div>
-      <button class="dl" data-target="ill-fanout" data-filename="acme-jobs-fanout.svg">Download SVG</button>
+      <button class="dl" data-target="ill-fanout" data-filename="acme-jobs-fanout.svg">下載 SVG</button>
     </figcaption>
   </figure>
 
@@ -402,7 +401,7 @@
        Palette + usage notes
        ============================================================ -->
   <section class="palette">
-    <h2>Palette &amp; rules</h2>
+    <h2>配色與規則</h2>
 
     <div class="swatches">
       <div class="swatch">
@@ -464,11 +463,11 @@
     </div>
 
     <ul class="notes">
-      <li>Strokes are 1.5px for neutral boxes, 2px for emphasised containers.</li>
-      <li>All rectangles use <code>rx="10"</code>; no drop shadows or gradients.</li>
-      <li>Labels inside boxes are 11px mono; annotations outside are 12px sans, gray-500.</li>
-      <li>Clay marks "the thing in focus"; olive marks "success / done".</li>
-      <li>Each SVG carries its own <code>&lt;style&gt;</code> block so the download stands alone.</li>
+      <li>一般方塊的線條用 1.5px，要強調的容器用 2px。</li>
+      <li>所有方框的圓角都是 <code>rx="10"</code>；不用陰影或漸層。</li>
+      <li>方塊內的標籤用 11px 等寬字型；外部註解用 12px 無襯線字型，顏色是 gray-500。</li>
+      <li>Clay 色用來標示「目前關注的東西」；olive 色代表「成功完成」。</li>
+      <li>每個 SVG 都內建自己的 <code>&lt;style&gt;</code> 區塊，下載後可以獨立使用。</li>
     </ul>
   </section>
 
